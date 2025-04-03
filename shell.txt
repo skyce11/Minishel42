@@ -1,0 +1,1 @@
+ echo > paquito.txt hola "buenas tardes caballeros" -flag --ls -prueba <camion.txt > torta.txt< castillo.txt< | < burro.txt <au.txt ls hola -l > preu.txt < au.txt > casa.txt | grep hola
