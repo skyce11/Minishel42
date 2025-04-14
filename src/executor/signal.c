@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:16:37 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 10:17:12 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:13:16 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@ int	g_signal;
 
 static void	sigint_handler_aux(void);
 
+/// @brief Initialize signal handling.
+/// This function sets up initial values for signal handling.
+/// SIGINT : Ctrl+C
+/// SIGQUIT : Ctrl+ \
+/// SIG_IGN : ignorar signales
+/// @return Void.
 void	signal_init(void)
 {
 	g_signal = S_BASE;
@@ -60,6 +66,10 @@ void	sigquit_handler(int sig)
 	exit(131);
 }
 
+/// @brief Auxiliary handler for SIGINT signal.
+/// This function is a helper for `sigint_handler`. It updates the global
+/// signal state variable (`g_signal`) depending on the current context.
+/// @return Void.
 static void	sigint_handler_aux(void)
 {
 	if (g_signal == S_HEREDOC_END)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 11:29:49 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:40:10 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan po
 			else if (tools->arg_str[i] == '\'' && !in_dquote)
 				in_squote = !in_squote;
 		}
-		while (in_dquote || in_squote) 
+		while (in_dquote || in_squote)
 		{
 			char	*next_line = readline(in_dquote ? "dquote> " : "quote> ");
 			if (!next_line)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 11:39:33 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 11:20:35 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/14 16:57:03 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,9 @@ void	ft_free_arr(char **arr)
 	free(arr);
 }
 
+/// @brief Duplicate an array of strings with MALLOC
+/// @param arr The original array of strings to be duplicated.
+/// @return A newly allocated copy of the array of strings, or NULL on failure.
 char	**arrdup(char **arr)
 {
 	char	**aux;
