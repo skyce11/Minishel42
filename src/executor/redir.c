@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sperez-s <sperez-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:04:01 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/03/26 21:09:59 by sperez-s         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:35:25 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ static void	fd_redir(t_redir *redir)
 	close(redir->fd);
 }
 
+/// @brief Prepara las redirecciones para un comando abriendo los archivos
+/// necesarios y estableciendo los descriptores de fichero apropiados.
+/// @param comando
+/// @return 0 si las redirecciones se han configurado correctamente, sino -1
 int	redir_setup(t_command *command)
 {
 	t_redir	*curr_redir;

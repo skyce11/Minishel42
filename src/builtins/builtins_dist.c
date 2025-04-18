@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_dist.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:06:43 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 10:07:15 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:19:25 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief si el commando es : echo / cd / pwd / export / unset / env / exit
+/// @param command
+/// @return 1 si es, sino 0
 int	is_builtin(t_command *command)
 {
 	if (!ft_strcmp(command->args[0], "echo"))
@@ -32,6 +35,10 @@ int	is_builtin(t_command *command)
 		return (0);
 }
 
+/// @brief redirige cada commando builtin a su propia funcion para ejecutarlo.
+/// @param command
+/// @param tools
+/// @return void.
 void	ft_builtin(t_command *command, t_tools *tools)
 {
 	if (!ft_strcmp(command->args[0], "env"))

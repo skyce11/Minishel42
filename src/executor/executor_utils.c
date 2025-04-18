@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sperez-s <sperez-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:27:37 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/03/26 21:09:07 by sperez-s         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:35:57 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Busca un comando en la ruta dada.  Si el comando es encontrado y es
+/// ejecutable, actualiza `command->args[0]`con la ruta completa.
+/// @param comando Estructura que contiene los detalles del comando a buscar.
+/// @param ruta Ruta en la que se encuentra el comando.
+/// @return 1 si el comando es encontrado y ejecutable, sino 0.
 int	find_command_in_route(t_command *command, char *path)
 {
 	char	*joined;
@@ -30,6 +35,12 @@ int	find_command_in_route(t_command *command, char *path)
 	return (found);
 }
 
+/// @brief Rellena la ruta de ejecución del comando buscando en rutas
+/// disponibles en el entorno (`PATH`). Comprueba si el comando es un comando
+/// incorporado o un comando externo.
+/// @param command
+/// @param tools
+/// @return 0 si se encuentra el comando o si es un builtin, sino -1.
 int	fill_command_from_env(t_command *command, t_tools *tools)
 {
 	int	found;
@@ -57,7 +68,7 @@ int	fill_command_from_env(t_command *command, t_tools *tools)
 	errno = 0;
 	return (0);
 }
-
+// get list size
 int	get_command_list_size(t_command *list)
 {
 	int	i;
@@ -91,6 +102,11 @@ t_pipe	*obtain_related_pipe_from_list(t_pipe *ps,
 	return (curr_pipe);
 }
 
+/// @brief Actualiza el estado de salida después de ejecutar un comando.
+/// Maneja códigos de retorno, errores de comando no encontrado e
+/// interrupciones SIGINT.
+/// @param status Código de retorno del comando ejecutado.
+/// @param tools
 void	handle_status(int status, t_tools *tools)
 {
 	if (WIFEXITED(status))

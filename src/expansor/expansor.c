@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:21:27 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 10:26:54 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:25:46 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ char	*ft_strstr(const char *haystack, const char *needle)
 	}
 	return (NULL);
 }
-
+/// @brief get el codigo de salida pedido con echo $?
+/// @param str
+/// @param exit_status
+/// @return exit code
 char	*expand_exit_status(char *str, int exit_status)
 {
 	char	*result;
@@ -53,6 +56,11 @@ char	*expand_exit_status(char *str, int exit_status)
 	return (result);
 }
 
+/// @brief transforma un commando del utilisador que contiene variables
+/// en una version interpretada antes que sea executada.
+/// @param tools
+/// @return la cadena modificada, que contiene el comando con las variables
+/// expandidas.
 char	*expansor(t_tools *tools)
 {
 	char	*aux;
@@ -69,7 +77,12 @@ char	*expansor(t_tools *tools)
 	}
 	return (tools->arg_str);
 }
-
+/// @brief Transforma un comando del usuario que contiene variables en una
+/// versión interpretada antes de ser ejecutada.
+/// @param tools Estructura con las herramientas y datos necesarios para
+/// la gestión del comando.
+/// @return La cadena modificada, que contiene el comando con las variables
+/// expandidas.
 char	*detect_dollar(t_tools *tools)
 {
 	int		i;
@@ -81,9 +94,13 @@ char	*detect_dollar(t_tools *tools)
 	aux = ft_strdup("\0");
 	while (tools->arg_str[i])
 	{
+		// Comprueba y salta los caracteres numéricos inmediatamente después de `$`.
 		i += digit_after_dollar(i, tools->arg_str);
+		// Si se detecta `$?`, se ignora el tratamiento y se devuelve 0.
 		if (tools->arg_str[i] == '$' && tools->arg_str[i + 1] == '?')
 			return (0);
+		// Si `$` está seguido de un carácter válido (ni espacio, ni comillas
+		// finales), llama a una función para procesar la expansión de `$`.
 		else if (tools->arg_str[i] == '$' && (tools->arg_str[i + 1] != ' '
 				&& (tools->arg_str[i + 1] != '"' || tools->arg_str[i + 2]
 					!= '\0')) && tools->arg_str[i + 1] != '\0')
@@ -100,6 +117,13 @@ char	*detect_dollar(t_tools *tools)
 	return (aux);
 }
 
+/// @brief La función loop_dollar procesa una ocurrencia de $VAR en una cadena
+// de comandos. Compara la variable con la lista de entorno (envp) y la
+/// sustituye por su valor si existe.
+/// @param tools
+/// @param aux Puntero a una cadena donde se construye el resultado.
+/// @param j Posición en la cadena donde comienza $.
+/// @return Longitud de la variable procesada (o su valor).
 int	loop_dollar(t_tools *tools, char **aux, int j)
 {
 	int		i;

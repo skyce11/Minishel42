@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_complex_command.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sperez-s <sperez-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/03/26 21:08:41 by sperez-s         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:40:33 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,13 @@ static int	exec_piped_command(t_pipe *ps, t_tools *tools,
 	return (0);
 }
 
+/// @brief Maneja la ejecución de comandos compuestos, como los que utilizan
+/// tuberías. Crea una lista de tuberías, ejecuta cada comando con las
+/// redirecciones apropiadas, y limpia los recursos utilizados.
+/// @param tools
+/// @param size Número de comandos en la cadena compuesta.
+/// @return 0 en caso de éxito, -1 en caso de error al crear tuberías,
+/// o 1 si un comando falla.
 int	exec_compound_command(t_tools *tools, unsigned int size)
 {
 	t_pipe			*ps;

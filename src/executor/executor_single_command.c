@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   executor_single_command.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sperez-s <sperez-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:34:38 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/03/26 21:08:35 by sperez-s         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:22:29 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Ejecuta un comando incrustado en el proceso padre.
+/// Guarda los descriptores estándar, ejecuta el comando,
+/// luego restaura los descriptores para preservar la integridad del shell.
 static void	run_builtin_in_parent_process(t_command *command, t_tools *tools)
 {
 	int	stdin_fd;
@@ -26,6 +29,8 @@ static void	run_builtin_in_parent_process(t_command *command, t_tools *tools)
 	close(stdout_fd);
 }
 
+// si el commando no es integrada, lanza la  ejecucion con un fork
+// Gestiona las señales y actualiza el estado de ejecución una vez ejecutado el comando.
 static int	fork_single_command(t_command *command, t_tools *tools)
 {
 	int	pid;
@@ -54,13 +59,24 @@ static int	fork_single_command(t_command *command, t_tools *tools)
 	return (status);
 }
 
+/// @brief La función `exec_single_command` es responsable de ejecutar
+/// un único comando en el shell. Diferencia entre builtins
+/// (builtins) y comandos externos, eligiendo un tratamiento apropiado
+/// para cada uno.
+/// @param command Estructura que contiene los detalles del comando.
+/// @param tools Estructura que contiene las herramientas y la información
+/// necesaria para la ejecución.
+/// @return El estado de ejecución (0 para un comando incrustado o el resultado
+/// del resultado de la bifurcación para un comando externo).
 int	exec_single_command(t_command *command, t_tools *tools)
 {
 	int	status;
 
 	if (is_builtin(command))
 	{
+		// ejecuta el commando directamente en el processo padre.
 		run_builtin_in_parent_process(command, tools);
+		// return 0, porque los commandos no necessitan un fork
 		return (0);
 	}
 	status = fork_single_command(command, tools);

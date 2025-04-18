@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 10:11:15 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/17 22:31:38 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ static int	check_exit_args(t_tools *tools)
 	return (0);
 }
 
+/// @brief Comprueba los argumentos suministrados al comando, muestra un mensaje
+/// de salida y libera los recursos.
+/// @param tools
+/// @return EXIT_FAILURE si el comando tiene demasiados argumentos,
+/// sino solo exit el shell.
 int	ft_exit(t_tools *tools)
 {
 	int	exit_code;

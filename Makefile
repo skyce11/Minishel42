@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sperez-s <sperez-s@student.42.fr>          +#+  +:+       +#+         #
+#    By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/13 09:43:48 by migonzal          #+#    #+#              #
-#    Updated: 2025/03/26 21:07:56 by sperez-s         ###   ########.fr        #
+#    Updated: 2025/04/17 16:47:41 by ampocchi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,7 @@ SRCS	=	$(SRC_DIR)main.c				\
 			$(SRC_DIR_BUILT)env.c				\
 			$(SRC_DIR_BUILT)pwd.c				\
 			$(SRC_DIR_BUILT)ft_exit.c			\
-			$(SRC_DIR_BUILT)builtins_dist.c		
+			$(SRC_DIR_BUILT)builtins_dist.c
 
 OBJS		=	$(SRCS:.c=.o)
 
@@ -87,7 +87,7 @@ INCLUDE	=	-Iinclude
 
 
 
-CC	=	gcc 
+CC	=	gcc
 RM = rm -f
 
 CFLAGS	=  -g -Wall -Wextra -Werror #-fsanitize=address -g3

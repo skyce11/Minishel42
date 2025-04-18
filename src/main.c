@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/14 17:40:10 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:58:39 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,14 @@ int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan po
 	{
 		if (g_signal == S_SIGINT)
 			tools->exit_status = 1;
+		// la funcion imprime una invitacion. Si nada se lee, se cierra el programma.
 		tools->arg_str = readline("minishell? "); // Aqui inicia el readline
 		if (!tools->arg_str)
 		{
 			ft_putendl_fd("No line read, exit minishell", STDOUT_FILENO);
 			exit(EXIT_SUCCESS);
 		}
+		// el commando se lee y se "strim" para quitar los espacios.
 		aux = ft_strtrim(tools->arg_str, " ");
 		free(tools->arg_str);
 		tools->arg_str = aux;
@@ -59,11 +61,13 @@ int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan po
 			reset_tools(tools);
 			continue ;
 		}
+		// Si el comando es invalido con los pipes, se reeinicia.
 		if (!validate_pipes(tools->arg_str))   // Intento de solucionar un error con las pipes, a revisar porque el error es mas profundo y no afecta solo a las pipe
 		{
 			reset_tools(tools);
 			continue ;
 		}
+		// esta parte consister en saber si tiene quotes no terminado. Si es el caso, se escribe "dquote>" o "quote>"
 		for (int i = 0; tools->arg_str[i]; i++) // aqui empieza la gestion de squote/dquote, por revisar
 		{
 			if (tools->arg_str[i] == '"' && !in_squote)

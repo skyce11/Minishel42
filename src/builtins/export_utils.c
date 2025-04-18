@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:09:11 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 10:09:30 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:46:03 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	ft_arraylen(char **array)
 {
 	int	i;
 
+	i = 0;
 	if (!array)
 		return (0);
 	while (array[i])

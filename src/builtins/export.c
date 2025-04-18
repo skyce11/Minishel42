@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:09:43 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 11:23:01 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:17:48 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ static void	print_env(t_tools *tools)
 	}
 }
 
+/// @brief Añade una nueva variable de entorno o actualiza una existente
+/// existente en `tools->envp`. Si la variable ya existe,
+/// es reemplazada por el nuevo valor. Si no existe, se añade.
+/// @param tools
+/// @param var Cadena que representa la variable de entorno.
 void	add_or_update_env(t_tools *tools, char *var)
 {
 	char	*name;
@@ -55,6 +60,11 @@ void	add_or_update_env(t_tools *tools, char *var)
 	free(value);
 }
 
+/// @brief Usado para mostrar variables o añadir/editar variables existentes.
+/// Modifica las variables de entorno directamente en `tools`.
+/// @param command
+/// @param tools
+/// @return void.
 void	ft_export(t_command *command, t_tools *tools)
 {
 	int	i;
