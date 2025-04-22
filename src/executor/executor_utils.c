@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:27:37 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/04/18 14:35:57 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:04:44 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	fill_command_from_env(t_command *command, t_tools *tools)
 	errno = 0;
 	return (0);
 }
-// get list size
+/// get list size
 int	get_command_list_size(t_command *list)
 {
 	int	i;
@@ -82,6 +82,14 @@ int	get_command_list_size(t_command *list)
 	return (i);
 }
 
+/// @brief get a pipe from the list based on its position and whether it is the
+/// previous pipe or not.
+/// It traverses the linked list of pipes to find the relevant one.
+/// @param ps Pointer to the head of the pipe list.
+/// @param pos Position of the pipe in the sequence.
+/// @param is_prev Indicates whether the requested pipe is the previous one (1)
+/// or the current one (0).
+/// @return Pointer to the requested pipe, or NULL if the previous pipe
 t_pipe	*obtain_related_pipe_from_list(t_pipe *ps,
 		unsigned int pos, int is_prev)
 {

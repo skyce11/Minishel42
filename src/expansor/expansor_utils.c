@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:17:38 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/17 18:12:28 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:14:50 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ size_t	dollar_after(char *str)
 	return (0);
 }
 
+/// @brief Finds the position after the first '=' character in a string.
+/// Scans the string for the '=' symbol and returns the index of the next char.
+/// If '=' is not found, returns 0.
+/// @param str The string to analyze.
+/// @return The index after '=' or 0 if not found.
 size_t	equal_after(char *str)
 {
 	size_t	i;
@@ -43,6 +48,10 @@ size_t	equal_after(char *str)
 	return (0);
 }
 
+/// @brief Converts a single character into a dynamically allocated string.
+/// Allocates memory for a string with two characters: the given character and '\0'.
+/// @param c The character to convert.
+/// @return A pointer to the newly allocated string.
 char	*char_to_str(char c)
 {
 	char	*str;
@@ -52,6 +61,12 @@ char	*char_to_str(char c)
 	return (str);
 }
 
+/// @brief Checks if a digit follows a dollar sign in a string.
+/// If the character at position `j` is '$' and the next character is a digit,
+/// it advances the index by two positions.
+/// @param j The current index position in the string.
+/// @param str The string to analyze.
+/// @return The number of positions the index has moved.
 int	digit_after_dollar(int j, char *str)
 {
 	int	i;
@@ -65,6 +80,11 @@ int	digit_after_dollar(int j, char *str)
 	return (j - i);
 }
 
+/// @brief Determines the length of a variable name after a '$' symbol.
+/// Iterates through the string, stopping at special characters or the next '$'.
+/// @param str The string to analyze.
+/// @param j The starting index of '$'.
+/// @return The index where the variable name ends.
 int	after_dollar_lenght(char *str, int j)
 {
 	int	i;

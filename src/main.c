@@ -6,12 +6,16 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/17 17:58:39 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:05:41 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Resets the structure containing execution tools.
+/// Frees allocated memory, clears stored data, and reinitializes the structure.
+/// @param tools Pointer to the tools structure being reset.
+/// @return Always returns 1 after successful reset.
 int	reset_tools(t_tools *tools)
 {
 	free_command(tools->command);
@@ -24,6 +28,11 @@ int	reset_tools(t_tools *tools)
 	return (1);
 }
 
+/// @brief Initializes the tools structure for command execution.
+/// Sets default values, initializes the command structure,
+/// and processes environment variables.
+/// @param tools Pointer to the tools structure to initialize.
+/// @return Always returns 1 after successful initialization.
 int	init_tools(t_tools *tools)
 {
 	tools->arg_str = NULL;

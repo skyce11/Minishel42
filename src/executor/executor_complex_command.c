@@ -6,12 +6,18 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/04/18 14:40:33 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:05:10 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Configures file descriptors for a piped command.
+/// Also ensures proper resource cleanup.
+/// @param curr_command The current command being executed.
+/// @param pipes Structure managing inter-process communication.
+/// @param i Index of the command in the sequence.
+/// @return Void
 static void	set_file_descriptors(t_command *curr_command, t_pipes_command pipes,
 	unsigned int i)
 {
@@ -35,6 +41,14 @@ static void	set_file_descriptors(t_command *curr_command, t_pipes_command pipes,
 	}
 }
 
+/// @brief Executes a command as part of a piped sequence.
+/// It sets up signal handling, adjusts file descriptors for input/output,
+/// runs the command, and handles built-in command cases.
+/// @param curr_command The command to be executed.
+/// @param pipes Structure holding pipes used for communication.
+/// @param tools
+/// @param i Index of the command in the sequence.
+/// @return -1 in case of an error; exits with 0 for built-in commands.
 static int	piped_command_child(t_command *curr_command,
 		t_pipes_command pipes, t_tools *tools, unsigned int i)
 {
@@ -48,7 +62,14 @@ static int	piped_command_child(t_command *curr_command,
 	}
 	return (-1);
 }
-
+/// @brief Executes a piped command within a compound command structure.
+/// It sets up the necessary pipes, forks a child process to execute the
+/// command, and manages resource cleanup.
+/// @param ps List of pipes used for inter-process communication.
+/// @param tools
+/// @param curr_command The command to be executed.
+/// @param i Index of the command within the compound command sequence.
+/// @return 0 on success, or the return value of the child process.
 static int	exec_piped_command(t_pipe *ps, t_tools *tools,
 	t_command *curr_command, unsigned int i)
 {

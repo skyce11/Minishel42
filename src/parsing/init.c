@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:29:41 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 10:44:56 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:02:17 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ t_command	*init_command(void)
 	return (new_command);
 }
 
+/// @brief Frees the memory allocated for a command structure.
+/// @param command Pointer to the command structure to be freed.
+/// @return Void
 void	free_command(t_command *command)
 {
 	char	**args;

@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/17 22:31:38 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:07:34 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ static void	free_tools(t_tools *tools)
 	free(tools->old_pwd);
 }
 
+/// @brief Validates the arguments provided to the 'exit' command. Checks if
+/// there are too many arguments, ensuring only one numeric value is allowed.
+/// If a non-numeric argument is found, an error message is displayed.
+/// @param tools Structure containing command details.
+/// @return Exit status code
+/// (0 by default, others if valid, 255 if invalid input).
 static int	check_exit_args(t_tools *tools)
 {
 	int	i;

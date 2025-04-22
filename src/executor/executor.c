@@ -6,13 +6,16 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 13:25:07 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/04/18 14:36:42 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:04:36 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// ejecuta el comando dependiendo de si es un builtin o no
+/// @brief Run the command depends if is a builton or not.
+/// @param command The command to be executed.
+/// @param tools
+/// @return Void
 void	run_command(t_command *command, t_tools *tools)
 {
 	if (redir_setup(command) == 0)

@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   parser_cells.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 10:25:18 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 10:58:06 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:03:08 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
+/// @brief Identifies the type of redirection operator in a string.
+/// Scans the input while handling quoted sections to correctly detect
+/// '>', '>>', '<', and '<<'.
+/// @param redir The string containing redirection symbols.
+/// @param i Pointer to the current index in the string.
+/// @return 0 for '<', 1 for '>', 2 for '<<', 3 for '>>'
 static int	locate_redir(char *redir, int *i)
 {
 	char	quote;
@@ -54,6 +60,14 @@ static int	locate_redir(char *redir, int *i)
 	return (type);
 }
 
+/// @brief Extracts the filename associated with a redirection. Skips leading
+/// spaces/tabs/newlines, then identifies and extracts the filename. Handles
+/// quoted filenames properly and ensures memory allocation is successful.
+/// If an error occurs, it updates the status and returns NULL.
+/// @param redir The string containing redirection.
+/// @param i Pointer to the current index in the string.
+/// @param status Pointer to track errors.
+/// @return A dynamically allocated string with the filename, or NULL on failure.
 static char	*locate_redir_file(char *redir, int *i, int *status)
 {
 	char	quote;
@@ -125,6 +139,13 @@ static char	*locate_redir_file(char *redir, int *i, int *status)
 	return (file);
 }
 
+/// @brief Creates a new redirection node.
+/// Allocates memory for a redirection structure and initializes its properties.
+/// If memory allocation fails, the function frees the file and returns NULL.
+/// @param file The file associated with the redirection.
+/// @param type The type of redirection (e.g., input, output, append).
+/// @param status Pointer to track errors.
+/// @return A pointer to the newly created redirection node, or NULL on failure.
 t_redir	*create_redir_node(char *file, int type, int *status)
 {
 	t_redir	*node;
@@ -146,6 +167,9 @@ t_redir	*create_redir_node(char *file, int type, int *status)
 	return (node);
 }
 
+/// @brief Frees memory allocated for a list of redirection structures.
+/// @param redir Pointer to the first redirection node.
+/// @return Void
 void	cleanse_redir_list(t_redir *redir)
 {
 	t_redir	*next;
@@ -161,6 +185,13 @@ void	cleanse_redir_list(t_redir *redir)
 	}
 }
 
+/// @brief Parses a redirection string and creates a linked list of redirection
+/// nodes. Iterates through the input string, identifying redirection types and
+/// associated filenames. If an error occurs, the allocated redirection list
+/// is cleaned up before returning NULL.
+/// @param redir The redirection string to process.
+/// @param status Pointer to a status flag that monitors errors.
+/// @return A pointer to the first redirection node, or NULL on failure.
 t_redir	*create_redir_list(char *redir, int *status)
 {
 	int		type;
@@ -207,6 +238,11 @@ t_redir	*create_redir_list(char *redir, int *status)
 	return (first);
 }
 
+/// @brief Creates a new command cell and initializes its properties.
+/// Allocates memory for a command structure, processes arguments and redirections,
+/// and sets the command separator.
+/// If an error occurs during redirection processing, it returns NULL.
+/// @param cmd_sep The command string to store in the new cell.
 t_command	*create_cell(char *cmd_sep)
 {
 	t_command	*cell;
@@ -227,6 +263,12 @@ t_command	*create_cell(char *cmd_sep)
 	return (cell);
 }
 
+/// @brief Adds a new command cell to the end of a linked list.
+/// Creates a new command cell and attaches it to the last element in the list.
+/// If the list is empty, the new cell becomes the first element.
+/// @param list The existing list of commands.
+/// @param cmd_sep The command string to store in the new cell.
+/// @return The updated command list with the new cell added.
 t_command	*add_cell(t_command *list, char *cmd_sep)
 {
 	t_command	*cur;

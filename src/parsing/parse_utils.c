@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 11:39:33 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/14 16:57:03 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:55:26 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,11 @@ char	**list_dup_after(char *s, char c)
 	return (pp);
 }
 
+/// @brief Parses command arguments, filtering out redirection symbols. Splits
+/// the input string into individual arguments while excluding '<' and '>'.
+/// Also removes quotes from arguments for cleaner processing.
+/// @param s The command string to parse.
+/// @return A dynamically allocated array of command arguments.
 char	**parse_args(char *s)
 {
 	int		i;
@@ -216,6 +221,8 @@ char	**parse_args(char *s)
 	return (res);
 }
 
+/// @brief free an tab
+/// @param arr
 void	ft_free_arr(char **arr)
 {
 	int	i;

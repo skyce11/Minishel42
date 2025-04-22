@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_open.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sperez-s <sperez-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 21:02:06 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/03/26 21:10:40 by sperez-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 13:21:41 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,11 @@ static int	get_open_mode(t_redir *redir)
 		return (R_OK | W_OK);
 }
 
+/// @brief Opens an existing file with the appropriate mode.
+/// Determines the correct mode based on the redirection type.
+/// Checks for permissions before opening the file.
+/// @param redir Pointer to the redirection structure containing file details.
+/// @return Returns the fd if successful, or 0 if permission is denied.
 static int	open_existing_file(t_redir *redir)
 {
 	int	mode;
@@ -81,6 +86,12 @@ static int	open_existing_file(t_redir *redir)
 	}
 }
 
+/// @brief Opens a file based on redirection type.
+/// Checks if the file exists first. If it does, it opens the existing file.
+/// If it does not exist, it decides how to handle the file based on its type.
+/// @param redir Pointer to the redirection structure containing file details.
+/// @return Returns a file descriptor if successful, 0 if the file doesn't
+/// exist, or 1 for general success.
 int	file_open(t_redir *redir)
 {
 	if (access(redir->file, F_OK) != -1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_aux.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 11:02:00 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 11:03:13 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:55:16 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ size_t	quotes_lenght(char *str)
 	return (aux);
 }
 
+/// @brief Removes all occurrences of a specified quote character from a string.
+/// Iterates through the string, shifting characters to eliminate
+/// consecutive quotes.
+/// @param str The string to modify.
+/// @param c The quote character to remove.
+/// @return The modified string with quotes removed.
 char	*delete_quotes(char *str, char c)
 {
 	int	i;

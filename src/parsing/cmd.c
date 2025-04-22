@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 09:33:25 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 10:29:16 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:10:10 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Checks for invalid pipe syntax in a string.
+/// Scans the input string to detect sequences like "| |" which are incorrect.
+/// If an error is found, it prints a message and returns 0.
+/// @param str The string to validate.
+/// @return 1 if the syntax is correct, 0 if an error is detected.
 int	validate_pipes(char *str)
 {
 	int	i;

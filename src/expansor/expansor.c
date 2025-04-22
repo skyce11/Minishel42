@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:21:27 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/17 18:25:46 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:15:03 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ char	*detect_dollar(t_tools *tools)
 	aux = ft_strdup("\0");
 	while (tools->arg_str[i])
 	{
-		// Comprueba y salta los caracteres numéricos inmediatamente después de `$`.
 		i += digit_after_dollar(i, tools->arg_str);
 		// Si se detecta `$?`, se ignora el tratamiento y se devuelve 0.
 		if (tools->arg_str[i] == '$' && tools->arg_str[i + 1] == '?')

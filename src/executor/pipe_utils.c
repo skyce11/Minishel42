@@ -6,12 +6,16 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:55:10 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/04/18 14:42:59 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:05:29 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Frees the memory allocated for a linked list of pipes.
+/// Iterates through the list, freeing each node to prevent memory leaks.
+/// @param first Pointer to the first pipe in the list.
+/// @return Void
 void	cleanse_pipe_list(t_pipe **first)
 {
 	t_pipe	*current;
