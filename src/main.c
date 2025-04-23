@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 12:05:41 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/23 12:24:03 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,43 @@ int	init_tools(t_tools *tools)
 	tools->reset = 0;
 	tools->command = init_command();
 	parse_envp(tools);
+	return (1);
+}
+
+int check_quotes(int in_dquote, int in_squote, char	*aux, t_tools *tools)
+{
+	// esta parte consister en saber si tiene quotes no terminado. Si es el caso, se escribe "dquote>" o "quote>"
+	for (int i = 0; tools->arg_str[i]; i++) // aqui empieza la gestion de squote/dquote, por revisar
+	{
+		if (tools->arg_str[i] == '"' && !in_squote)
+			in_dquote = !in_dquote;
+		else if (tools->arg_str[i] == '\'' && !in_dquote)
+			in_squote = !in_squote;
+	}
+	while (in_dquote || in_squote)
+	{
+		char	*next_line = readline(in_dquote ? "dquote> " : "quote> ");
+		if (!next_line)
+		{
+			ft_putendl_fd("bash: syntax error: unexpected end of file", STDOUT_FILENO);
+			return (EXIT_SUCCESS);
+		}
+		aux = ft_strjoin(tools->arg_str, "\n");
+		free(tools->arg_str);
+		tools->arg_str = ft_strjoin(aux, next_line);
+		free(aux);
+		free(next_line);
+		in_dquote = 0;
+		in_squote = 0;
+		for (int i = 0; tools->arg_str[i]; i++)
+		{
+			if (tools->arg_str[i] == '"' && !in_squote)
+				in_dquote = !in_dquote;
+			else if (tools->arg_str[i] == '\'' && !in_dquote)
+				in_squote = !in_squote;
+		}
+	}
+	g_signal = S_BASE;
 	return (1);
 }
 
@@ -76,37 +113,11 @@ int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan po
 			reset_tools(tools);
 			continue ;
 		}
-		// esta parte consister en saber si tiene quotes no terminado. Si es el caso, se escribe "dquote>" o "quote>"
-		for (int i = 0; tools->arg_str[i]; i++) // aqui empieza la gestion de squote/dquote, por revisar
+		if (check_quotes(in_dquote, in_squote, aux, tools) == 0)
 		{
-			if (tools->arg_str[i] == '"' && !in_squote)
-				in_dquote = !in_dquote;
-			else if (tools->arg_str[i] == '\'' && !in_dquote)
-				in_squote = !in_squote;
+			reset_tools(tools);
+			continue ;
 		}
-		while (in_dquote || in_squote)
-		{
-			char	*next_line = readline(in_dquote ? "dquote> " : "quote> ");
-			if (!next_line)
-			{
-				ft_putendl_fd("No line read, exit minishell", STDOUT_FILENO);
-				exit(EXIT_SUCCESS);
-			}
-			aux = ft_strjoin(tools->arg_str, "\n");
-			free(tools->arg_str);
-			tools->arg_str = ft_strjoin(aux, next_line);
-			free(aux);
-			free(next_line);
-			in_dquote = 0;
-			in_squote = 0;
-			for (int i = 0; tools->arg_str[i]; i++)
-			{
-				if (tools->arg_str[i] == '"' && !in_squote)
-					in_dquote = !in_dquote;
-				else if (tools->arg_str[i] == '\'' && !in_dquote)
-					in_squote = !in_squote;
-			}
-		}   // aqui acaba la gestion de squote/dquote, por revisar todo esto
 		add_history(tools->arg_str);   // gestion del historial
 		expansor(tools);               //gestion de la expansion de variables
 		tools->command = parser(tools->arg_str);   //Aqui parseo el string que recibe la funcion readline para pasarselo al executor

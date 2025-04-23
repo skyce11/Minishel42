@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:16:37 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/17 16:46:26 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/23 11:24:18 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	sigint_handler_aux(void);
 /// @brief Initialize signal handling.
 /// This function sets up initial values for signal handling.
 /// SIGINT : Ctrl+C
-/// SIGQUIT : Ctrl+ \
+/// SIGQUIT : Ctrl+ \ //
 /// SIG_IGN : ignorar signales
 /// @return Void.
 void	signal_init(void)
@@ -37,7 +37,7 @@ void	sigint_handler(int sig)
 		rl_on_new_line();
 		rl_redisplay();
 		ft_putstr_fd("\n", 1);
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
@@ -49,9 +49,13 @@ void	sigint_handler(int sig)
 	}
 	else if (g_signal == S_HEREDOC)
 	{
-		ft_putstr_fd("\n", 1);
-		signal(SIGQUIT, sigquit_handler);
-		exit(0);
+		// ft_putstr_fd("\n", 1);
+		// signal(SIGQUIT, sigquit_handler);
+		// exit(0);
+		g_signal = S_BASE; // Rétablit l'état initial
+		ft_putendl_fd("\nInterruption : quotes non fermées !", STDERR_FILENO);
+		return ; // Retour au prompt principal
+
 	}
 	else
 		signal(SIGQUIT, SIG_IGN);
