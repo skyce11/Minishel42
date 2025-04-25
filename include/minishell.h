@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 11:27:58 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/25 12:10:45 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/readline.h>
+# include <editline/readline.h>
 # include <readline/history.h>
 
 //VARIABLE GLOBAR
@@ -37,7 +38,7 @@ typedef enum e_signal
 	S_BASE, // señal base
 	S_HEREDOC, //entra en el heredox
 	S_HEREDOC_END, // finalización del heredox
-	S_HEREDOC_INTERRUPTED, // 
+	S_HEREDOC_INTERRUPTED, //
 	S_SIGINT, // Ctrl + C
 	S_SIGINT_CMD, // Ctrl + C en medio de un comando
 	S_CMD, // Se ejecuta un comando
@@ -274,6 +275,7 @@ t_pipe			*obtain_related_pipe_from_list(t_pipe *ps,
 int				exec_compound_command(t_tools *tools, unsigned int size);
 
 int				exec_single_command(t_command *command, t_tools *tools);
+int				check_quotes(int in_dquote, int in_squote, t_tools *tools);
 
 /*
  * Signal

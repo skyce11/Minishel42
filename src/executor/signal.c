@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:16:37 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/23 11:24:18 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:07:41 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	sigint_handler(int sig)
 		rl_on_new_line();
 		rl_redisplay();
 		ft_putstr_fd("\n", 1);
-		rl_replace_line("", 0);
+		// rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
