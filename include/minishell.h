@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/25 12:10:45 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:55:21 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/readline.h>
-# include <editline/readline.h>
 # include <readline/history.h>
 
 //VARIABLE GLOBAR

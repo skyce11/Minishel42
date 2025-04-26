@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:16:37 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/25 11:07:41 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:53:03 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,8 @@ void	sigint_handler(int sig)
 	(void)sig;
 	if (g_signal == S_BASE || g_signal == S_SIGINT)
 	{
-		rl_on_new_line();
-		rl_redisplay();
 		ft_putstr_fd("\n", 1);
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
@@ -49,13 +47,12 @@ void	sigint_handler(int sig)
 	}
 	else if (g_signal == S_HEREDOC)
 	{
-		// ft_putstr_fd("\n", 1);
-		// signal(SIGQUIT, sigquit_handler);
-		// exit(0);
-		g_signal = S_BASE; // Rétablit l'état initial
-		ft_putendl_fd("\nInterruption : quotes non fermées !", STDERR_FILENO);
-		return ; // Retour au prompt principal
-
+		ft_putstr_fd("^C", 1);
+		ft_putstr_fd("\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		g_signal = S_BASE;
+		return ;
 	}
 	else
 		signal(SIGQUIT, SIG_IGN);
@@ -81,6 +78,6 @@ static void	sigint_handler_aux(void)
 		ft_putstr_fd("\n", 1);
 		g_signal = S_CANCEL_EXEC;
 	}
-	else if (g_signal == S_BASE || g_signal == S_HEREDOC)
+	else if (g_signal == S_BASE)
 		g_signal = S_SIGINT;
 }

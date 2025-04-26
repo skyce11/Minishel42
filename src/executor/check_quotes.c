@@ -2,7 +2,8 @@
 
 static void	update_quotes(const char *line, int *in_dquote, int *in_squote)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	while (line[i])
 	{
@@ -25,7 +26,7 @@ static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote)
 		next_line = readline("quote> ");
 	if (!next_line)
 	{
-		ft_putendl_fd("bash: syntax error: unexpected end of file", STDOUT_FILENO);
+		ft_putendl_fd("syntax error: unexpected end of file", STDOUT_FILENO);
 		free(*buffer);
 		exit(EXIT_FAILURE);
 	}
@@ -39,7 +40,7 @@ static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote)
 	update_quotes(*buffer, in_dquote, in_squote);
 }
 
-static void	child_heredoc(int fd[2], int in_dquote, int in_squote, t_tools *tools)
+void	child_heredoc(int fd[2], int in_dquote, int in_squote, t_tools *tools)
 {
 	char	*buffer;
 
@@ -56,15 +57,16 @@ static void	child_heredoc(int fd[2], int in_dquote, int in_squote, t_tools *tool
 	exit(EXIT_SUCCESS);
 }
 
-static int  check_child_status(int status, int fd, char *result)
+static int	check_child_status(int status, int fd, char *result)
 {
-    if (WIFSIGNALED(status) || (WIFEXITED(status) && WEXITSTATUS(status) != EXIT_SUCCESS))
-    {
-        close(fd);
-        free(result);
-        return (EXIT_SUCCESS);
-    }
-    return (EXIT_FAILURE);
+	if (WIFSIGNALED(status) || (WIFEXITED(status)
+			&& WEXITSTATUS(status) != EXIT_SUCCESS))
+	{
+		close(fd);
+		free(result);
+		return (EXIT_SUCCESS);
+	}
+	return (EXIT_FAILURE);
 }
 
 static int	parent_heredoc(int fd[2], t_tools *tools, pid_t pid)
@@ -79,12 +81,14 @@ static int	parent_heredoc(int fd[2], t_tools *tools, pid_t pid)
 	waitpid(pid, &status, 0);
 	if (check_child_status(status, fd[0], result) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
-	while ((line = read_line(fd[0])) != NULL)
+	line = get_next_line(fd[0]);
+	while (line != NULL)
 	{
 		temp = result;
 		result = ft_strjoin(result, line);
 		free(temp);
 		free(line);
+		line = get_next_line(fd[0]);
 	}
 	close(fd[0]);
 	free(tools->arg_str);
@@ -99,6 +103,7 @@ int	check_quotes(int in_dquote, int in_squote, t_tools *tools)
 	pid_t	pid;
 
 	update_quotes(tools->arg_str, &in_dquote, &in_squote);
+	g_signal = S_HEREDOC;
 	if (!in_dquote && !in_squote)
 		return (EXIT_FAILURE);
 	if (pipe(fd) == -1)

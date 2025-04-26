@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 10:41:16 by migonzal          #+#    #+#             */
-/*   Updated: 2021/09/30 14:42:21 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:50:45 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef LIBFT_H
 # define LIBFT_H
 
@@ -16,6 +17,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
+# include "get_next_line.h"
 
 typedef struct s_list
 {
@@ -23,6 +25,8 @@ typedef struct s_list
 	struct s_list	*next;
 
 }	t_list;
+char	*ft_strcat(char *dest, char const *str);
+char	*get_next_line(int fd);
 //First part
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);

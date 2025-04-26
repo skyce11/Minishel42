@@ -1,5 +1,11 @@
 {
     "files.associations": {
-        "minishell.h": "c"
+        "minishell.h": "c",
+        "libft.h": "c",
+        "get_next_line.h": "c",
+        "stdlib.h": "c",
+        "string.h": "c",
+        "fcntl.h": "c",
+        "stdio.h": "c"
     }
 }

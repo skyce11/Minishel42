@@ -6,9 +6,12 @@
 #    By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/13 09:43:48 by migonzal          #+#    #+#              #
-#    Updated: 2025/04/25 13:26:09 by ampocchi         ###   ########.fr        #
+#    Updated: 2025/04/26 19:18:36 by ampocchi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+# Shut up all comand make
+MAKEFLAGS += -s
 
 ### ------ COLORS ------ ###
 RED		= '\033[31m'
@@ -21,7 +24,7 @@ WHITE	= '\033[37m'
 NONE	= '\033[0m'
 
 ### ------ VARIABLES ------ ###
-# La commande 'find' recherche tous les .c, en ignorant le dossier libft.
+# this comand is for search all .c without libft and print the result
 SRCS	= $(shell find . -path "./libft" -prune -o -type f -name "*.c" -print)
 OBJS	= $(SRCS:.c=.o)
 NAME	= minishell
@@ -42,11 +45,11 @@ all: $(NAME)
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 $(LIBFTNAME):
-	$(MAKE) -C $(LIBFT)
+	@$(MAKE) -C $(LIBFT)
 
 $(NAME): $(OBJS) $(LIBFTNAME)
 	@$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) $(LDFLAGS) -L. -lreadline -o $(NAME)
-	@echo $(GREEN) ": All ready to work"
+	@echo $(GREEN) "All ready to work"
 
 clean:
 	@$(RM) $(OBJS)
