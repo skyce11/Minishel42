@@ -6,7 +6,7 @@
 #    By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/13 09:43:48 by migonzal          #+#    #+#              #
-#    Updated: 2025/04/26 19:18:36 by ampocchi         ###   ########.fr        #
+#    Updated: 2025/04/29 21:14:26 by ampocchi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,8 +36,12 @@ INCLUDE	= -Iinclude
 
 CC		= cc
 RM		= rm -f
+
 CFLAGS	= -g -Wall -Wextra -Werror
 
+#Cosas del MAC
+CFLAGS += -I/usr/local/opt/readline/include
+LDFLAGS += -L/usr/local/opt/readline/lib -lreadline
 ### ------ RULES ------ ###
 all: $(NAME)
 
