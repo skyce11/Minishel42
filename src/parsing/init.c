@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:29:41 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/30 14:10:47 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:32:47 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	free_command(t_command *command)
 		if (command->args)
 			ft_free_arr(command->args);
 		if (command->redir)
-			free(command->redir);
+			cleanse_redir_list(command->redir);
 		if (command->next)
 			free_command(command->next);
 		free(command);

@@ -1,0 +1,8 @@
+include
+libft
+Makefile
+minishell
+README.MD
+shell.txt
+src
+test.txt
