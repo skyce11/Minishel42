@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/30 14:32:45 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:06:29 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	reset_tools(t_tools *tools)
 /// @return Always returns 1 after successful initialization.
 int	init_tools(t_tools *tools)
 {
+	tools->exit_status = 0;
 	tools->arg_str = NULL;
 	tools->reset = 0;
 	tools->command = init_command();

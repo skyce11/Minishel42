@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:55:10 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/04/22 12:05:29 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:54:47 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	cleanse_pipe_list(t_pipe **first)
 /// @param prev Puntero a la tubería anterior de la lista (o NULL para la primera tubería).
 /// @param list Puntero a la cabecera de la lista de tuberías (para gestión en caso de fallo).
 /// @return Puntero a la nueva estructura `t_pipe` inicializada, o `NULL` en caso de error.
-static t_pipe	*init_pipe(t_pipe *prev, t_pipe **list)
+t_pipe	*init_pipe(t_pipe *prev, t_pipe **list)
 {
 	t_pipe	*pipe;
 

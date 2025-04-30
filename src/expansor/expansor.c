@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:21:27 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/30 13:32:31 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:48:36 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ char	*expand_exit_status(char *str, int exit_status)
 	char	*result;
 	char	*exit_status_str;
 	char	*pos;
+	char 	*substr;
+	char	*tmp;
 
 	pos = ft_strstr(str, "$?");
 	if (!pos)
@@ -49,8 +51,15 @@ char	*expand_exit_status(char *str, int exit_status)
 	exit_status_str = ft_itoa(exit_status);
 	if (!exit_status_str)
 		return (str);
-	result = ft_strjoin(ft_substr(str, 0, pos - str), exit_status_str);
-	result = ft_strjoin(result, pos + 2);
+	substr = ft_substr(str, 0, pos - str);
+	if (!substr)
+		return (free(exit_status_str), str);
+	tmp = ft_strjoin(substr, exit_status_str);
+	free(substr);
+	if (!tmp)
+		return (free(exit_status_str), str);
+	result = ft_strjoin(tmp, pos + 2);
+	free(tmp);
 	free(exit_status_str);
 	free(str);
 	return (result);
@@ -96,11 +105,8 @@ char	*detect_dollar(t_tools *tools)
 	while (tools->arg_str[i])
 	{
 		i += digit_after_dollar(i, tools->arg_str);
-		// Si se detecta `$?`, se ignora el tratamiento y se devuelve 0.
 		if (tools->arg_str[i] == '$' && tools->arg_str[i + 1] == '?')
-			return (0);
-		// Si `$` está seguido de un carácter válido (ni espacio, ni comillas
-		// finales), llama a una función para procesar la expansión de `$`.
+			return (free(aux), NULL);
 		else if (tools->arg_str[i] == '$' && (tools->arg_str[i + 1] != ' '
 				&& (tools->arg_str[i + 1] != '"' || tools->arg_str[i + 2]
 					!= '\0')) && tools->arg_str[i + 1] != '\0')
@@ -109,9 +115,10 @@ char	*detect_dollar(t_tools *tools)
 		{
 			aux2 = char_to_str(tools->arg_str[i++]);
 			aux3 = ft_strjoin(aux, aux2);
-			free(aux);
-			aux = aux3;
 			free(aux2);
+			free(aux);
+			aux = ft_strdup(aux3);
+			free(aux3);
 		}
 	}
 	return (aux);
