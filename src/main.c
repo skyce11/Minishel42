@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/25 11:26:06 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/29 22:13:06 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	reset_tools(t_tools *tools)
 	tools->arg_str = NULL;
 	ft_free_arr(tools->paths);
 	tools->paths = NULL;
-	init_tools(tools);
+	if (init_tools(tools) == 0)
+		return (0);
 	tools->reset = 1;
 	return (1);
 }
@@ -38,7 +39,8 @@ int	init_tools(t_tools *tools)
 	tools->arg_str = NULL;
 	tools->reset = 0;
 	tools->command = init_command();
-	parse_envp(tools);
+	if (parse_envp(tools) == 0)
+		return (0);
 	return (1);
 }
 
@@ -84,6 +86,8 @@ int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan po
 		add_history(tools->arg_str);   // gestion del historial
 		expansor(tools);               //gestion de la expansion de variables
 		tools->command = parser(tools->arg_str);   //Aqui parseo el string que recibe la funcion readline para pasarselo al executor
+		if (!tools->command)
+			return (0);
 		executor(tools);               // gestion del executor
 		reset_tools(tools);				//cuando acaba todo, reset de todo y se queda listo para recibir el sig comando
 	}
@@ -92,18 +96,25 @@ int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan po
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_tools	tools;
+	// t_tools	tools;
+	(void)envp;
 
 	if (argc != 1 || argv[1])
 	{
-		printf("Este programa no acepta argumentos inútil\n");
-		exit(0);
+		ft_putstr_fd("Este programa no acepta argumentos inútil\n", 1);
+		// exit(0);
+		return (0);
 	}
-	tools.envp = arrdup(envp);   // guardo el enviroment antes de hacer nada
-	signal_init();   			// señales, hay que prederlo fuego a esto
-	find_pwd(&tools); 			// estoy guardando el las variables PATH y OLDPATH
-	init_tools(&tools);
-	printf("AQUI EMPIEZA LA MINISHELL\n");
-	minishell_loop(&tools);     //este es loop que mantiene abierta el prompt de la mini hasta que le digas que se cierre
+	// tools.envp = arrdup(envp);
+	// if (!tools.envp)
+	// 	return (1);
+	// signal_init();
+	// if (find_pwd(&tools) == 0)
+	// 	return (1);
+	// if (init_tools(&tools) == 0)
+	// 	return (1);
+	// printf("AQUI EMPIEZA LA MINISHELL\n");
+	// if (minishell_loop(&tools) == 0)
+	// 	return (1);
 	return (0);
 }

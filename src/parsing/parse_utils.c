@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 11:39:33 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 11:55:26 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:34:31 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ char	*word_dup(char *str, int start, int finish)
 
 	i = 0;
 	word = malloc((finish - start + 1) * sizeof(char));
+	if (!word)
+		return (NULL);
 	while (start < finish)
 		word[i++] = str[start++];
 	word[i] = '\0';

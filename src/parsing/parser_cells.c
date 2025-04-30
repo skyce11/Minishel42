@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 10:25:18 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 12:03:08 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:38:55 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,6 +276,8 @@ t_command	*add_cell(t_command *list, char *cmd_sep)
 
 	cur = list;
 	cell = create_cell(cmd_sep);
+	if (!cell)
+		return (NULL);
 	if (list == NULL)
 		return (cell);
 	while (cur->next)

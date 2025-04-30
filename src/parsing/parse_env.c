@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:45:04 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 11:08:27 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:54:58 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,22 @@ int	find_pwd(t_tools *tools)
 	while (tools->envp[i])
 	{
 		if (!ft_strncmp(tools->envp[i], "PWD=", 4))
+		{
 			tools->pwd = ft_substr(tools->envp[i], 4,
-					ft_strlen(tools->envp[i]) - 4);
+				ft_strlen(tools->envp[i]) - 4);
+			if (!tools->pwd)
+				return (0);
+		}
 		if (!ft_strncmp(tools->envp[i], "OLDPWD=", 7))
+		{
 			tools->old_pwd = ft_substr(tools->envp[i], 7,
-					ft_strlen(tools->envp[i]) - 7);
+				ft_strlen(tools->envp[i]) - 7);
+			if (!tools->pwd)
+				return (0);
+		}
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 /// @brief Extracts the PATH variable from the environment.
@@ -61,18 +69,24 @@ int	parse_envp(t_tools *tools)
 {
 	char	*path_from_envp;
 	int		i;
+	int		len;
 	char	*tmp;
 
+	len = 0;
 	path_from_envp = find_path(tools->envp);
 	tools->paths = ft_split(path_from_envp, ':');
+	if (!path_from_envp || path_from_envp[0] == '\0' || !tools->paths)
+		return (printf("Error: PATH no encontrado.\n"), 0);
 	free(path_from_envp);
 	i = 0;
 	while (tools->paths[i])
 	{
-		if (ft_strncmp(&tools->paths[i][ft_strlen(tools->paths[i]) - 1],
-			"/", 1) != 0)
+		len = ft_strlen(tools->paths[i])  - 1;
+		if (ft_strncmp(&tools->paths[i][len], "/", 1) != 0)
 		{
 			tmp = ft_strjoin(tools->paths[i], "/");
+			if (!tmp)
+				return (ft_free_arr(tools->paths), 0);
 			free(tools->paths[i]);
 			tools->paths[i] = tmp;
 		}

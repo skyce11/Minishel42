@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:04:58 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 11:16:08 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:42:57 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ t_command	*parser(char *s)
 	while (aux[i])
 	{
 		sep = add_cell(sep, aux[i]);
+		if (!sep)
+			return (NULL);
 		i++;
 	}
 	return (sep);
