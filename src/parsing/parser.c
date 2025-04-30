@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:04:58 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/29 21:42:57 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:02:56 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ t_command	*parser(char *s)
 			return (NULL);
 		i++;
 	}
+	ft_free_arr(aux);
 	return (sep);
 }

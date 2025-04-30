@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 11:39:33 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/29 21:34:31 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:05:21 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,8 @@ char	**parse_args(char *s)
 	j = 0;
 	c = 0;
 	aux = split_minishell(s, ' ');
+	if (!aux)
+		return (NULL);
 	if (aux[0][0] != '<' && aux[0][0] != '>')
 	{
 		i++;
@@ -188,25 +190,29 @@ char	**parse_args(char *s)
 	}
 	while (aux[i])
 	{
-		if (aux[i][0] != '<' && aux[i][0] != '>'
-			&& aux[i - 1][0] != '<' && aux[i - 1][0] != '>')
+		if (aux[i][0] != '<' && aux[i][0] != '>' &&
+			aux[i - 1][0] != '<' && aux[i - 1][0] != '>')
 		{
 			c++;
 		}
 		i++;
 	}
 	i = 0;
-	res = ft_calloc(c +1, sizeof(s));
+	res = ft_calloc(c + 1, sizeof(char *));
+	if (!res)
+		return (ft_free_matrix(aux), NULL);
+	// Transfert du premier token si ce n'est pas une redirection
 	if (aux[0][0] != '<' && aux[0][0] != '>')
 	{
 		res[0] = aux[0];
+		aux[0] = NULL; // Détache le pointeur pour éviter double free
 		i++;
 		j++;
 	}
 	while (aux[i])
 	{
-		if (aux[i][0] != '<' && aux[i][0] != '>'
-			&& aux[i - 1][0] != '<' && aux[i - 1][0] != '>')
+		if (aux[i][0] != '<' && aux[i][0] != '>' &&
+			aux[i - 1][0] != '<' && aux[i - 1][0] != '>')
 		{
 			res[j] = ft_strdup(aux[i]);
 			j++;
@@ -220,6 +226,7 @@ char	**parse_args(char *s)
 		delete_quotes(res[i], '\'');
 		i++;
 	}
+	ft_free_matrix(aux);
 	return (res);
 }
 

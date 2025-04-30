@@ -6,20 +6,20 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 12:07:34 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:42:04 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	free_tools(t_tools *tools)
-{
-	ft_free_arr(tools->paths);
-	ft_free_arr(tools->envp);
-	free(tools->arg_str);
-	free(tools->pwd);
-	free(tools->old_pwd);
-}
+// static void	free_tools(t_tools *tools)
+// {
+// 	ft_free_arr(tools->paths);
+// 	ft_free_arr(tools->envp);
+// 	free(tools->arg_str);
+// 	free(tools->pwd);
+// 	free(tools->old_pwd);
+// }
 
 /// @brief Validates the arguments provided to the 'exit' command. Checks if
 /// there are too many arguments, ensuring only one numeric value is allowed.
@@ -68,6 +68,7 @@ int	ft_exit(t_tools *tools)
 		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	free_tools(tools);
+	// free_tools(tools);
+	ft_clean_all(tools);
 	exit(exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/29 22:13:06 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:15:10 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,36 +85,52 @@ int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan po
 		}
 		add_history(tools->arg_str);   // gestion del historial
 		expansor(tools);               //gestion de la expansion de variables
+		if (tools->command)
+			free_command(tools->command);
 		tools->command = parser(tools->arg_str);   //Aqui parseo el string que recibe la funcion readline para pasarselo al executor
 		if (!tools->command)
-			return (0);
+			return (ft_clean_all(tools), 0);
 		executor(tools);               // gestion del executor
 		reset_tools(tools);				//cuando acaba todo, reset de todo y se queda listo para recibir el sig comando
 	}
 	return (1);
 }
 
+void	ft_clean_all(t_tools *tools)
+{
+	if (tools->arg_str)
+		free(tools->arg_str);
+	if (tools->command)
+		free_command(tools->command);
+	if (tools->pwd)
+		free(tools->pwd);
+	if (tools->old_pwd)
+		free(tools->old_pwd);
+	if (tools->envp)
+		ft_free_arr(tools->envp);
+	ft_free_arr(tools->paths);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	// t_tools	tools;
-	(void)envp;
+	t_tools	tools;
 
 	if (argc != 1 || argv[1])
 	{
 		ft_putstr_fd("Este programa no acepta argumentos inútil\n", 1);
-		// exit(0);
 		return (0);
 	}
-	// tools.envp = arrdup(envp);
-	// if (!tools.envp)
-	// 	return (1);
-	// signal_init();
-	// if (find_pwd(&tools) == 0)
-	// 	return (1);
-	// if (init_tools(&tools) == 0)
-	// 	return (1);
-	// printf("AQUI EMPIEZA LA MINISHELL\n");
-	// if (minishell_loop(&tools) == 0)
-	// 	return (1);
+	tools.envp = arrdup(envp);
+	if (!tools.envp)
+		return (ft_free_arr(tools.envp), 0);
+	signal_init();
+	if (find_pwd(&tools) == 0)
+		return (ft_clean_all(&tools), 0);
+	if (init_tools(&tools) == 0)
+		return (ft_clean_all(&tools), 0);
+	printf("AQUI EMPIEZA LA MINISHELL\n");
+	if (minishell_loop(&tools) == 0)
+		return (1);
+	ft_clean_all(&tools);
 	return (0);
 }

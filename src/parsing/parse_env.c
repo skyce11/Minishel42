@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:45:04 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/29 21:54:58 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:03:49 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ int	find_pwd(t_tools *tools)
 			tools->pwd = ft_substr(tools->envp[i], 4,
 				ft_strlen(tools->envp[i]) - 4);
 			if (!tools->pwd)
-				return (0);
+				return (free(tools->pwd), 0);
 		}
 		if (!ft_strncmp(tools->envp[i], "OLDPWD=", 7))
 		{
 			tools->old_pwd = ft_substr(tools->envp[i], 7,
 				ft_strlen(tools->envp[i]) - 7);
-			if (!tools->pwd)
-				return (0);
+			if (!tools->old_pwd)
+				return (free(tools->old_pwd), 0);
 		}
 		i++;
 	}
@@ -46,18 +46,39 @@ int	find_pwd(t_tools *tools)
 /// Searches the environment variable list for "PATH=" and returns its value.
 /// @param envp Array of environment variables.
 /// @return A string containing the extracted PATH, or an empty string if not found.
+// char	*find_path(char **envp)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (envp[i])
+// 	{
+// 		if (!ft_strncmp(envp[i], "PATH=", 5))
+// 			return (ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5));
+// 		i++;
+// 	}
+// 	return (ft_strdup("\0"));
+// }
+
 char	*find_path(char **envp)
 {
 	int	i;
 
 	i = 0;
+	if (!envp)
+		return (NULL);
 	while (envp[i])
 	{
 		if (!ft_strncmp(envp[i], "PATH=", 5))
-			return (ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5));
+		{
+			char *path = ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5);
+			if (!path)
+				return (NULL);
+			return (path);
+		}
 		i++;
 	}
-	return (ft_strdup("\0"));
+	return (NULL);
 }
 
 /// @brief Parses the environment variables to extract executable paths.

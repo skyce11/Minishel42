@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:29:41 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 11:02:17 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:10:47 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ t_command	*init_command(void)
 	if (!new_command)
 		return (NULL);
 	new_command->cmd_sep = NULL;
-	new_command->args = NULL;
-	new_command->return_val = 0;
 	new_command->next = NULL;
+	new_command->args = NULL;
+	new_command->redir = NULL;
+	new_command->return_val = 0;
 	return (new_command);
 }
 
@@ -31,22 +32,14 @@ t_command	*init_command(void)
 /// @return Void
 void	free_command(t_command *command)
 {
-	char	**args;
-
 	if (command)
 	{
-		if (command->cmd_sep)
-		{
-			args = command->args;
-			while (*args)
-			{
-				free(*args);
-				args++;
-			}
-			free(command->args);
-		}
+		if (command->args)
+			ft_free_arr(command->args);
 		if (command->redir)
 			free(command->redir);
+		if (command->next)
+			free_command(command->next);
 		free(command);
 	}
 }
