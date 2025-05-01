@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:34:38 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/01 16:31:34 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:48:48 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,7 @@ int	exec_single_command(t_command *command, t_tools *tools)
 
 	if (is_builtin(command) == 1)
 	{
-		// ejecuta el commando directamente en el processo padre.
 		run_builtin_in_parent_process(command, tools);
-		// return 0, porque los commandos no necessitan un fork
 		return (0);
 	}
 	status = fork_single_command(command, tools);

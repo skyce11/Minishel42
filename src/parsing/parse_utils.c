@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 11:39:33 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/30 14:34:57 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:49:17 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,67 +169,6 @@ char	**list_dup_after(char *s, char c)
 /// Also removes quotes from arguments for cleaner processing.
 /// @param s The command string to parse.
 /// @return A dynamically allocated array of command arguments.
-// char	**parse_args(char *s)
-// {
-// 	int		i;
-// 	int		j;
-// 	int		c;
-// 	char	**aux;
-// 	char	**res;
-
-// 	i = 0;
-// 	j = 0;
-// 	c = 0;
-// 	aux = split_minishell(s, ' ');
-// 	if (!aux)
-// 		return (NULL);
-// 	if (aux[0][0] != '<' && aux[0][0] != '>')
-// 	{
-// 		i++;
-// 		c++;
-// 	}
-// 	while (aux[i])
-// 	{
-// 		if (aux[i][0] != '<' && aux[i][0] != '>' &&
-// 			aux[i - 1][0] != '<' && aux[i - 1][0] != '>')
-// 		{
-// 			c++;
-// 		}
-// 		i++;
-// 	}
-// 	i = 0;
-// 	res = ft_calloc(c + 1, sizeof(char *));
-// 	if (!res)
-// 		return (ft_free_matrix(aux), NULL);
-// 	// Transfert du premier token si ce n'est pas une redirection
-// 	if (aux[0][0] != '<' && aux[0][0] != '>')
-// 	{
-// 		res[0] = aux[0];
-// 		aux[0] = NULL; // Détache le pointeur pour éviter double free
-// 		i++;
-// 		j++;
-// 	}
-// 	while (aux[i])
-// 	{
-// 		if (aux[i][0] != '<' && aux[i][0] != '>' &&
-// 			aux[i - 1][0] != '<' && aux[i - 1][0] != '>')
-// 		{
-// 			res[j] = ft_strdup(aux[i]);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	i = 0;
-// 	while (res[i])
-// 	{
-// 		delete_quotes(res[i], '\"');
-// 		delete_quotes(res[i], '\'');
-// 		i++;
-// 	}
-// 	ft_free_matrix(aux);
-// 	return (res);
-// }
-
 char	**parse_args(char *s)
 {
 	int		i;

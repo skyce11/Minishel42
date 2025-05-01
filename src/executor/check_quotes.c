@@ -20,10 +20,7 @@ static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote)
 	char	*next_line;
 	char	*temp;
 
-	if (*in_dquote)
-		next_line = readline("dquote> ");
-	else
-		next_line = readline("quote> ");
+	next_line = readline("> ");
 	if (!next_line)
 	{
 		ft_putendl_fd("syntax error: unexpected end of file", STDOUT_FILENO);

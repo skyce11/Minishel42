@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/01 16:18:41 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:58:24 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	init_tools(t_tools *tools)
 	return (1);
 }
 
-int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan por revisar, y todo lo que tenga que ver con las señales hay que prenderle fuego y empezzar de 0
+int	minishell_loop(t_tools *tools)
 {
 	char	*aux;
 	int		in_dquote;
@@ -57,42 +57,31 @@ int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan po
 	{
 		if (g_signal == S_SIGINT)
 			tools->exit_status = 1;
-		// la funcion imprime una invitacion. Si nada se lee, se cierra el programma.
-		tools->arg_str = readline("minishell? "); // Aqui inicia el readline
+		tools->arg_str = readline("minishell ");
 		if (!tools->arg_str)
 		{
-			ft_putendl_fd("No line read, exit minishell", STDOUT_FILENO);
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
+			ft_clean_all(tools);
 			exit(EXIT_SUCCESS);
 		}
-		// el commando se lee y se "strim" para quitar los espacios.
 		aux = ft_strtrim(tools->arg_str, " ");
 		free(tools->arg_str);
 		tools->arg_str = aux;
-		if (tools->arg_str[0] == '\0')  //si el parseo recibe un string vacio reset de la mini
+		if (tools->arg_str[0] == '\0' || !validate_pipes(tools->arg_str)
+			|| check_quotes(in_dquote, in_squote, tools) == 0)
 		{
 			reset_tools(tools);
 			continue ;
 		}
-		// Si el comando es invalido con los pipes, se reeinicia.
-		if (!validate_pipes(tools->arg_str))   // Intento de solucionar un error con las pipes, a revisar porque el error es mas profundo y no afecta solo a las pipe
-		{
-			reset_tools(tools);
-			continue ;
-		}
-		if (check_quotes(in_dquote, in_squote, tools) == 0)
-		{
-			reset_tools(tools);
-			continue ;
-		}
-		add_history(tools->arg_str);   // gestion del historial
-		expansor(tools);               //gestion de la expansion de variables
+		add_history(tools->arg_str);
+		expansor(tools);
 		if (tools->command)
 			free_command(tools->command);
-		tools->command = parser(tools->arg_str);   //Aqui parseo el string que recibe la funcion readline para pasarselo al executor
+		tools->command = parser(tools->arg_str);
 		if (!tools->command)
 			return (ft_clean_all(tools), 0);
-		executor(tools);               // gestion del executor
-		reset_tools(tools);				//cuando acaba todo, reset de todo y se queda listo para recibir el sig comando
+		executor(tools);
+		reset_tools(tools);
 	}
 	return (1);
 }
