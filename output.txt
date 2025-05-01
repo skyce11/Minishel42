@@ -1,3 +1,0 @@
-[?2004hminishell? [?2004l
-Minishell: input.txt: File or directory does not exist
-No line read, exit minishell
