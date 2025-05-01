@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:06:43 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 12:04:59 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:38:26 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,25 @@
 /// @return 1 si es, sino 0
 int	is_builtin(t_command *command)
 {
-	if (!ft_strcmp(command->args[0], "echo"))
-		return (1);
-	if (!ft_strcmp(command->args[0], "cd"))
-		return (1);
-	if (!ft_strcmp(command->args[0], "pwd"))
-		return (1);
-	if (!ft_strcmp(command->args[0], "export"))
-		return (1);
-	if (!ft_strcmp(command->args[0], "unset"))
-		return (1);
-	if (!ft_strcmp(command->args[0], "env"))
-		return (1);
-	if (!ft_strcmp(command->args[0], "exit"))
-		return (1);
+	if (command->args[0])
+	{
+		if (!ft_strcmp(command->args[0], "echo"))
+			return (1);
+		if (!ft_strcmp(command->args[0], "cd"))
+			return (1);
+		if (!ft_strcmp(command->args[0], "pwd"))
+			return (1);
+		if (!ft_strcmp(command->args[0], "export"))
+			return (1);
+		if (!ft_strcmp(command->args[0], "unset"))
+			return (1);
+		if (!ft_strcmp(command->args[0], "env"))
+			return (1);
+		if (!ft_strcmp(command->args[0], "exit"))
+			return (1);
+		else
+			return (0);
+	}
 	else
 		return (0);
 }

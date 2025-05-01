@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/30 17:06:29 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:18:41 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ void	ft_clean_all(t_tools *tools)
 		free(tools->old_pwd);
 	if (tools->envp)
 		ft_free_arr(tools->envp);
-	ft_free_arr(tools->paths);
+	if (tools->paths)
+		ft_free_arr(tools->paths);
 }
 
 int	main(int argc, char **argv, char **envp)

@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:55:10 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/04/30 17:54:47 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:19:42 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	cleanse_pipe_list(t_pipe **first)
 		free(current);
 		current = next;
 	}
+	*first = NULL;
 }
 
 /// @brief Inicializa una estructura `t_pipe` para manejar tuberías en una lista
@@ -47,6 +48,8 @@ t_pipe	*init_pipe(t_pipe *prev, t_pipe **list)
 		cleanse_pipe_list(list);
 		return (NULL);
 	}
+	pipe->pipe[0] = -1;
+	pipe->pipe[1] = -1;
 	pipe->next = NULL;
 	if (prev)
 		prev->next = pipe;
@@ -68,13 +71,15 @@ t_pipe	*create_pipe_list(int size)
 	i = 0;
 	if (size > 0)
 	{
-		first = init_pipe(NULL, NULL);
+		first = init_pipe(NULL, &first);
 		if (!first)
 			return (NULL);
 		current = first;
 		while (i < size - 1)
 		{
 			current = init_pipe(current, &first);
+			if (!current)
+				return (NULL);
 			i++;
 		}
 	}

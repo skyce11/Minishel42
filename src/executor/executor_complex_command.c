@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/04/22 12:05:10 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:27:40 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,75 @@
 /// @param pipes Structure managing inter-process communication.
 /// @param i Index of the command in the sequence.
 /// @return Void
-static void	set_file_descriptors(t_command *curr_command, t_pipes_command pipes,
-	unsigned int i)
+// static void	set_file_descriptors(t_command *curr_command, t_pipes_command pipes,
+// 	unsigned int i)
+// {
+// 	if (curr_command->next)
+// 	{
+// 		dup2(pipes.curr->pipe[1], STDOUT_FILENO);
+// 		close(pipes.curr->pipe[0]);
+// 		close(pipes.curr->pipe[1]);
+// 	}
+// 	if (i != 0)
+// 	{
+// 		dup2(pipes.prev->pipe[0], STDIN_FILENO);
+// 		close(pipes.prev->pipe[0]);
+// 	}
+// 	if (is_builtin(curr_command)
+// 		&& ft_strcmp(curr_command->args[0], "exit") == 0)
+// 	{
+// 		close(STDIN_FILENO);
+// 		close(STDOUT_FILENO);
+// 		close(STDERR_FILENO);
+// 	}
+// }
+void set_file_descriptors(t_command *curr_command, t_pipes_command pipes, unsigned int i)
 {
-	if (curr_command->next)
+    if (curr_command->next)
 	{
-		dup2(pipes.curr->pipe[1], STDOUT_FILENO);
-		close(pipes.curr->pipe[0]);
-		close(pipes.curr->pipe[1]);
-	}
-	if (i != 0)
+        if (pipes.curr->pipe[1] == -1)
+		{
+            if (pipe(pipes.curr->pipe) < 0)
+			{
+                perror("pipe");
+                exit(EXIT_FAILURE);
+            }
+        }
+        if (dup2(pipes.curr->pipe[1], STDOUT_FILENO) < 0)
+		{
+            perror("dup2");
+            exit(EXIT_FAILURE);
+        }
+        if (pipes.curr->pipe[0] != -1)
+		{
+            close(pipes.curr->pipe[0]);
+            pipes.curr->pipe[0] = -1;
+        }
+        if (pipes.curr->pipe[1] != -1)
+		{
+            close(pipes.curr->pipe[1]);
+            pipes.curr->pipe[1] = -1;
+        }
+    }
+    if (i != 0 && pipes.prev)
 	{
-		dup2(pipes.prev->pipe[0], STDIN_FILENO);
-		close(pipes.prev->pipe[0]);
-	}
-	if (is_builtin(curr_command)
-		&& ft_strcmp(curr_command->args[0], "exit") == 0)
+        if (dup2(pipes.prev->pipe[0], STDIN_FILENO) < 0)
+		{
+            perror("dup2");
+            exit(EXIT_FAILURE);
+        }
+        if (pipes.prev->pipe[0] != -1)
+		{
+            close(pipes.prev->pipe[0]);
+            pipes.prev->pipe[0] = -1;
+        }
+    }
+    if (is_builtin(curr_command) && strcmp(curr_command->args[0], "exit") == 0)
 	{
-		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
-		close(STDERR_FILENO);
-	}
+        close(STDIN_FILENO);
+        close(STDOUT_FILENO);
+        close(STDERR_FILENO);
+    }
 }
 
 /// @brief Executes a command as part of a piped sequence.
@@ -82,16 +130,29 @@ static int	exec_piped_command(t_pipe *ps, t_tools *tools,
 	if (fill_command_from_env(curr_command, tools) != -1)
 	{
 		if (curr_command->next != NULL)
-			pipe(pipes.curr->pipe);
+			if (pipe(pipes.curr->pipe) < 0)
+				return (-1);
 		pid = fork();
 		if (pid == 0)
 			return (piped_command_child(curr_command, pipes, tools, i));
 		else
 		{
 			if (curr_command->next != NULL)
-				close(pipes.curr->pipe[1]);
+			{
+				if (pipes.curr->pipe[1] != -1)
+				{
+					close(pipes.curr->pipe[1]);
+					pipes.curr->pipe[1] = -1;
+				}
+			}
 			if (pipes.prev)
-				close(pipes.prev->pipe[0]);
+			{
+				if (pipes.curr->pipe[0] != -1)
+				{
+					close(pipes.prev->pipe[0]);
+					pipes.curr->pipe[0] = -1;
+				}
+			}
 			waitpid(pid, &child_status, 0);
 			handle_status(child_status, tools);
 		}
@@ -123,9 +184,9 @@ int	exec_compound_command(t_tools *tools, unsigned int size)
 	while (i < size)
 	{
 		if (exec_piped_command(ps, tools, curr_command, i) != 0)
-			return (1);
-		if (curr_command)
-			curr_command = curr_command->next;
+			return (cleanse_pipe_list(&ps), 1);
+		// if (curr_command)
+		curr_command = curr_command->next;
 		i++;
 	}
 	cleanse_pipe_list(&ps);
