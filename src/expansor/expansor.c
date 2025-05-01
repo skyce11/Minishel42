@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:21:27 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/30 17:48:36 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:43:37 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,14 @@ char	*expand_exit_status(char *str, int exit_status)
 char	*expansor(t_tools *tools)
 {
 	char	*aux;
-	int		index;
+	int		idx;
 
 	aux = NULL;
 	tools->arg_str = expand_exit_status(tools->arg_str, tools->exit_status);
-	index = dollar_after(tools->arg_str);
-	if (index >= 2 && tools->arg_str[index - 2] != '\'' && index != 0
-		&& tools->arg_str[index] != '\0')
+	idx = dollar_after(tools->arg_str);
+	if (idx != 0 && idx >= 2
+		&& tools->arg_str[idx - 2] != '\''
+		&& tools->arg_str[idx] != '\0')
 	{
 		aux = detect_dollar(tools);
 		free(tools->arg_str);

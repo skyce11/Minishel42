@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/01 16:27:40 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:59:42 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,75 +18,56 @@
 /// @param pipes Structure managing inter-process communication.
 /// @param i Index of the command in the sequence.
 /// @return Void
-// static void	set_file_descriptors(t_command *curr_command, t_pipes_command pipes,
-// 	unsigned int i)
-// {
-// 	if (curr_command->next)
-// 	{
-// 		dup2(pipes.curr->pipe[1], STDOUT_FILENO);
-// 		close(pipes.curr->pipe[0]);
-// 		close(pipes.curr->pipe[1]);
-// 	}
-// 	if (i != 0)
-// 	{
-// 		dup2(pipes.prev->pipe[0], STDIN_FILENO);
-// 		close(pipes.prev->pipe[0]);
-// 	}
-// 	if (is_builtin(curr_command)
-// 		&& ft_strcmp(curr_command->args[0], "exit") == 0)
-// 	{
-// 		close(STDIN_FILENO);
-// 		close(STDOUT_FILENO);
-// 		close(STDERR_FILENO);
-// 	}
-// }
-void set_file_descriptors(t_command *curr_command, t_pipes_command pipes, unsigned int i)
+void	safe_close(int *fd)
 {
-    if (curr_command->next)
+	if (*fd != -1)
 	{
-        if (pipes.curr->pipe[1] == -1)
+		close(*fd);
+		*fd = -1;
+	}
+}
+
+/* Fonction générique pour appliquer dup2 avec vérification */
+void	safe_dup2(int oldfd, int newfd)
+{
+	if (oldfd != -1)
+	{
+		if (dup2(oldfd, newfd) < 0)
 		{
-            if (pipe(pipes.curr->pipe) < 0)
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
+	}
+}
+
+void	set_file_descriptors(t_command *curr_command, t_pipes_command pipes,
+						unsigned int i)
+{
+	if (curr_command->next)
+	{
+		if (pipes.curr->pipe[1] == -1)
+		{
+			if (pipe(pipes.curr->pipe) < 0)
 			{
-                perror("pipe");
-                exit(EXIT_FAILURE);
-            }
-        }
-        if (dup2(pipes.curr->pipe[1], STDOUT_FILENO) < 0)
-		{
-            perror("dup2");
-            exit(EXIT_FAILURE);
-        }
-        if (pipes.curr->pipe[0] != -1)
-		{
-            close(pipes.curr->pipe[0]);
-            pipes.curr->pipe[0] = -1;
-        }
-        if (pipes.curr->pipe[1] != -1)
-		{
-            close(pipes.curr->pipe[1]);
-            pipes.curr->pipe[1] = -1;
-        }
-    }
-    if (i != 0 && pipes.prev)
+				perror("pipe");
+				exit(EXIT_FAILURE);
+			}
+		}
+		safe_dup2(pipes.curr->pipe[1], STDOUT_FILENO);
+		safe_close(&pipes.curr->pipe[0]);
+		safe_close(&pipes.curr->pipe[1]);
+	}
+	if (i != 0 && pipes.prev)
 	{
-        if (dup2(pipes.prev->pipe[0], STDIN_FILENO) < 0)
-		{
-            perror("dup2");
-            exit(EXIT_FAILURE);
-        }
-        if (pipes.prev->pipe[0] != -1)
-		{
-            close(pipes.prev->pipe[0]);
-            pipes.prev->pipe[0] = -1;
-        }
-    }
-    if (is_builtin(curr_command) && strcmp(curr_command->args[0], "exit") == 0)
+		safe_dup2(pipes.prev->pipe[0], STDIN_FILENO);
+		safe_close(&pipes.prev->pipe[0]);
+	}
+	if (is_builtin(curr_command) && strcmp(curr_command->args[0], "exit") == 0)
 	{
-        close(STDIN_FILENO);
-        close(STDOUT_FILENO);
-        close(STDERR_FILENO);
-    }
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
+	}
 }
 
 /// @brief Executes a command as part of a piped sequence.

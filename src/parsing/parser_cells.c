@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 10:25:18 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/29 21:38:55 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:28:56 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,12 +252,22 @@ t_command	*create_cell(char *cmd_sep)
 	cell = malloc(sizeof(t_command));
 	if (!cell)
 		return (NULL);
-	cell -> next = NULL;
-	cell -> args = parse_args(cmd_sep);
-	cell -> redir = create_redir_list(cmd_sep, &status);
-	cell -> cmd_sep = cmd_sep;
+	cell->next = NULL;
+	cell->args = parse_args(cmd_sep);
+	cell->redir = create_redir_list(cmd_sep, &status);
+	cell->cmd_sep = ft_strdup(cmd_sep);
+	if (!cell->cmd_sep)
+	{
+		if (cell->args)
+		ft_free_matrix(cell->args);
+		return(free(cell), NULL);
+	}
 	if (status == -1)
 	{
+		free(cell->cmd_sep);
+		if (cell->args)
+			ft_free_matrix(cell->args);
+		free(cell);
 		return (NULL);
 	}
 	return (cell);
@@ -274,12 +284,16 @@ t_command	*add_cell(t_command *list, char *cmd_sep)
 	t_command	*cur;
 	t_command	*cell;
 
-	cur = list;
 	cell = create_cell(cmd_sep);
 	if (!cell)
+	{
+		if (list != NULL)
+			free_command(list);
 		return (NULL);
+	}
 	if (list == NULL)
 		return (cell);
+	cur = list;
 	while (cur->next)
 		cur = cur->next;
 	cur->next = cell;
