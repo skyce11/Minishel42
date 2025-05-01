@@ -6,7 +6,7 @@
 #    By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/27 10:41:27 by migonzal          #+#    #+#              #
-#    Updated: 2025/04/26 19:17:06 by ampocchi         ###   ########.fr        #
+#    Updated: 2025/05/01 19:12:29 by ampocchi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ HDRS = libft.h
 
 NAME = libft.a
 
-CC = gcc
+CC = cc
 RM = rm -f
 
 CFLAGS = -Wall -Wextra -Werror
