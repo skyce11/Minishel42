@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/25 11:26:06 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/02 20:16:26 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,38 @@ int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan po
 	return (1);
 }
 
+/// @brief update the nbr of SHLVL.
+/// @param tools
+/// @param flag if flags = 1 -> increment ; if flags = 0 -> decrement;
+void	update_shlvl(t_tools *tools, int flag)
+{
+	int		i;
+	int		shlvl;
+	char	*new_val;
+	char	*entry;
+
+	i = 0;
+	while (tools->envp[i++])
+	{
+		if (!ft_strncmp(tools->envp[i], "SHLVL=", 6))
+		{
+			shlvl = ft_atoi(tools->envp[i] + 6);
+			if (flag == 1)
+				shlvl++;
+			else if (flag == 0 && shlvl > 0)
+				shlvl--;
+			else if (flag == 0 && shlvl < 0)
+					shlvl = 0;
+			new_val = ft_itoa(shlvl);
+			entry = ft_strjoin("SHLVL=", new_val);
+			free(new_val);
+			free(tools->envp[i]);
+			tools->envp[i] = entry;
+			return ;
+		}
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_tools	tools;
@@ -100,10 +132,12 @@ int	main(int argc, char **argv, char **envp)
 		exit(0);
 	}
 	tools.envp = arrdup(envp);   // guardo el enviroment antes de hacer nada
+	update_shlvl(&tools, 1);
 	signal_init();   			// señales, hay que prederlo fuego a esto
 	find_pwd(&tools); 			// estoy guardando el las variables PATH y OLDPATH
 	init_tools(&tools);
 	printf("AQUI EMPIEZA LA MINISHELL\n");
 	minishell_loop(&tools);     //este es loop que mantiene abierta el prompt de la mini hasta que le digas que se cierre
+	update_shlvl(&tools, 0);
 	return (0);
 }

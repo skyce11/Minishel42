@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 12:07:34 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/02 20:07:43 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ int	ft_exit(t_tools *tools)
 		return (EXIT_FAILURE);
 	}
 	free_tools(tools);
+	update_shlvl(tools, 0);
 	exit(exit_code);
 }

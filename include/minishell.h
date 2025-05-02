@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/25 14:55:21 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/02 20:07:23 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,9 @@ typedef struct s_env
 	char			*value_var;
 	struct s_env	*next;
 }					t_env;
+
+
+void	update_shlvl(t_tools *tools, int flag);
 
 /*
  * Parser_cells
