@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/25 14:55:21 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:40:36 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+#include <termios.h>
 
 //VARIABLE GLOBAR
 extern int	g_signal;
