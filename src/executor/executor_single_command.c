@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:34:38 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/01 18:48:48 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/03 18:39:56 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,14 @@ static int	fork_single_command(t_command *command, t_tools *tools)
 	if (fill_command_from_env(command, tools) == -1)
 		return (-1);
 	g_signal = S_CMD;
+	if (ft_strcmp(command->args[0], "./minishell") == 0)
+		g_signal = S_MINI;
 	pid = fork();
 	if (pid == 0)
 	{
-		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, sigquit_handler);
+		signal_init();
 		run_command(command, tools);
+		g_signal = S_BASE;
 		return (-1);
 	}
 	else if (pid > 0)
@@ -55,7 +57,6 @@ static int	fork_single_command(t_command *command, t_tools *tools)
 	else
 		return (-1);
 	g_signal = S_BASE;
-	signal(SIGQUIT, SIG_IGN);
 	return (status);
 }
 

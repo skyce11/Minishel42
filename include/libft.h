@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 10:41:16 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/26 18:50:45 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/03 18:34:47 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ typedef struct s_list
 	struct s_list	*next;
 
 }	t_list;
+
+char	*ft_strndup(const char *s, size_t n);
 char	*ft_strcat(char *dest, char const *str);
 char	*get_next_line(int fd);
 //First part

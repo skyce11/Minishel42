@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/30 17:48:39 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/03 18:46:35 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	ft_exit(t_tools *tools)
 		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	// free_tools(tools);
 	ft_clean_all(tools);
+	update_shlvl(tools, 0);
 	exit(exit_code);
 }

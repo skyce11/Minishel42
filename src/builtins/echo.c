@@ -19,17 +19,22 @@
 int	ft_echo(t_command *command)
 {
 	int	i;
+	int	skip_newline;
 
 	i = 1;
-	if (command->args[1] && !ft_strncmp(command->args[1], "-n", 2))
+	skip_newline = 0;
+	while (command->args[i] && !ft_strncmp(command->args[i], "-n", 2))
+	{
+		skip_newline = 1;
 		i++;
+	}
 	while (command->args[i])
 	{
 		ft_putstr_fd(command->args[i++], STDOUT_FILENO);
 		if (command->args[i])
 			ft_putchar_fd(32, STDOUT_FILENO);
 	}
-	if (!(command->args[1] && !ft_strncmp(command->args[1], "-n", 2)))
+	if (!skip_newline)
 		ft_putchar_fd(10, STDOUT_FILENO);
 	return (EXIT_SUCCESS);
 }
