@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:16:37 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/01 20:00:31 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:53:03 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,17 @@ void	sigint_handler(int sig)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		g_signal = S_SIGINT;
 	}
 	else if (g_signal == S_CMD)
 	{
 		g_signal = S_SIGINT_CMD;
+		ft_putstr_fd("\n", 1);
 		rl_on_new_line();
 	}
 	else if (g_signal == S_HEREDOC)
 	{
-		ft_putstr_fd("^C\n", 1);
+		ft_putstr_fd("^C", 1);
+		ft_putstr_fd("\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		g_signal = S_BASE;
@@ -56,6 +57,14 @@ void	sigint_handler(int sig)
 	else
 		signal(SIGQUIT, SIG_IGN);
 	sigint_handler_aux();
+}
+
+void	sigquit_handler(int sig)
+{
+	(void)sig;
+	write (1, "HOLA\n", 5);
+	ft_putstr_fd("Quit (core dumped)\n", 1);
+	exit(131);
 }
 
 /// @brief Auxiliary handler for SIGINT signal.

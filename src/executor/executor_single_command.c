@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:34:38 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/01 20:01:51 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:05:03 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	fork_single_command(t_command *command, t_tools *tools)
 	if (pid == 0)
 	{
 		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, SIG_IGN);
+		signal(SIGQUIT, sigquit_handler);
 		run_command(command, tools);
 		return (-1);
 	}
