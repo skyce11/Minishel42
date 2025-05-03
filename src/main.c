@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/03 16:02:01 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/03 18:23:42 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 /// @return Always returns 1 after successful reset.
 int	reset_tools(t_tools *tools)
 {
+	signal_init();
 	free_command(tools->command);
 	free(tools->arg_str);
 	tools->arg_str = NULL;

@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/02 20:07:23 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/03 17:30:11 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ typedef enum e_signal
 	S_SIGINT, // Ctrl + C
 	S_SIGINT_CMD, // Ctrl + C en medio de un comando
 	S_CMD, // Se ejecuta un comando
+	S_MINI, // Se ejecuta una mini
+	S_QUOTE, // se ejecuta cuando esta entre " " o ' '
 	S_CANCEL_EXEC, // Ctrl + D en heredoc
 	S_SIZE
 }	t_signal;
