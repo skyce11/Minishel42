@@ -6,7 +6,7 @@
 #    By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/27 10:41:27 by migonzal          #+#    #+#              #
-#    Updated: 2025/05/01 19:12:29 by ampocchi         ###   ########.fr        #
+#    Updated: 2025/05/03 18:35:48 by ampocchi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRCS =  ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c ft_isascii.c 
 	   	ft_strlen.c ft_strncmp.c ft_strrchr.c ft_substr.c ft_tolower.c ft_toupper.c ft_strnstr.c ft_strtrim.c \
 	   	ft_split.c ft_itoa.c \
 	   	ft_strmapi.c ft_striteri.c \
-		get_next_line.c get_next_line_utils.c ft_strcat.c
+		get_next_line.c get_next_line_utils.c ft_strcat.c ft_strndup.c
 
 SRCSB = ft_lstnew_bonus.c \
 		ft_lstadd_front_bonus.c \

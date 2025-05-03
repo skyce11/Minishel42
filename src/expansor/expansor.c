@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:21:27 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 11:15:03 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/03 18:35:32 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ int	loop_dollar(t_tools *tools, char **aux, int j)
 	if (res == 0)
 	{
 		var_length = after_dollar_lenght(tools->arg_str, j) - j;
-		aux2 = strndup(tools->arg_str + j, var_length);
+		aux2 = ft_strndup(tools->arg_str + j, var_length);
 		aux3 = ft_strjoin(*aux, aux2);
 		free(*aux);
 		*aux = aux3;
