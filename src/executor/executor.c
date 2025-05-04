@@ -16,16 +16,7 @@
 /// @param command The command to be executed.
 /// @param tools
 /// @return Void
-// void	run_command(t_command *command, t_tools *tools)
-// {
-// 	if (redir_setup(command) == 0)
-// 	{
-// 		if (is_builtin(command))
-// 			ft_builtin(command, tools);
-// 		else
-// 			execve(command->args[0], command->args, tools->envp);
-// 	}
-// }
+
 
 void	run_command(t_command *command, t_tools *tools)
 {
@@ -50,37 +41,6 @@ void	run_command(t_command *command, t_tools *tools)
 /// @param tools Estructura que contiene los datos del shell,
 /// incluyendo la lista de comandos.
 /// @return 0 en caso de error, o el resultado de la ejecución del comando.
-// int	executor(t_tools *tools)
-// {
-// 	write (1, "HOLA\n", 5);
-// 	if (tools->command->args == NULL || tools->command->args[0] == NULL)
-// 	{
-// 		fprintf(stderr, "Error: args is NULL\n");
-// 		return (-1);
-// 	}
-// 	write (1, "HOLO\n", 5);
-// 	unsigned int	size; // numero total de commando
-
-// 	size = get_command_list_size(tools->command);
-// 	// verifica si la lista de commando esta vacia
-
-// 	if (!tools->command->args && tools->command->redir)
-// 	{
-// 		if (redir_setup_no_command(tools->command->redir) == 0)
-// 			return (0); // Éxito al manejar redirecciones sin comando
-// 		return (-1);    // Error al manejar redirecciones
-// 	}
-
-// 	if (size < 1)
-// 	{
-// 		printf("ERROR: empty command list\n");
-// 		return (0);
-// 	}
-// 	// si solo hay un commando, se ejecuta directamente
-// 	if (size == 1)
-// 		return (exec_single_command(tools->command, tools));
-// 	return (exec_compound_command(tools, size));
-// }
 
 
 int	executor(t_tools *tools)
