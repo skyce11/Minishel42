@@ -45,7 +45,7 @@ void	child_heredoc(int fd[2], int in_dquote, int in_squote, t_tools *tools)
 {
 	char	*buffer;
 
-	signal(SIGINT, SIG_DFL);
+	// signal(SIGINT, SIG_DFL);
 	close(fd[0]);
 	buffer = ft_strdup(tools->arg_str);
 	if (!buffer)
@@ -55,6 +55,7 @@ void	child_heredoc(int fd[2], int in_dquote, int in_squote, t_tools *tools)
 	write(fd[1], buffer, ft_strlen(buffer));
 	free(buffer);
 	close(fd[1]);
+	// signal(SIGINT, sigint_handler);
 	exit(EXIT_SUCCESS);
 }
 
@@ -81,6 +82,7 @@ static int	parent_heredoc(int fd[2], t_tools *tools, pid_t pid)
 	result = ft_strdup("");
 	close(fd[1]);
 	waitpid(pid, &status, 0);
+	handle_status(status, tools);
 	if (check_child_status(status, fd[0], result, tools) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	line = get_next_line(fd[0]);

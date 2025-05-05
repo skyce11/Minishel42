@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/05 08:42:17 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/05 09:44:46 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static void	set_file_descriptors(t_command *curr_command, t_pipes_command pipes,
 static int	piped_command_child(t_command *curr_command,
 		t_pipes_command pipes, t_tools *tools, unsigned int i)
 {
-	signal(SIGINT, SIG_DFL);
 	set_file_descriptors(curr_command, pipes, i);
 	run_command(curr_command, tools);
 	if (is_builtin(curr_command))
@@ -123,7 +122,10 @@ int	exec_compound_command(t_tools *tools, unsigned int size)
 	while (i < size)
 	{
 		if (exec_piped_command(ps, tools, curr_command, i) != 0)
+		{
+			cleanse_pipe_list(&ps);
 			return (1);
+		}
 		if (curr_command)
 			curr_command = curr_command->next;
 		i++;
