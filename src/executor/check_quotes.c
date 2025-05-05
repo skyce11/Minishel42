@@ -45,6 +45,7 @@ void	child_heredoc(int fd[2], int in_dquote, int in_squote, t_tools *tools)
 {
 	char	*buffer;
 
+	signal(SIGINT, SIG_DFL);
 	close(fd[0]);
 	buffer = ft_strdup(tools->arg_str);
 	if (!buffer)

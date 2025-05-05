@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:16:37 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/03 20:04:30 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/05 08:40:24 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ static void	sigint_handler_aux(void)
 		g_signal = S_BASE;
 		return ;
 	}
-	// else if (g_signal == S_BASE)
-	// 	g_signal = S_SIGINT;
 }
 
 void	sigint_handler(int sig)

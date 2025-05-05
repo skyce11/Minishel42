@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:27:37 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/05 07:22:06 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/05 08:28:40 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,8 @@ void	handle_status(int status, t_tools *tools)
 			tools->exit_status = 1;
 		else if (tools && tools->exit_status == F_CMD_NOT_FOUND)
 			printf("%s: command not found\n", tools->command->args[0]);
-		else if (g_signal == S_SIGINT_CMD)
-			tools->exit_status = F_NOT_FILE;
 	}
+	if (g_signal == S_SIGINT_CMD)
+			tools->exit_status = F_NOT_FILE;
 	g_signal = S_BASE;
 }
