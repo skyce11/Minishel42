@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/03 19:05:42 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/05 04:38:29 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@
 
 //VARIABLE GLOBAR
 extern int	g_signal;
+
+typedef enum e_exit_code
+{
+	F_CMD_NOT_FOUND = 127,
+	F_NOT_FILE = 130,
+	F_QUOTE = 258
+}	t_exit_code;
 
 typedef enum e_signal
 {

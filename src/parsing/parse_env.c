@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:45:04 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 11:08:27 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/03 22:03:30 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*find_path(char **envp)
 			return (ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5));
 		i++;
 	}
-	return (ft_strdup("\0"));
+	return (NULL);
 }
 
 /// @brief Parses the environment variables to extract executable paths.
@@ -64,6 +64,8 @@ int	parse_envp(t_tools *tools)
 	char	*tmp;
 
 	path_from_envp = find_path(tools->envp);
+	if (!path_from_envp)
+		return (0);
 	tools->paths = ft_split(path_from_envp, ':');
 	free(path_from_envp);
 	i = 0;

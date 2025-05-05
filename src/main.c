@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/03 19:05:24 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/05 07:16:26 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 /// @return Always returns 1 after successful reset.
 int	reset_tools(t_tools *tools)
 {
+	int last_exit_status;
+
+	last_exit_status = tools->exit_status;
 	signal_init();
 	free_command(tools->command);
 	free(tools->arg_str);
@@ -25,6 +28,7 @@ int	reset_tools(t_tools *tools)
 	ft_free_arr(tools->paths);
 	tools->paths = NULL;
 	init_tools(tools);
+	tools->exit_status = last_exit_status;
 	tools->reset = 1;
 	return (1);
 }
@@ -85,7 +89,7 @@ int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan po
 		add_history(tools->arg_str);   // gestion del historial
 		expansor(tools);               //gestion de la expansion de variables
 		tools->command = parser(tools->arg_str);   //Aqui parseo el string que recibe la funcion readline para pasarselo al executor
-		executor(tools);               // gestion del executor
+		tools->exit_status = executor(tools);               // gestion del executor
 		reset_tools(tools);				//cuando acaba todo, reset de todo y se queda listo para recibir el sig comando
 	}
 	return (1);
@@ -130,7 +134,7 @@ int	main(int argc, char **argv, char **envp)
 	tools.envp = arrdup(envp);   // guardo el enviroment antes de hacer nada
 	update_shlvl(&tools);
 	signal_init();   			// señales, hay que prederlo fuego a esto
-	find_pwd(&tools); 			// estoy guardando el las variables PATH y OLDPATH
+	find_pwd(&tools); 			// estoy guardando el las variables PWD y OLDPWD
 	init_tools(&tools);
 	printf("AQUI EMPIEZA LA MINISHELL\n");
 	minishell_loop(&tools);     //este es loop que mantiene abierta el prompt de la mini hasta que le digas que se cierre

@@ -15,7 +15,7 @@ static void	update_quotes(const char *line, int *in_dquote, int *in_squote)
 	}
 }
 
-static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote)
+static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote, t_tools *tools)
 {
 	char	*next_line;
 	char	*temp;
@@ -28,7 +28,8 @@ static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote)
 	{
 		ft_putendl_fd("syntax error: unexpected end of file", STDOUT_FILENO);
 		free(*buffer);
-		exit(EXIT_FAILURE);
+		tools->exit_status = 258;
+		exit(258);
 	}
 	temp = ft_strjoin(*buffer, "\n");
 	free(*buffer);
@@ -44,26 +45,26 @@ void	child_heredoc(int fd[2], int in_dquote, int in_squote, t_tools *tools)
 {
 	char	*buffer;
 
-	signal(SIGINT, SIG_DFL);
 	close(fd[0]);
 	buffer = ft_strdup(tools->arg_str);
 	if (!buffer)
 		exit(EXIT_FAILURE);
 	while (in_dquote || in_squote)
-		heredoc_update_buffer(&buffer, &in_dquote, &in_squote);
+		heredoc_update_buffer(&buffer, &in_dquote, &in_squote, tools);
 	write(fd[1], buffer, ft_strlen(buffer));
 	free(buffer);
 	close(fd[1]);
 	exit(EXIT_SUCCESS);
 }
 
-static int	check_child_status(int status, int fd, char *result)
+static int	check_child_status(int status, int fd, char *result, t_tools *tools)
 {
 	if (WIFSIGNALED(status) || (WIFEXITED(status)
 			&& WEXITSTATUS(status) != EXIT_SUCCESS))
 	{
 		close(fd);
 		free(result);
+		tools->exit_status = F_QUOTE;
 		return (EXIT_SUCCESS);
 	}
 	return (EXIT_FAILURE);
@@ -79,7 +80,7 @@ static int	parent_heredoc(int fd[2], t_tools *tools, pid_t pid)
 	result = ft_strdup("");
 	close(fd[1]);
 	waitpid(pid, &status, 0);
-	if (check_child_status(status, fd[0], result) == EXIT_SUCCESS)
+	if (check_child_status(status, fd[0], result, tools) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	line = get_next_line(fd[0]);
 	while (line != NULL)

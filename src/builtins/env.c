@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:08:56 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 12:06:03 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/05 04:35:55 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_env(t_command *command, t_tools *tools)
 	if (command->args[1])
 	{
 		printf("env: %s: No such file or directory\n", command->args[1]);
-		tools->exit_status = 127;
+		tools->exit_status = F_CMD_NOT_FOUND;
 		return ;
 	}
 	while (tools->envp[i])
