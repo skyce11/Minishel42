@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:16:37 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/05 09:26:46 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:40:49 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ void	sigint_handler(int sig)
 		g_signal = S_SIGINT_CMD;
 		rl_on_new_line();
 	}
-	else
-		signal(SIGQUIT, SIG_IGN);
+	// else
+		// signal(SIGQUIT, SIG_IGN);
 	sigint_handler_aux();
 }
 

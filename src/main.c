@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/05 09:26:17 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:00:43 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int	minishell_loop(t_tools *tools) //toda la gestion de squote y dquote estan po
 			reset_tools(tools);
 			continue ;
 		}
+		// g_signal = S_BASE;
 		add_history(tools->arg_str);   // gestion del historial
 		expansor(tools);               //gestion de la expansion de variables
 		tools->command = parser(tools->arg_str);   //Aqui parseo el string que recibe la funcion readline para pasarselo al executor

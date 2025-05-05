@@ -15,21 +15,24 @@ static void	update_quotes(const char *line, int *in_dquote, int *in_squote)
 	}
 }
 
-static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote, t_tools *tools)
+static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote)
 {
 	char	*next_line;
 	char	*temp;
+	char	*str_err;
 
-	if (*in_dquote)
-		next_line = readline("dquote> ");
-	else
-		next_line = readline("quote> ");
+	str_err = "bash: unexpected EOF while looking for matching ";
+		next_line = readline("> ");
 	if (!next_line)
 	{
+		ft_putstr_fd(str_err, STDOUT_FILENO);
+		if (*in_dquote)
+			ft_putendl_fd("`\"'", STDOUT_FILENO);
+		else if (*in_squote)
+			ft_putendl_fd("`\''", STDOUT_FILENO);
 		ft_putendl_fd("syntax error: unexpected end of file", STDOUT_FILENO);
 		free(*buffer);
-		tools->exit_status = 258;
-		exit(258);
+		exit(F_QUOTE);
 	}
 	temp = ft_strjoin(*buffer, "\n");
 	free(*buffer);
@@ -45,28 +48,38 @@ void	child_heredoc(int fd[2], int in_dquote, int in_squote, t_tools *tools)
 {
 	char	*buffer;
 
-	// signal(SIGINT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
 	close(fd[0]);
 	buffer = ft_strdup(tools->arg_str);
 	if (!buffer)
 		exit(EXIT_FAILURE);
 	while (in_dquote || in_squote)
-		heredoc_update_buffer(&buffer, &in_dquote, &in_squote, tools);
+		heredoc_update_buffer(&buffer, &in_dquote, &in_squote);
 	write(fd[1], buffer, ft_strlen(buffer));
 	free(buffer);
 	close(fd[1]);
-	// signal(SIGINT, sigint_handler);
+	signal(SIGINT, sigint_handler);
 	exit(EXIT_SUCCESS);
 }
 
 static int	check_child_status(int status, int fd, char *result, t_tools *tools)
 {
-	if (WIFSIGNALED(status) || (WIFEXITED(status)
-			&& WEXITSTATUS(status) != EXIT_SUCCESS))
+	if (WIFSIGNALED(status))
+	{
+		int sig = WTERMSIG(status);
+		close(fd);
+		free(result);
+		if (sig == SIGINT)
+			tools->exit_status = 130;
+		else
+			tools->exit_status = 2;
+		return (EXIT_SUCCESS);
+	}
+	else if (WIFEXITED(status) && WEXITSTATUS(status) != EXIT_SUCCESS)
 	{
 		close(fd);
 		free(result);
-		tools->exit_status = F_QUOTE;
+		tools->exit_status = WEXITSTATUS(status);
 		return (EXIT_SUCCESS);
 	}
 	return (EXIT_FAILURE);
@@ -111,16 +124,10 @@ int	check_quotes(int in_dquote, int in_squote, t_tools *tools)
 	if (!in_dquote && !in_squote)
 		return (EXIT_FAILURE);
 	if (pipe(fd) == -1)
-	{
-		perror("pipe");
-		return (EXIT_SUCCESS);
-	}
+		return (perror("pipe"), EXIT_SUCCESS);
 	pid = fork();
 	if (pid < 0)
-	{
-		perror("fork");
-		return (EXIT_SUCCESS);
-	}
+		return (perror("fork"), EXIT_SUCCESS);
 	else if (pid == 0)
 		child_heredoc(fd, in_dquote, in_squote, tools);
 	else
