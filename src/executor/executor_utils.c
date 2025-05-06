@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:27:37 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/05 20:31:34 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/06 09:50:42 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,14 @@ t_pipe	*obtain_related_pipe_from_list(t_pipe *ps,
 /// @param tools
 void	handle_status(int status, t_tools *tools)
 {
+	if (WIFSIGNALED(status))
+	{
+		int sig = WTERMSIG(status);
+		if (sig == SIGINT)
+			tools->exit_status = 130;
+		else
+			tools->exit_status = 2;
+	}
 	if (WIFEXITED(status))
 	{
 		tools->exit_status = WEXITSTATUS(status);

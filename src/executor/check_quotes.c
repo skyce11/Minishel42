@@ -122,7 +122,10 @@ int	check_quotes(int in_dquote, int in_squote, t_tools *tools)
 	update_quotes(tools->arg_str, &in_dquote, &in_squote);
 	g_signal = S_QUOTE;
 	if (!in_dquote && !in_squote)
+	{
+		g_signal = S_BASE;
 		return (EXIT_FAILURE);
+	}
 	if (pipe(fd) == -1)
 		return (perror("pipe"), EXIT_SUCCESS);
 	pid = fork();
@@ -132,6 +135,5 @@ int	check_quotes(int in_dquote, int in_squote, t_tools *tools)
 		child_heredoc(fd, in_dquote, in_squote, tools);
 	else
 		return (parent_heredoc(fd, tools, pid));
-	g_signal = S_BASE;
 	return (EXIT_SUCCESS);
 }
