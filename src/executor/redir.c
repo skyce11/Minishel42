@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:04:01 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/05 06:40:10 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:23:37 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,12 @@
 // 	return (0);
 // }
 
-static void	fd_redir(t_redir *redir, int no_command)
-{
-	int fd;
 
+static void	fd_redir(t_tools *tools, t_redir *redir, int no_command)
+{
+	int fd = 0;
+
+	(void)tools; // No se usa en esta función por ahora, para evitar warnings
 	// Abrir el archivo según el tipo de redirección
 	if (redir->type == 0 || redir->type == 2) // Redirección de entrada (< y <<)
 	{
@@ -98,11 +100,12 @@ static void	fd_redir(t_redir *redir, int no_command)
 /**
  * Configura las redirecciones para un comando abriendo los archivos
  * necesarios y ajustando los descriptores de archivo.
- * 
+ *
+ * @param tools Estructura global de herramientas.
  * @param command El comando para el cual se configura la redirección.
  * @return 0 si las redirecciones se configuran correctamente, -1 en caso de error.
  */
-int	redir_setup(t_command *command)
+int	redir_setup(t_tools *tools, t_command *command)
 {
 	t_redir	*curr_redir;
 	t_redir	*first_redir;
@@ -116,7 +119,7 @@ int	redir_setup(t_command *command)
 	// Abrir y preparar los archivos para redirección
 	while (curr_redir)
 	{
-		if (file_open(curr_redir) < 1)
+		if (file_open(tools, curr_redir) < 1)
 			return (-1);
 		curr_redir = curr_redir->next;
 	}
@@ -125,7 +128,7 @@ int	redir_setup(t_command *command)
 	// Configurar los descriptores de archivo
 	while (curr_redir)
 	{
-		fd_redir(curr_redir, no_command); // Crear/truncar o redirigir
+		fd_redir(tools, curr_redir, no_command); // Crear/truncar o redirigir
 		curr_redir = curr_redir->next;
 	}
 	return (0);
