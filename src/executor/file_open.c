@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 21:02:06 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/04/22 13:21:41 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/05 07:54:31 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	get_open_mode(t_redir *redir)
 /// Determines the correct mode based on the redirection type.
 /// Checks for permissions before opening the file.
 /// @param redir Pointer to the redirection structure containing file details.
-/// @return Returns the fd if successful, or 0 if permission is denied.
+/// @return Returns the fd if successful, or -1 if permission is denied.
 static int	open_existing_file(t_redir *redir)
 {
 	int	mode;
@@ -77,12 +77,14 @@ static int	open_existing_file(t_redir *redir)
 		if (redir->type == 3)
 			mode = O_RDWR | O_APPEND;
 		redir->fd = open(redir->file, mode);
+		if (redir->fd == -1)
+			return(-1);
 		return (redir->fd);
 	}
 	else
 	{
 		printf("Minishell: %s: Permission denied\n", redir->file);
-		return (0);
+		return (-1);
 	}
 }
 

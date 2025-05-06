@@ -6,7 +6,11 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/05/01 17:59:42 by ampocchi         ###   ########.fr       */
+=======
+/*   Updated: 2025/05/06 09:49:49 by ampocchi         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +85,7 @@ void	set_file_descriptors(t_command *curr_command, t_pipes_command pipes,
 static int	piped_command_child(t_command *curr_command,
 		t_pipes_command pipes, t_tools *tools, unsigned int i)
 {
-	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	set_file_descriptors(curr_command, pipes, i);
 	run_command(curr_command, tools);
 	if (is_builtin(curr_command))
@@ -118,22 +122,10 @@ static int	exec_piped_command(t_pipe *ps, t_tools *tools,
 			return (piped_command_child(curr_command, pipes, tools, i));
 		else
 		{
-			if (curr_command->next != NULL)
-			{
-				if (pipes.curr->pipe[1] != -1)
-				{
-					close(pipes.curr->pipe[1]);
-					pipes.curr->pipe[1] = -1;
-				}
-			}
-			if (pipes.prev)
-			{
-				if (pipes.curr->pipe[0] != -1)
-				{
-					close(pipes.prev->pipe[0]);
-					pipes.curr->pipe[0] = -1;
-				}
-			}
+			if (curr_command->next != NULL && pipes.curr->pipe[1] != STDIN_FILENO)
+				close(pipes.curr->pipe[1]);
+			if (pipes.prev && pipes.prev->pipe[0] != STDIN_FILENO)
+				close(pipes.prev->pipe[0]);
 			waitpid(pid, &child_status, 0);
 			handle_status(child_status, tools);
 		}
@@ -165,11 +157,21 @@ int	exec_compound_command(t_tools *tools, unsigned int size)
 	while (i < size)
 	{
 		if (exec_piped_command(ps, tools, curr_command, i) != 0)
+<<<<<<< HEAD
 			return (cleanse_pipe_list(&ps), 1);
 		// if (curr_command)
 		curr_command = curr_command->next;
+=======
+		{
+			cleanse_pipe_list(&ps);
+			return (1);
+		}
+		if (curr_command)
+			curr_command = curr_command->next;
+>>>>>>> main
 		i++;
 	}
 	cleanse_pipe_list(&ps);
-	return (0);
+	signal(SIGQUIT, sigint_handler);
+	return (tools->exit_status);
 }

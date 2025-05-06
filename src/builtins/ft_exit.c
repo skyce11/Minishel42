@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/03 18:46:35 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:58:26 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 /// If a non-numeric argument is found, an error message is displayed.
 /// @param tools Structure containing command details.
 /// @return Exit status code
-/// (0 by default, others if valid, 255 if invalid input).
+/// (0 by default, others if valid, 2 if invalid input).
 static int	check_exit_args(t_tools *tools)
 {
 	int	i;
@@ -43,7 +43,7 @@ static int	check_exit_args(t_tools *tools)
 				ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 				ft_putstr_fd(tools->command->args[1], STDERR_FILENO);
 				ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-				return (255);
+				return (2);
 			}
 			i++;
 		}
@@ -63,12 +63,6 @@ int	ft_exit(t_tools *tools)
 
 	ft_putendl_fd("exit", STDERR_FILENO);
 	exit_code = check_exit_args(tools);
-	if (exit_code == 1)
-	{
-		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
-	ft_clean_all(tools);
-	update_shlvl(tools, 0);
+	free_tools(tools);
 	exit(exit_code);
 }

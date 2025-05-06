@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:27:37 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/04/22 12:04:44 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/06 09:50:42 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,23 @@ int	fill_command_from_env(t_command *command, t_tools *tools)
 		return (0);
 	found = 0;
 	i = 0;
+	if (!tools->paths)
+	{
+		printf("%s: No such file or directory\n", command->args[0]);
+		tools->exit_status = F_NOT_FILE;
+		return (-1);
+	}
 	while (tools->paths[i] && !found)
 	{
 		if (access(command->args[0], R_OK | X_OK) != -1)
 			found = 1;
 		else
-		{
-			found = find_command_in_route(command, tools->paths[i]);
-			i++;
-		}
+			found = find_command_in_route(command, tools->paths[i++]);
 	}
-	if (found == 0)
+	if (!found)
 	{
 		printf("%s: command not found\n", command->args[0]);
+		tools->exit_status = F_CMD_NOT_FOUND;
 		return (-1);
 	}
 	errno = 0;
@@ -117,11 +121,23 @@ t_pipe	*obtain_related_pipe_from_list(t_pipe *ps,
 /// @param tools
 void	handle_status(int status, t_tools *tools)
 {
+	if (WIFSIGNALED(status))
+	{
+		int sig = WTERMSIG(status);
+		if (sig == SIGINT)
+			tools->exit_status = 130;
+		else
+			tools->exit_status = 2;
+	}
 	if (WIFEXITED(status))
+	{
 		tools->exit_status = WEXITSTATUS(status);
-	if (tools && tools->exit_status == 127)
-		printf("%s: command not found\n", tools->command->args[0]);
+		if (status == 256)
+			tools->exit_status = 1;
+		else if (tools && tools->exit_status == F_CMD_NOT_FOUND)
+			printf("%s: command not found\n", tools->command->args[0]);
+	}
 	if (g_signal == S_SIGINT_CMD)
-		tools->exit_status = 130;
-	g_signal = S_BASE;
+			tools->exit_status = F_NOT_FILE;
+	// g_signal = S_BASE;
 }

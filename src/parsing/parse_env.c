@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:45:04 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/30 13:03:49 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:03:50 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,24 +46,12 @@ int	find_pwd(t_tools *tools)
 /// Searches the environment variable list for "PATH=" and returns its value.
 /// @param envp Array of environment variables.
 /// @return A string containing the extracted PATH, or an empty string if not found.
-// char	*find_path(char **envp)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (envp[i])
-// 	{
-// 		if (!ft_strncmp(envp[i], "PATH=", 5))
-// 			return (ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5));
-// 		i++;
-// 	}
-// 	return (ft_strdup("\0"));
-// }
-
 char	*find_path(char **envp)
 {
 	int	i;
+	char *path;
 
+	path = NULL;
 	i = 0;
 	if (!envp)
 		return (NULL);
@@ -71,7 +59,7 @@ char	*find_path(char **envp)
 	{
 		if (!ft_strncmp(envp[i], "PATH=", 5))
 		{
-			char *path = ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5);
+			path = ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5);
 			if (!path)
 				return (NULL);
 			return (path);
@@ -95,6 +83,8 @@ int	parse_envp(t_tools *tools)
 
 	len = 0;
 	path_from_envp = find_path(tools->envp);
+	if (!path_from_envp)
+		return (0);
 	tools->paths = ft_split(path_from_envp, ':');
 	if (!path_from_envp || path_from_envp[0] == '\0' || !tools->paths)
 		return (printf("Error: PATH no encontrado.\n"), 0);

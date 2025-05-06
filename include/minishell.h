@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/03 18:38:04 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:57:55 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@
 
 //VARIABLE GLOBAR
 extern int	g_signal;
+
+typedef enum e_exit_code
+{
+	F_CMD_NOT_FOUND = 127,
+	F_NOT_FILE = 130,
+	F_QUOTE = 2
+}	t_exit_code;
 
 typedef enum e_signal
 {
@@ -93,9 +100,7 @@ typedef struct s_env
 }					t_env;
 
 
-void	ft_clean_all(t_tools *tools);
-void	cleanse_redir_list(t_redir *redir);
-void	update_shlvl(t_tools *tools, int flag);
+void	update_shlvl(t_tools *tools);
 
 /*
  * Parser_cells

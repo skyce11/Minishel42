@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:34:38 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/03 18:39:56 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:59:19 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,26 @@ static int	fork_single_command(t_command *command, t_tools *tools)
 	int	pid;
 	int	status;
 
-	if (fill_command_from_env(command, tools) == -1)
-		return (-1);
+	if (fill_command_from_env(command, tools) != 0)
+		return (tools->exit_status);
 	g_signal = S_CMD;
 	if (ft_strcmp(command->args[0], "./minishell") == 0)
 		g_signal = S_MINI;
 	pid = fork();
+	if (pid < 0)
+		return (-1);
 	if (pid == 0)
 	{
-		signal_init();
 		run_command(command, tools);
-		g_signal = S_BASE;
-		return (-1);
+		exit(F_CMD_NOT_FOUND);
 	}
-	else if (pid > 0)
+	else
 	{
 		waitpid(pid, &status, 0);
 		handle_status(status, tools);
 	}
-	else
-		return (-1);
 	g_signal = S_BASE;
-	return (status);
+	return (tools->exit_status);
 }
 
 /// @brief La función `exec_single_command` es responsable de ejecutar
@@ -73,10 +71,11 @@ int	exec_single_command(t_command *command, t_tools *tools)
 {
 	int	status;
 
-	if (is_builtin(command) == 1)
+	status = 0;
+	if (is_builtin(command))
 	{
 		run_builtin_in_parent_process(command, tools);
-		return (0);
+		return (status);
 	}
 	status = fork_single_command(command, tools);
 	return (status);
