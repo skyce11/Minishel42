@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/06 11:58:26 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:05:32 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,6 @@ int	ft_exit(t_tools *tools)
 
 	ft_putendl_fd("exit", STDERR_FILENO);
 	exit_code = check_exit_args(tools);
-	free_tools(tools);
+	ft_clean_all(tools);
 	exit(exit_code);
 }

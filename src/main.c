@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/06 12:02:41 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:05:15 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,6 @@ int	main(int argc, char **argv, char **envp)
 	init_tools(&tools);
 	printf("AQUI EMPIEZA LA MINISHELL\n");
 	minishell_loop(&tools);     //este es loop que mantiene abierta el prompt de la mini hasta que le digas que se cierre
-	update_shlvl(&tools, 0);
+	update_shlvl(&tools);
 	return (0);
 }

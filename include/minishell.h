@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/06 11:57:55 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:09:01 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ typedef struct s_env
 
 
 void	update_shlvl(t_tools *tools);
+void	ft_clean_all(t_tools *tools);
+void	cleanse_redir_list(t_redir *redir);
 
 /*
  * Parser_cells

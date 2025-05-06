@@ -6,11 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/01 17:59:42 by ampocchi         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/06 09:49:49 by ampocchi         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2025/05/06 12:08:14 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,18 +153,12 @@ int	exec_compound_command(t_tools *tools, unsigned int size)
 	while (i < size)
 	{
 		if (exec_piped_command(ps, tools, curr_command, i) != 0)
-<<<<<<< HEAD
-			return (cleanse_pipe_list(&ps), 1);
-		// if (curr_command)
-		curr_command = curr_command->next;
-=======
 		{
 			cleanse_pipe_list(&ps);
 			return (1);
 		}
-		if (curr_command)
+		// if (curr_command)
 			curr_command = curr_command->next;
->>>>>>> main
 		i++;
 	}
 	cleanse_pipe_list(&ps);
