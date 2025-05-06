@@ -139,6 +139,23 @@ static char	*locate_redir_file(char *redir, int *i, int *status)
 	return (file);
 }
 
+
+static int is_redirection_only(char *cmd_sep)
+{
+    int i = 0;
+
+    while (cmd_sep[i])
+    {
+        if (cmd_sep[i] != ' ' && cmd_sep[i] != '\t' && cmd_sep[i] != '\n' &&
+            cmd_sep[i] != '<' && cmd_sep[i] != '>' && cmd_sep[i] != '|')
+        {
+            return (0); // No es solo una redirección
+        }
+        i++;
+    }
+    return (1); // Solo contiene redirecciones
+}
+
 /// @brief Creates a new redirection node.
 /// Allocates memory for a redirection structure and initializes its properties.
 /// If memory allocation fails, the function frees the file and returns NULL.
@@ -253,7 +270,20 @@ t_command	*create_cell(char *cmd_sep)
 	if (!cell)
 		return (NULL);
 	cell -> next = NULL;
-	cell -> args = parse_args(cmd_sep);
+	if (is_redirection_only(cmd_sep))
+	{
+		cell->args = malloc(sizeof(char *));
+		if (!cell->args)
+		{
+			free(cell);
+			return (NULL);
+		}
+		cell->args[0] = NULL;
+	}
+	else
+	{
+		cell -> args = parse_args(cmd_sep);
+	}
 	cell -> redir = create_redir_list(cmd_sep, &status);
 	cell -> cmd_sep = cmd_sep;
 	if (status == -1)

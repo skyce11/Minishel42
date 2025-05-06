@@ -12,19 +12,96 @@
 
 #include "minishell.h"
 
-static void	fd_redir(t_redir *redir)
+// static void	fd_redir(t_redir *redir)
+// {
+// 	if (redir->type == 0 || redir->type == 2)
+// 		dup2(redir->fd, STDIN_FILENO);
+// 	else
+// 		dup2(redir->fd, STDOUT_FILENO);
+// 	close(redir->fd);
+// }
+
+// // / @brief Prepara las redirecciones para un comando abriendo los archivos
+// // / necesarios y estableciendo los descriptores de fichero apropiados.
+// // / @param comando
+// // / @return 0 si las redirecciones se han configurado correctamente, sino -1
+// int	redir_setup(t_command *command)
+// {
+// 	t_redir	*curr_redir;
+// 	t_redir	*first_redir;
+
+// 	curr_redir = command->redir;
+// 	first_redir = command->redir;
+// 	while (curr_redir)
+// 	{
+// 		if (file_open(curr_redir) < 1)
+// 			return (-1);
+// 		curr_redir = curr_redir->next;d
+// 	}
+// 	curr_redir = first_redir;
+// 	while (curr_redir)
+// 	{
+// 		fd_redir(curr_redir);
+// 		curr_redir = curr_redir->next;
+// 	}
+// 	return (0);
+// }
+
+static void	fd_redir(t_redir *redir, int no_command)
 {
-	if (redir->type == 0 || redir->type == 2)
-		dup2(redir->fd, STDIN_FILENO);
-	else
-		dup2(redir->fd, STDOUT_FILENO);
-	close(redir->fd);
+	int fd;
+
+	// Abrir el archivo según el tipo de redirección
+	if (redir->type == 0 || redir->type == 2) // Redirección de entrada (< y <<)
+	{
+		if (dup2(redir->fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2 failed for STDIN");
+			close(redir->fd);
+			return;
+		}
+	}
+	else // Redirección de salida (> y >>)
+	{
+		if (no_command)
+		{
+			// Caso especial: No hay comando, solo crear/truncar el archivo
+			if (redir->type == 1) // `>` para truncar el archivo
+				fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			else if (redir->type == 3) // `>>` para añadir al archivo
+				fd = open(redir->file, O_CREAT | O_WRONLY | O_APPEND, 0644);
+
+			if (fd == -1)
+			{
+				perror("Error opening file");
+				return;
+			}
+			close(fd); // Cerrar el archivo inmediatamente
+		}
+		else
+		{
+			// Redirección normal: Redirigir STDOUT al archivo
+			if (dup2(redir->fd, STDOUT_FILENO) == -1)
+			{
+				perror("dup2 failed for STDOUT");
+				close(redir->fd);
+				return;
+			}
+		}
+	}
+
+	// Cerrar el descriptor de archivo original
+	if (close(redir->fd) == -1)
+		perror("close failed");
 }
 
-/// @brief Prepara las redirecciones para un comando abriendo los archivos
-/// necesarios y estableciendo los descriptores de fichero apropiados.
-/// @param comando
-/// @return 0 si las redirecciones se han configurado correctamente, sino -1
+/**
+ * Configura las redirecciones para un comando abriendo los archivos
+ * necesarios y ajustando los descriptores de archivo.
+ * 
+ * @param command El comando para el cual se configura la redirección.
+ * @return 0 si las redirecciones se configuran correctamente, -1 en caso de error.
+ */
 int	redir_setup(t_command *command)
 {
 	t_redir	*curr_redir;
@@ -32,6 +109,11 @@ int	redir_setup(t_command *command)
 
 	curr_redir = command->redir;
 	first_redir = command->redir;
+
+	// Detectar si no hay un comando asociado
+	int no_command = (command->args == NULL || command->args[0] == NULL);
+
+	// Abrir y preparar los archivos para redirección
 	while (curr_redir)
 	{
 		if (file_open(curr_redir) < 1)
@@ -39,9 +121,11 @@ int	redir_setup(t_command *command)
 		curr_redir = curr_redir->next;
 	}
 	curr_redir = first_redir;
+
+	// Configurar los descriptores de archivo
 	while (curr_redir)
 	{
-		fd_redir(curr_redir);
+		fd_redir(curr_redir, no_command); // Crear/truncar o redirigir
 		curr_redir = curr_redir->next;
 	}
 	return (0);
