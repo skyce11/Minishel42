@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:16:37 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/06 11:45:02 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/07 11:29:05 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ static void	sigint_handler_aux(void)
 	else if (g_signal == S_HEREDOC)
 	{
 		print_ctrl(NULL);
-		g_signal = S_BASE;
+		rl_redisplay();
+		g_signal = S_CANCEL_EXEC;
 		return ;
 	}
 	else if (g_signal == S_QUOTE)
