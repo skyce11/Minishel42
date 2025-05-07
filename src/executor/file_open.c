@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 21:02:06 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/05 07:54:31 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/07 11:44:30 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,13 @@ static int	handle_heredoc(t_tools *tools, t_redir *redir)
 {
 	char	*line;
 	int		pipe_fd[2];
+	char	*str_err;
+	char	*str_err2;
 
 	(void)tools; // No se usa en esta función por ahora, para evitar warnings
+	str_err = "bash: warning: here-document delimited by end-of-file";
+	str_err2 = " (wanted `END')";
+	signal(SIGINT, SIG_DFL);
 	if (pipe(pipe_fd) == -1)
 	{
 		perror("pipe");
@@ -127,7 +132,17 @@ static int	handle_heredoc(t_tools *tools, t_redir *redir)
 	{
 		line = readline("> ");
 		if (line == NULL)
+		{
+			ft_putstr_fd(str_err, STDOUT_FILENO);
+			ft_putendl_fd(str_err2, STDOUT_FILENO);
 			break ;
+		}
+		if (g_signal == S_CANCEL_EXEC)
+        {
+			tools->exit_status = 130;
+            free(line);
+            break;
+        }
 		if (strcmp(line, redir->file) == 0)
 		{
 			free(line);
@@ -142,6 +157,7 @@ static int	handle_heredoc(t_tools *tools, t_redir *redir)
 		free(line);
 		// free(expanded_line);
 	}
+	signal(SIGINT, sigint_handler);
 	g_signal = S_BASE;
 	close(pipe_fd[1]);
 	redir->fd = pipe_fd[0];

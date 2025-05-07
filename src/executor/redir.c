@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:04:01 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/07 10:23:37 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:56:02 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@
 // 	close(redir->fd);
 // }
 
-// // / @brief Prepara las redirecciones para un comando abriendo los archivos
-// // / necesarios y estableciendo los descriptores de fichero apropiados.
-// // / @param comando
-// // / @return 0 si las redirecciones se han configurado correctamente, sino -1
 // int	redir_setup(t_command *command)
 // {
 // 	t_redir	*curr_redir;
@@ -47,7 +43,10 @@
 // 	return (0);
 // }
 
-
+/// @brief Prepara las redirecciones para un comando abriendo los archivos
+/// necesarios y estableciendo los descriptores de fichero apropiados.
+/// @param comando
+/// @return 0 si las redirecciones se han configurado correctamente, sino -1
 static void	fd_redir(t_tools *tools, t_redir *redir, int no_command)
 {
 	int fd = 0;
@@ -97,14 +96,11 @@ static void	fd_redir(t_tools *tools, t_redir *redir, int no_command)
 		perror("close failed");
 }
 
-/**
- * Configura las redirecciones para un comando abriendo los archivos
- * necesarios y ajustando los descriptores de archivo.
- *
- * @param tools Estructura global de herramientas.
- * @param command El comando para el cual se configura la redirección.
- * @return 0 si las redirecciones se configuran correctamente, -1 en caso de error.
- */
+/// Configura las redirecciones para un comando abriendo los archivos
+/// necesarios y ajustando los descriptores de archivo.
+/// @param tools Estructura global de herramientas.
+/// @param command El comando para el cual se configura la redirección.
+/// @return 0 si success, -1 en caso de error.
 int	redir_setup(t_tools *tools, t_command *command)
 {
 	t_redir	*curr_redir;
@@ -112,7 +108,6 @@ int	redir_setup(t_tools *tools, t_command *command)
 
 	curr_redir = command->redir;
 	first_redir = command->redir;
-
 	// Detectar si no hay un comando asociado
 	int no_command = (command->args == NULL || command->args[0] == NULL);
 
