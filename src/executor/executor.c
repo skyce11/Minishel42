@@ -20,7 +20,7 @@
 
 void	run_command(t_command *command, t_tools *tools)
 {
-	if (redir_setup(command) == 0)
+	if (redir_setup(tools, command) == 0)
 	{
 		if (command->args == NULL || command->args[0] == NULL)
 		{
@@ -62,7 +62,7 @@ int	executor(t_tools *tools)
 		// Validar si `args[0]` es NULL y solo considerar redirecciones
 		if (tools->command->args == NULL || tools->command->args[0] == NULL)
 		{
-			if (redir_setup(tools->command) == 0)
+			if (redir_setup(tools, tools->command) == 0)
 				return (1); // Redirección manejada correctamente
 			else
 				return (0); // Error al manejar la redirección

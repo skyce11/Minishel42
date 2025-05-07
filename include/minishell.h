@@ -272,11 +272,13 @@ int				check_valid_identifier(char c);
 int				executor(t_tools *tools);
 void			run_command(t_command *command, t_tools *tools);
 
-int				file_open(t_redir *redir);
+// int				file_open(t_redir *redir);
+int	file_open(t_tools *tools, t_redir *redir);
 
 t_pipe			*create_pipe_list(int size);
 void			cleanse_pipe_list(t_pipe **first);
-int				redir_setup(t_command *command);
+// int				redir_setup(t_command *command);
+int	redir_setup(t_tools *tools, t_command *command);
 
 int				get_command_list_size(t_command *list);
 int				fill_command_from_env(t_command *command, t_tools *tools);
