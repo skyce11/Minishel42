@@ -15,7 +15,7 @@ static void	update_quotes(const char *line, int *in_dquote, int *in_squote)
 	}
 }
 
-static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote)
+static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote, int *fd)
 {
 	char	*next_line;
 	char	*temp;
@@ -32,6 +32,8 @@ static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote)
 			ft_putendl_fd("`\''", STDOUT_FILENO);
 		ft_putendl_fd("syntax error: unexpected end of file", STDOUT_FILENO);
 		free(*buffer);
+		close(fd[1]);
+		close(fd[0]);
 		exit(F_QUOTE);
 	}
 	temp = ft_strjoin(*buffer, "\n");
@@ -54,7 +56,7 @@ void	child_heredoc(int fd[2], int in_dquote, int in_squote, t_tools *tools)
 	if (!buffer)
 		exit(EXIT_FAILURE);
 	while (in_dquote || in_squote)
-		heredoc_update_buffer(&buffer, &in_dquote, &in_squote);
+		heredoc_update_buffer(&buffer, &in_dquote, &in_squote, fd);
 	write(fd[1], buffer, ft_strlen(buffer));
 	free(buffer);
 	close(fd[1]);
