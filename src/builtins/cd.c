@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:07:53 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/18 14:18:49 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:05:42 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@ static void	ft_change_pwd_env(t_tools *tools)
 	ft_memfree(path);
 }
 
+void	ft_print_cd(char *str, int fd, t_tools *tools)
+{
+	ft_putendl_fd(str, fd);
+	tools->exit_status = 1;
+}
+
 /// @brief Maneja el comando `cd` para cambiar el directorio de trabajo.
 /// Actualiza las variables de entorno `OLDPWD` y `PWD`, y maneja
 /// errores cuando la ruta no es válida o se suministran demasiados argumentos.
@@ -46,12 +52,9 @@ void	ft_cd(t_command *command, t_tools *tools)
 	char	*path;
 
 	path = NULL;
+	tools->exit_status = 0;
 	if (command->args[1] && command->args[2])
-	{
-		printf("cd: too many arguments\n");
-		tools->exit_status = 1;
-		return ;
-	}
+		return (ft_print_cd("cd: too many arguments", 1, tools));
 	ft_change_oldpwd_env(tools);
 	if (command->args[1])
 	{
@@ -63,14 +66,7 @@ void	ft_cd(t_command *command, t_tools *tools)
 	else if (!path)
 		path = ft_strdup(getenv("HOME"));
 	if (chdir(path))
-	{
-		perror("cd");
-		tools->exit_status = 1;
-	}
-	else
-	{
-		tools->exit_status = 0;
-	}
+		ft_print_cd("cd", STDERR_FILENO, tools);
 	ft_memfree(path);
 	ft_change_pwd_env(tools);
 }
