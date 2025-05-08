@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/06 12:08:14 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:58:10 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	set_file_descriptors(t_command *curr_command, t_pipes_command pipes,
 static int	piped_command_child(t_command *curr_command,
 		t_pipes_command pipes, t_tools *tools, unsigned int i)
 {
-	signal(SIGQUIT, SIG_DFL);
 	set_file_descriptors(curr_command, pipes, i);
 	run_command(curr_command, tools);
 	if (is_builtin(curr_command))
@@ -110,6 +109,7 @@ static int	exec_piped_command(t_pipe *ps, t_tools *tools,
 	pipes.curr = obtain_related_pipe_from_list(ps, i, 0);
 	if (fill_command_from_env(curr_command, tools) != -1)
 	{
+		g_signal = S_SIGINT;
 		if (curr_command->next != NULL)
 			if (pipe(pipes.curr->pipe) < 0)
 				return (-1);
@@ -118,12 +118,13 @@ static int	exec_piped_command(t_pipe *ps, t_tools *tools,
 			return (piped_command_child(curr_command, pipes, tools, i));
 		else
 		{
-			if (curr_command->next != NULL && pipes.curr->pipe[1] != STDIN_FILENO)
+			if (curr_command->next != NULL && pipes.curr->pipe[1] >= 0)
 				close(pipes.curr->pipe[1]);
-			if (pipes.prev && pipes.prev->pipe[0] != STDIN_FILENO)
+			if (pipes.prev && pipes.prev->pipe[0] >= 0)
 				close(pipes.prev->pipe[0]);
 			waitpid(pid, &child_status, 0);
 			handle_status(child_status, tools);
+			g_signal = S_BASE;
 		}
 	}
 	return (0);
@@ -162,6 +163,5 @@ int	exec_compound_command(t_tools *tools, unsigned int size)
 		i++;
 	}
 	cleanse_pipe_list(&ps);
-	signal(SIGQUIT, sigint_handler);
 	return (tools->exit_status);
 }

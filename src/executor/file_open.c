@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 21:02:06 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/08 14:33:52 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:01:15 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static int preprocess_heredoc(t_tools *tools, const char *delimiter)
 	while (1)
 	{
 		line = readline("> ");
-		if (line == NULL || strcmp(line, delimiter) == 0)
+		if (line == NULL)
 		{
 			ft_putstr_fd("bash: warning: here-document delim", STDOUT_FILENO);
 			ft_putendl_fd("ited by end-of-file (wanted `END')", STDOUT_FILENO);
@@ -97,7 +97,11 @@ static int preprocess_heredoc(t_tools *tools, const char *delimiter)
 			free(line);
 			break;
 		}
-
+		if (strcmp(line, delimiter) == 0)
+		{
+			free(line);
+			break;
+		}
 		// Aplicar expansor a la línea
 		free(tools->arg_str); // Liberar cualquier valor previo
 		tools->arg_str = ft_strdup(line);

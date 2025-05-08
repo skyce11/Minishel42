@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 10:25:18 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/07 10:32:24 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:51:14 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,8 +270,6 @@ t_command	*create_cell(char *cmd_sep)
 	if (!cell)
 		return (NULL);
 	cell->next = NULL;
-	cell->args = parse_args(cmd_sep);
-	cell->redir = create_redir_list(cmd_sep, &status);
 	cell->cmd_sep = ft_strdup(cmd_sep);
 	if (!cell->cmd_sep)
 	{
@@ -279,12 +277,12 @@ t_command	*create_cell(char *cmd_sep)
 		ft_free_matrix(cell->args);
 		return(free(cell), NULL);
 	}
-	cell -> next = NULL;
 	if (is_redirection_only(cmd_sep))
 	{
 		cell->args = malloc(sizeof(char *));
 		if (!cell->args)
 		{
+			free(cell->cmd_sep);
 			free(cell);
 			return (NULL);
 		}
@@ -293,9 +291,14 @@ t_command	*create_cell(char *cmd_sep)
 	else
 	{
 		cell -> args = parse_args(cmd_sep);
+		if (!cell->args)
+		{
+			free(cell->cmd_sep);
+			free(cell);
+			return (NULL);
+		}
 	}
 	cell -> redir = create_redir_list(cmd_sep, &status);
-	cell -> cmd_sep = cmd_sep;
 	if (status == -1)
 	{
 		free(cell->cmd_sep);

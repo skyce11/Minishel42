@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 11:39:33 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/01 18:49:17 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:43:44 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,12 @@ char	**parse_args(char *s)
 	if (aux[0] && aux[0][0] != '<' && aux[0][0] != '>')
 	{
 		res[j] = ft_strdup(aux[0]);
+		if (!res[j])
+		{
+			ft_free_matrix(aux);
+			free(res);
+			return (NULL);
+		}
 		j++;
 	}
 	i = 1;
@@ -214,6 +220,11 @@ char	**parse_args(char *s)
 			aux[i - 1][0] != '<' && aux[i - 1][0] != '>')
 		{
 			res[j] = ft_strdup(aux[i]);
+			if (!res[j])
+			{
+				ft_free_matrix(aux);
+				ft_free_matrix(res);
+			}
 			j++;
 		}
 		i++;
