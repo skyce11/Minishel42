@@ -6,26 +6,11 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/08 14:58:10 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:34:28 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/// @brief Configures file descriptors for a piped command.
-/// Also ensures proper resource cleanup.
-/// @param curr_command The current command being executed.
-/// @param pipes Structure managing inter-process communication.
-/// @param i Index of the command in the sequence.
-/// @return Void
-void	safe_close(int *fd)
-{
-	if (*fd != -1)
-	{
-		close(*fd);
-		*fd = -1;
-	}
-}
 
 /* Fonction générique pour appliquer dup2 avec vérification */
 void	safe_dup2(int oldfd, int newfd)
@@ -90,6 +75,7 @@ static int	piped_command_child(t_command *curr_command,
 	}
 	return (-1);
 }
+
 /// @brief Executes a piped command within a compound command structure.
 /// It sets up the necessary pipes, forks a child process to execute the
 /// command, and manages resource cleanup.
@@ -109,7 +95,6 @@ static int	exec_piped_command(t_pipe *ps, t_tools *tools,
 	pipes.curr = obtain_related_pipe_from_list(ps, i, 0);
 	if (fill_command_from_env(curr_command, tools) != -1)
 	{
-		g_signal = S_SIGINT;
 		if (curr_command->next != NULL)
 			if (pipe(pipes.curr->pipe) < 0)
 				return (-1);
@@ -118,15 +103,13 @@ static int	exec_piped_command(t_pipe *ps, t_tools *tools,
 			return (piped_command_child(curr_command, pipes, tools, i));
 		else
 		{
-			if (curr_command->next != NULL && pipes.curr->pipe[1] >= 0)
-				close(pipes.curr->pipe[1]);
-			if (pipes.prev && pipes.prev->pipe[0] >= 0)
-				close(pipes.prev->pipe[0]);
+			close_safe(curr_command, pipes);
 			waitpid(pid, &child_status, 0);
 			handle_status(child_status, tools);
-			g_signal = S_BASE;
 		}
 	}
+	else
+		return (close_safe(curr_command, pipes), tools->exit_status);
 	return (0);
 }
 
@@ -147,20 +130,20 @@ int	exec_compound_command(t_tools *tools, unsigned int size)
 	ps = create_pipe_list(size);
 	if (!ps)
 	{
-		write(2, "ERROR: Could't create pipe list\n", 33);
+		ft_putendl_fd("ERROR: Could't create pipe list\n", STDERR_FILENO);
 		return (-1);
 	}
 	curr_command = tools->command;
-	while (i < size)
+	while (i++ < size)
 	{
+		g_signal = S_SIGINT;
 		if (exec_piped_command(ps, tools, curr_command, i) != 0)
 		{
 			cleanse_pipe_list(&ps);
 			return (1);
 		}
-		// if (curr_command)
-			curr_command = curr_command->next;
-		i++;
+		g_signal = S_BASE;
+		curr_command = curr_command->next;
 	}
 	cleanse_pipe_list(&ps);
 	return (tools->exit_status);

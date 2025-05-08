@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/06 12:09:01 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:33:25 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,45 +104,34 @@ void	update_shlvl(t_tools *tools);
 void	ft_clean_all(t_tools *tools);
 void	cleanse_redir_list(t_redir *redir);
 
-/*
- * Parser_cells
- */
+//close_fd.c
+void	safe_close(int *fd);
+void	close_safe(t_command *curr_command, t_pipes_command	pipes);
 
+//  Parser_cells
 t_command		*create_cell(char *cmd_sep);
 t_command		*add_cell(t_command *list, char *cmd_sep);
 void			print_list(t_command *list);
 t_redir			*create_redir_list(char *redir, int *status);
 
-/*
- * Parser_pip
- */
-
+//  Parser_pip
 t_pip			*create_pip_cell(char *cmd_pip);
 t_pip			*add_pip_cell(t_pip *list, char *cmd_pip, int pos);
 void			print_pip_list(t_pip *piplist);
 int				pipeinstr(char c, char *str);
 void			parse_pip(t_command *list);
 
-/*
- * cmd.c
- */
-
+// cmd.c
 int				validate_pipes(char *str);
 char			*first_command(char *str);
 int				ft_strlen_first_word(char *str);
 char			*arg_quote(char *str);
 
-/*
- * init.c
- */
-
+// init.c
 t_command		*init_command(void);
 void			free_command(t_command *command);
 
-/*
- * split minishell
- */
-
+// split minishell
 void			*ft_free_matrix(char **mtx);
 char			**split_minishell(char *s, char z);
 size_t			count_tokens(char *s, char z);
@@ -150,9 +139,7 @@ char			*cross_string(char *s, size_t *i, char z);
 char			*get_end_str(char *s, char c, size_t *len, int count, char z);
 size_t			count_string(char *s, char z);
 
-/*
- * parse_utils
- */
+// parse_utils
 char			*word_dup(char *str, int start, int finish);
 char			*word_dup_after(char *s, char c, int i);
 char			*word_dup_before(char *s, char c);
@@ -166,55 +153,39 @@ size_t			pos_after_char(char *str, char c);
 int				find_match_quote(char *line, int i, int *num_del, int del);
 int				count_quotes(char *line);
 
-/*
- * Parser
- */
+// Parser
 t_command		*parser(char *s);
 
-/*
- * parse_envp
- */
+// parse_envp
 int				find_pwd(t_tools *tools);
 char			*find_path(char **envp);
 int				parse_envp(t_tools *t_tools);
 
-/*
- *  parser_var
- */
+// parser_var
 int				get_char_pos(char *s, char c);
 char			*get_left_str(char *str);
 char			*get_right_str(char *str);
 int				if_var(char *str);
 int				if_ass_str(char **table);
 
-/*
- * quotes_aux.c
- */
-
+// quotes_aux.c
 size_t			quotes_lenght(char *str);
 char			*delete_quotes(char *str, char c);
 
-/*
- *	expansor.c
- */
+// expansor.c
 char			*ft_strstr(const char *haystack, const char *needle);
 char			*expansor(t_tools *tools);
 char			*detect_dollar(t_tools *tools);
 int				loop_dollar(t_tools *tools, char **aux, int j);
 
-/*
- *	expansor_utils.c
- */
+// expansor_utils.c
 size_t			dollar_after(char *str);
 size_t			equal_after(char *str);
 char			*char_to_str(char c);
 int				digit_after_dollar(int j, char *str);
 int				after_dollar_lenght(char *str, int j);
 
-/*
- * BUILTINS
- */
-
+// 			BUILTINS
 //cd
 void			ft_cd(t_command *command, t_tools *tools);
 
@@ -251,34 +222,27 @@ void			add_arg_to_env(char *var, t_tools *tools);
 int				is_builtin(t_command *command);
 void			ft_builtin(t_command *command, t_tools *tools);
 
-/*
- * MINISHELL_LOOP
- */
+// MINISHELL_LOOP
 int				reset_tools(t_tools *tools);
 int				init_tools(t_tools *tools);
 int				minishell_loop(t_tools *tools);
 
-/*
- * BUILTINS_UTILS
- */
+//  BUILTINS_UTILS
 void			ft_free_list(t_env **list);
 void			change_path(t_tools *tools);
 int				check_valid_identifier(char c);
 
-/*
- * Executor
- */
-
+//  Executor
 int				executor(t_tools *tools);
-void			run_command(t_command *command, t_tools *tools);
+int				run_command(t_command *command, t_tools *tools);
 
 // int				file_open(t_redir *redir);
-int	file_open(t_tools *tools, t_redir *redir);
+int		file_open(t_tools *tools, t_redir *redir);
 
 t_pipe			*create_pipe_list(int size);
 void			cleanse_pipe_list(t_pipe **first);
 // int				redir_setup(t_command *command);
-int	redir_setup(t_tools *tools, t_command *command);
+int				redir_setup(t_tools *tools, t_command *command);
 
 int				get_command_list_size(t_command *list);
 int				fill_command_from_env(t_command *command, t_tools *tools);
@@ -291,10 +255,9 @@ int				exec_compound_command(t_tools *tools, unsigned int size);
 
 int				exec_single_command(t_command *command, t_tools *tools);
 int				check_quotes(int in_dquote, int in_squote, t_tools *tools);
+int				check_child_status(int status, int fd, char *result, t_tools *tools);
 
-/*
- * Signal
- */
+// Signal
 void			signal_init(void);
 void			sigint_handler(int sig);
 void			sigquit_handler(int sig);
