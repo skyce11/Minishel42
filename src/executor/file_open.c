@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 21:02:06 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/07 11:44:30 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:33:52 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ static int preprocess_heredoc(t_tools *tools, const char *delimiter)
 	char *line;
 	int pipe_fd[2];
 
+	signal(SIGINT, SIG_DFL);
 	// Crear un pipe para redirigir el contenido del heredoc
 	if (pipe(pipe_fd) == -1)
 	{
@@ -85,6 +86,14 @@ static int preprocess_heredoc(t_tools *tools, const char *delimiter)
 		line = readline("> ");
 		if (line == NULL || strcmp(line, delimiter) == 0)
 		{
+			ft_putstr_fd("bash: warning: here-document delim", STDOUT_FILENO);
+			ft_putendl_fd("ited by end-of-file (wanted `END')", STDOUT_FILENO);
+			free(line);
+			break;
+		}
+		if (g_signal == S_CANCEL_EXEC)
+		{
+			tools->exit_status = 130;
 			free(line);
 			break;
 		}
@@ -100,6 +109,8 @@ static int preprocess_heredoc(t_tools *tools, const char *delimiter)
 
 		free(line);
 	}
+	signal(SIGINT, sigint_handler);
+	g_signal = S_BASE;
 	close(pipe_fd[1]); // Cerrar el extremo de escritura
 	return (pipe_fd[0]); // Retornar el extremo de lectura
 }
