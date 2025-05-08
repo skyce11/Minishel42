@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:08:42 by migonzal          #+#    #+#             */
-/*   Updated: 2025/03/31 10:14:08 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:40:26 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ char	*get_env_value(char *fullenv)
 	i = 0;
 	while (fullenv[i] && fullenv[i] != '=' && fullenv[i] != ' ')
 		i++;
+	if (fullenv[i] == '\0')
+		return (ft_strdup(""));
 	if (fullenv[i + 1] == '\"')
 		return (ft_substr(fullenv, i + 2, ft_strlen(fullenv) - i));
 	else

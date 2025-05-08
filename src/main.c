@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/07 11:56:45 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:34:15 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@ int	reset_tools(t_tools *tools)
 	last_exit_status = tools->exit_status;
 	signal_init();
 	free_command(tools->command);
-	free(tools->arg_str);
+	if (tools->arg_str)
+		free(tools->arg_str);
 	tools->arg_str = NULL;
-	ft_free_arr(tools->paths);
+	if (tools->paths)
+		ft_free_arr(tools->paths);
 	tools->paths = NULL;
 	init_tools(tools);
 	tools->exit_status = last_exit_status;
