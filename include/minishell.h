@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/09 16:11:29 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 19:53:07 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,6 @@ int				after_dollar_lenght(char *str, int j);
 // 			BUILTINS
 //cd
 void			ft_cd(t_command *command, t_tools *tools);
-
 //echo
 void			print_lines(int i, char **str, int out);
 int				ft_echo(t_command *command);
@@ -202,8 +201,6 @@ void			ft_export(t_command *command, t_tools *tools);
 //unset
 void			ft_unset(t_command *command, t_tools *tools);
 //exit
-
-// int				ft_exit(t_tools *tools);
 int	ft_exit(t_tools *tools, int fd1, int fd2);
 
 // env_utils
@@ -235,8 +232,7 @@ void			change_path(t_tools *tools);
 int				check_valid_identifier(char c);
 
 //  Executor
-int				executor(t_tools *tools);
-// void				run_command(t_command *command, t_tools *tools);
+void			executor(t_tools *tools);
 void	run_command(t_command *command, t_tools *tools, int fd1, int fd2);
 
 // int				file_open(t_redir *redir);
@@ -244,7 +240,6 @@ int		file_open(t_tools *tools, t_redir *redir);
 
 t_pipe			*create_pipe_list(int size);
 void			cleanse_pipe_list(t_pipe **first);
-// int				redir_setup(t_command *command);
 int				redir_setup(t_tools *tools, t_command *command);
 
 int				get_command_list_size(t_command *list);
@@ -264,5 +259,8 @@ int				check_child_status(int status, int fd, char *result, t_tools *tools);
 void			signal_init(void);
 void			sigint_handler(int sig);
 void			sigquit_handler(int sig);
+
+void			break_heredoc(char *line, int err, t_tools *tools);
+int		preprocess_heredoc(t_tools *tools, const char *delimiter);
 
 #endif

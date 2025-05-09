@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:55:10 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/01 16:19:42 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 19:56:20 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ void	cleanse_pipe_list(t_pipe **first)
 
 /// @brief Inicializa una estructura `t_pipe` para manejar tuberías en una lista
 /// encadenada. Si falla, limpia la lista existente antes de devolver `NULL`.
-/// @param prev Puntero a la tubería anterior de la lista (o NULL para la primera tubería).
-/// @param list Puntero a la cabecera de la lista de tuberías (para gestión en caso de fallo).
-/// @return Puntero a la nueva estructura `t_pipe` inicializada, o `NULL` en caso de error.
+/// @param prev Puntero a la tubería anterior de la lista (o NULL).
+/// @param list Puntero a la cabecera de la lista de tuberías (en caso de fallo)
+/// @return Puntero a la nueva estructura `t_pipe` inicializada,
+/// o `NULL` en caso de error.
 t_pipe	*init_pipe(t_pipe *prev, t_pipe **list)
 {
 	t_pipe	*pipe;
@@ -58,7 +59,7 @@ t_pipe	*init_pipe(t_pipe *prev, t_pipe **list)
 
 /// @brief Crea una lista encadenada de estructuras `t_pipe` para gestionar las
 /// tuberías necesarias en una serie de comandos compuestos.
-/// @param size Número de tuberías a crear (vinculado al número de comandos - 1).
+/// @param size Número de tuberías a crear (vinculado al número de comandos - 1)
 /// @return Puntero a la primera estructura `t_pipe` de la lista, sino `NULL`.
 t_pipe	*create_pipe_list(int size)
 {

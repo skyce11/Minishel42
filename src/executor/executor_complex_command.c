@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/09 16:18:53 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 19:54:37 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ static int	exec_piped_command(t_pipe *ps, t_tools *tools,
 			close_safe(curr_command, pipes);
 			waitpid(pid, &child_status, 0);
 			handle_status(child_status, tools);
+			tools->exit_status = 0;
 		}
 	}
 	else
