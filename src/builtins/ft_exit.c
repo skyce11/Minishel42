@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/06 12:05:32 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:09:47 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,14 @@ static int	check_exit_args(t_tools *tools)
 /// @param tools
 /// @return EXIT_FAILURE si el comando tiene demasiados argumentos,
 /// sino solo exit el shell.
-int	ft_exit(t_tools *tools)
+int	ft_exit(t_tools *tools, int fd1, int fd2)
 {
 	int	exit_code;
 
 	ft_putendl_fd("exit", STDERR_FILENO);
 	exit_code = check_exit_args(tools);
 	ft_clean_all(tools);
+	safe_close(&fd1);
+	safe_close(&fd2);
 	exit(exit_code);
 }

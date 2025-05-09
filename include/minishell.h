@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/08 19:33:25 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:11:29 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,8 @@ void			ft_export(t_command *command, t_tools *tools);
 void			ft_unset(t_command *command, t_tools *tools);
 //exit
 
-int				ft_exit(t_tools *tools);
+// int				ft_exit(t_tools *tools);
+int	ft_exit(t_tools *tools, int fd1, int fd2);
 
 // env_utils
 char			*get_env_name(char *fullenv);
@@ -220,7 +221,8 @@ void			add_arg_to_env(char *var, t_tools *tools);
 
 //BUILTING_DISTRIBUTOR
 int				is_builtin(t_command *command);
-void			ft_builtin(t_command *command, t_tools *tools);
+// void			ft_builtin(t_command *command, t_tools *tools);
+void	ft_builtin(t_command *command, t_tools *tools, int fd1, int fd2);
 
 // MINISHELL_LOOP
 int				reset_tools(t_tools *tools);
@@ -234,7 +236,8 @@ int				check_valid_identifier(char c);
 
 //  Executor
 int				executor(t_tools *tools);
-int				run_command(t_command *command, t_tools *tools);
+// void				run_command(t_command *command, t_tools *tools);
+void	run_command(t_command *command, t_tools *tools, int fd1, int fd2);
 
 // int				file_open(t_redir *redir);
 int		file_open(t_tools *tools, t_redir *redir);

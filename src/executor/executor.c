@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 13:25:07 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/07 10:55:17 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:08:47 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 /// @return Void
 
 
-void	run_command(t_command *command, t_tools *tools)
+void	run_command(t_command *command, t_tools *tools, int fd1, int fd2)
 {
 	if (redir_setup(tools, command) == 0)
 	{
@@ -29,7 +29,7 @@ void	run_command(t_command *command, t_tools *tools)
 			return;
 		}
 		if (is_builtin(command))
-			ft_builtin(command, tools);
+			ft_builtin(command, tools, fd1, fd2);
 		else
 		{
 			execve(command->args[0], command->args, tools->envp);

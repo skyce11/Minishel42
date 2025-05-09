@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:34:38 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/06 11:59:19 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:16:02 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ static void	run_builtin_in_parent_process(t_command *command, t_tools *tools)
 
 	stdin_fd = dup(STDIN_FILENO);
 	stdout_fd = dup(STDOUT_FILENO);
-	run_command(command, tools);
+	run_command(command, tools, stdin_fd, stdout_fd);
 	dup2(stdin_fd, STDIN_FILENO);
 	dup2(stdout_fd, STDOUT_FILENO);
-	close(stdin_fd);
-	close(stdout_fd);
+	safe_close(&stdin_fd);
+	safe_close(&stdout_fd);
 }
 
 // si el commando no es integrada, lanza la  ejecucion con un fork
@@ -46,7 +46,7 @@ static int	fork_single_command(t_command *command, t_tools *tools)
 		return (-1);
 	if (pid == 0)
 	{
-		run_command(command, tools);
+		run_command(command, tools, 0, 1);
 		exit(F_CMD_NOT_FOUND);
 	}
 	else
@@ -75,8 +75,9 @@ int	exec_single_command(t_command *command, t_tools *tools)
 	if (is_builtin(command))
 	{
 		run_builtin_in_parent_process(command, tools);
-		return (status);
+		printf("exit_status: %d\n", tools->exit_status);
+		return (tools->exit_status);
 	}
 	status = fork_single_command(command, tools);
-	return (status);
+	return (tools->exit_status);
 }

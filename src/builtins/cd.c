@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:07:53 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/08 17:05:42 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:40:27 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,16 @@ static void	ft_change_pwd_env(t_tools *tools)
 	ft_memfree(path);
 }
 
-void	ft_print_cd(char *str, int fd, t_tools *tools)
+void	ft_print_cd(int err, int fd, t_tools *tools, t_command *command)
 {
-	ft_putendl_fd(str, fd);
+	ft_putstr_fd("bash: cd: " , fd);
+	if (err == 1)
+		ft_putendl_fd("too many arguments", fd);
+	if (err == 2)
+	{
+		ft_putstr_fd(command->args[1] , fd);
+		ft_putendl_fd(" No such file or directory", fd);
+	}
 	tools->exit_status = 1;
 }
 
@@ -54,7 +61,7 @@ void	ft_cd(t_command *command, t_tools *tools)
 	path = NULL;
 	tools->exit_status = 0;
 	if (command->args[1] && command->args[2])
-		return (ft_print_cd("cd: too many arguments", 1, tools));
+		return (ft_print_cd(1, STDOUT_FILENO, tools, command));
 	ft_change_oldpwd_env(tools);
 	if (command->args[1])
 	{
@@ -66,7 +73,8 @@ void	ft_cd(t_command *command, t_tools *tools)
 	else if (!path)
 		path = ft_strdup(getenv("HOME"));
 	if (chdir(path))
-		ft_print_cd("cd", STDERR_FILENO, tools);
+		ft_print_cd(2, STDERR_FILENO, tools, command);
 	ft_memfree(path);
 	ft_change_pwd_env(tools);
+	printf("exit_status: %d\n", tools->exit_status);
 }

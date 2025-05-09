@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:06:43 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/01 16:38:26 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:09:11 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	is_builtin(t_command *command)
 /// @param command
 /// @param tools
 /// @return void.
-void	ft_builtin(t_command *command, t_tools *tools)
+void	ft_builtin(t_command *command, t_tools *tools, int fd1, int fd2)
 {
 	if (!ft_strcmp(command->args[0], "env"))
 		ft_env(command, tools);
@@ -53,7 +53,7 @@ void	ft_builtin(t_command *command, t_tools *tools)
 	if (!ft_strcmp(command->args[0], "echo"))
 		ft_echo(command);
 	if (!ft_strcmp(command->args[0], "exit"))
-		ft_exit(tools);
+		ft_exit(tools, fd1, fd2);
 	if (!ft_strcmp(command->args[0], "export"))
 		ft_export(command, tools);
 	if (!ft_strcmp(command->args[0], "unset"))
