@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 13:25:07 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/09 17:52:37 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 20:32:08 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	executor(t_tools *tools)
 {
 	unsigned int	size;
 
+	tools->exit_status = 0;
 	size = get_command_list_size(tools->command);
 	if (size < 1)
 	{

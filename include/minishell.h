@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/09 19:53:07 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 20:41:16 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int				find_match_quote(char *line, int i, int *num_del, int del);
 int				count_quotes(char *line);
 
 // Parser
-t_command		*parser(char *s);
+void		parser(t_tools *tools);
 
 // parse_envp
 int				find_pwd(t_tools *tools);
@@ -261,6 +261,6 @@ void			sigint_handler(int sig);
 void			sigquit_handler(int sig);
 
 void			break_heredoc(char *line, int err, t_tools *tools);
-int		preprocess_heredoc(t_tools *tools, const char *delimiter);
+int				preprocess_heredoc(t_tools *tools, const char *delimiter);
 
 #endif

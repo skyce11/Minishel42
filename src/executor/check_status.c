@@ -6,11 +6,27 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:08:09 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/09 16:33:08 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 20:40:39 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_clean_all(t_tools *tools)
+{
+	if (tools->arg_str)
+		free(tools->arg_str);
+	if (tools->command)
+		free_command(tools->command);
+	if (tools->pwd)
+		free(tools->pwd);
+	if (tools->old_pwd)
+		free(tools->old_pwd);
+	if (tools->envp)
+		ft_free_arr(tools->envp);
+	if (tools->paths)
+		ft_free_arr(tools->paths);
+}
 
 int	check_child_status(int status, int fd, char *result, t_tools *tools)
 {

@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/09 17:33:58 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 20:41:54 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 /// @return Always returns 1 after successful reset.
 int	reset_tools(t_tools *tools)
 {
-	int last_exit_status;
+	int	last_exit_status;
 
 	last_exit_status = tools->exit_status;
 	signal_init();
@@ -54,36 +54,24 @@ int	init_tools(t_tools *tools)
 int	minishell_loop(t_tools *tools)
 {
 	char	*aux;
-	int		in_dquote;
-	int		in_squote;
 
-	in_dquote = 0;
-	in_squote = 0;
 	while (1)
 	{
-		if (g_signal == S_SIGINT)
-			tools->exit_status = 1;
 		tools->arg_str = readline("minishell ");
 		if (!tools->arg_str)
-		{
-			ft_putstr_fd("exit\n", STDOUT_FILENO);
-			ft_clean_all(tools);
-			exit(EXIT_SUCCESS);
-		}
+			return (ft_putstr_fd("exit\n", 1), ft_clean_all(tools), 0);
 		aux = ft_strtrim(tools->arg_str, " ");
 		free(tools->arg_str);
 		tools->arg_str = aux;
 		if (tools->arg_str[0] == '\0' || !validate_pipes(tools->arg_str)
-			|| check_quotes(in_dquote, in_squote, tools) == 0)
+			|| check_quotes(0, 0, tools) == 0)
 		{
 			reset_tools(tools);
 			continue ;
 		}
 		add_history(tools->arg_str);
 		expansor(tools);
-		if (tools->command)
-			free_command(tools->command);
-		tools->command = parser(tools->arg_str);
+		parser(tools);
 		if (!tools->command)
 			return (ft_clean_all(tools), 0);
 		executor(tools);
@@ -91,23 +79,6 @@ int	minishell_loop(t_tools *tools)
 	}
 	return (1);
 }
-
-void	ft_clean_all(t_tools *tools)
-{
-	if (tools->arg_str)
-		free(tools->arg_str);
-	if (tools->command)
-		free_command(tools->command);
-	if (tools->pwd)
-		free(tools->pwd);
-	if (tools->old_pwd)
-		free(tools->old_pwd);
-	if (tools->envp)
-		ft_free_arr(tools->envp);
-	if (tools->paths)
-		ft_free_arr(tools->paths);
-}
-
 
 /// @brief update the nbr of SHLVL.
 /// @param tools
@@ -148,6 +119,7 @@ int	main(int argc, char **argv, char **envp)
 	tools.envp = arrdup(envp);
 	if (!tools.envp)
 		return (ft_free_arr(tools.envp), 0);
+	update_shlvl(&tools);
 	signal_init();
 	if (find_pwd(&tools) == 0)
 		return (ft_clean_all(&tools), 0);
@@ -157,13 +129,5 @@ int	main(int argc, char **argv, char **envp)
 	if (minishell_loop(&tools) == 0)
 		return (1);
 	ft_clean_all(&tools);
-	tools.envp = arrdup(envp);   // guardo el enviroment antes de hacer nada
-	update_shlvl(&tools);
-	signal_init();   			// señales, hay que prederlo fuego a esto
-	find_pwd(&tools); 			// estoy guardando el las variables PWD y OLDPWD
-	init_tools(&tools);
-	printf("AQUI EMPIEZA LA MINISHELL\n");
-	minishell_loop(&tools);     //este es loop que mantiene abierta el prompt de la mini hasta que le digas que se cierre
-	update_shlvl(&tools);
 	return (0);
 }
