@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 15:35:47 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:45:50 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,22 +136,42 @@ void			*ft_free_matrix(char **mtx);
 char			**split_minishell(char *s, char z);
 size_t			count_tokens(char *s, char z);
 char			*cross_string(char *s, size_t *i, char z);
-char			*get_end_str(char *s, char c, size_t *len, int count, char z);
+char			*get_end_str(char *s, size_t *len, char z);
 size_t			count_string(char *s, char z);
 
 // parse_utils
-char			*word_dup(char *str, int start, int finish);
-char			*word_dup_after(char *s, char c, int i);
-char			*word_dup_before(char *s, char c);
-int				count_words(const char *str, char c);
 char			**list_dup_after(char *s, char c);
 int				dup_after_pos(char *s, char c, int num);
 char			**parse_args(char *s);
 void			ft_free_arr(char **arr);
-char			**arrdup(char **arr);
-size_t			pos_after_char(char *str, char c);
-int				find_match_quote(char *line, int i, int *num_del, int del);
-int				count_quotes(char *line);
+
+//parser_redir_nodes
+int	add_redir_node(t_redir **list, char *file, int type, int *status);
+void	cleanse_redir_list(t_redir *redir);
+t_redir	*create_redir_node(char *file, int type, int *status);
+
+//parser_redir_utils
+int	is_redirection_only(char *cmd_sep);
+t_redir	*create_redir_list(char *redir, int *status);
+
+// quotes_utils
+char	**arrdup(char **arr);
+size_t	pos_after_char(char *str, char c);
+int	find_match_quote(char *line, int i, int *num_del, int del);
+int	count_quotes(char *line);
+
+//String_utils
+int	count_words(const char *str, char c);
+char	*word_dup(char *str, int start, int finish);
+char	*word_dup_after(char *s, char c, int i);
+int	dup_after_pos(char *s, char c, int num);
+char	*word_dup_before(char *s, char c);
+
+
+
+
+
+
 
 // Parser
 void		parser(t_tools *tools);
@@ -231,8 +251,8 @@ void			change_path(t_tools *tools);
 int				check_valid_identifier(char c);
 
 //  Executor
-void			executor(t_tools *tools);
-void	run_command(t_command *command, t_tools *tools);
+void				executor(t_tools *tools);
+void			run_command(t_command *command, t_tools *tools);
 
 // int				file_open(t_redir *redir);
 int		file_open(t_tools *tools, t_redir *redir);
