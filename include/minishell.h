@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 15:28:30 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:35:47 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,6 @@ void			add_arg_to_env(char *var, t_tools *tools);
 //BUILTING_DISTRIBUTOR
 int				is_builtin(t_command *command);
 void			ft_builtin(t_command *command, t_tools *tools);
-// void	ft_builtin(t_command *command, t_tools *tools, int fd1, int fd2);
 
 // MINISHELL_LOOP
 int				reset_tools(t_tools *tools);

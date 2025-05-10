@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 13:25:07 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/10 15:30:25 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:39:34 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 /// @param command The command to be executed.
 /// @param tools
 /// @return Void
-// void	run_command(t_command *command, t_tools *tools, int fd1, int fd2)
 void	run_command(t_command *command, t_tools *tools)
 {
 	if (redir_setup(tools, command) == 0)
@@ -24,7 +23,7 @@ void	run_command(t_command *command, t_tools *tools)
 		if (command->args == NULL || command->args[0] == NULL)
 			return ;
 		if (is_builtin(command))
-			ft_builtin(command, tools);
+			ft_builtin(command, tools, fd1, fd2);
 		else
 		{
 			execve(command->args[0], command->args, tools->envp);
@@ -44,7 +43,6 @@ void	executor(t_tools *tools)
 
 	tools->exit_status = 0;
 	size = get_command_list_size(tools->command);
-	printf("exec\n");
 	if (size < 1)
 	{
 		ft_putendl_fd("ERROR: empty command list", 1);
@@ -61,7 +59,6 @@ void	executor(t_tools *tools)
 		exec_single_command(tools->command, tools);
 		return ;
 	}
-	printf("exec1\n");
 	exec_compound_command(tools, size);
 	return ;
 }

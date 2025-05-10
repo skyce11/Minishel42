@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:34:38 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/10 15:29:31 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:40:05 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	run_builtin_in_parent_process(t_command *command, t_tools *tools)
 
 	stdin_fd = dup(STDIN_FILENO);
 	stdout_fd = dup(STDOUT_FILENO);
-	run_command(command, tools);
+	run_command(command, tools, stdin_fd, stdout_fd);
 	dup2(stdin_fd, STDIN_FILENO);
 	dup2(stdout_fd, STDOUT_FILENO);
 	safe_close(&stdin_fd);

@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/10 15:28:59 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:40:32 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,7 @@ void	set_file_descriptors(t_command *curr_command, t_pipes_command pipes,
 static int	piped_command_child(t_command *curr_command,
 		t_pipes_command pipes, t_tools *tools, unsigned int i)
 {
-	printf("ok1\n");
 	set_file_descriptors(curr_command, pipes, i);
-	printf("ok2\n");
 	run_command(curr_command, tools);
 	if (is_builtin(curr_command))
 	{
@@ -97,19 +95,14 @@ static int	exec_piped_command(t_pipe *ps, t_tools *tools,
 	pipes.curr = obtain_related_pipe_from_list(ps, i, 0);
 	if (fill_command_from_env(curr_command, tools) != -1)
 	{
-		printf("exec_piped1\n");
 		if (curr_command->next != NULL)
 			if (pipe(pipes.curr->pipe) < 0)
 				return (-1);
 		pid = fork();
 		if (pid == 0)
-			return (
-				printf("exec_piped3\n"),
-				piped_command_child(curr_command, pipes, tools, i)
-			);
+			return (piped_command_child(curr_command, pipes, tools, i));
 		else
 		{
-			printf("exec_piped2\n");
 			close_safe(curr_command, pipes);
 			waitpid(pid, &child_status, 0);
 			handle_status(child_status, tools);
@@ -145,7 +138,6 @@ int	exec_compound_command(t_tools *tools, unsigned int size)
 	while (i++ < size)
 	{
 		g_signal = S_SIGINT;
-		printf("exec_compound\n");
 		if (exec_piped_command(ps, tools, curr_command, i) != 0)
 		{
 			cleanse_pipe_list(&ps);
