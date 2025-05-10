@@ -60,14 +60,19 @@ static int	locate_redir(char *redir, int *i)
 	return (type);
 }
 
-static size_t preprocess_redir_file(char *redir, int *i, int *status, char **word_start)
+static size_t	preprocess_redir_file(char *redir, int *i,
+			int *status, char **word_start)
 {
-	char	quote = 0;
-	size_t	length = 0;
+	char	quote;
+	size_t	length;
 
-	while (redir[*i] && (redir[*i] == ' ' || redir[*i] == '\t' || redir[*i] == '\n'))
+	quote = 0;
+	length = 0;
+	while (redir[*i] && (redir[*i] == ' '
+			|| redir[*i] == '\t' || redir[*i] == '\n'))
 		*i = *i + 1;
-	if (redir[*i] && (redir[*i] == '\\' || redir[*i] == '<' || redir[*i] == '>'))
+	if (redir[*i] && (redir[*i] == '\\'
+			|| redir[*i] == '<' || redir[*i] == '>'))
 	{
 		*status = -1;
 		return (0);
@@ -81,15 +86,16 @@ static size_t preprocess_redir_file(char *redir, int *i, int *status, char **wor
 			{
 				*i = *i + 1;
 				length++;
-				break;
+				break ;
 			}
 		}
 		else
 		{
 			if (redir[*i] == '"' || redir[*i] == '\'')
 				quote = redir[*i];
-			else if (redir[*i] == ' ' || redir[*i] == '\t' || redir[*i] == '\n' || redir[*i] == '<' || redir[*i] == '>')
-				break;
+			else if (redir[*i] == ' ' || redir[*i] == '\t' || redir[*i] == '\n'
+				|| redir[*i] == '<' || redir[*i] == '>')
+				break ;
 		}
 		length++;
 		*i = *i + 1;
@@ -107,12 +113,9 @@ static char	*locate_redir_file(char *redir, int *i, int *status)
 	size_t	length;
 
 	word_start = NULL;
-	// Preprocesar el archivo y calcular su longitud
 	length = preprocess_redir_file(redir, i, status, &word_start);
 	if (*status == -1 || length == 0)
 		return (NULL);
-
-	// Reservar memoria y copiar el nombre del archivo
 	file = ft_calloc(1, sizeof(char) * (length + 1));
 	if (!file || ft_strlcpy(file, word_start, length + 1) < length)
 	{
@@ -123,21 +126,21 @@ static char	*locate_redir_file(char *redir, int *i, int *status)
 	return (file);
 }
 
-
-static int is_redirection_only(char *cmd_sep)
+static int	is_redirection_only(char *cmd_sep)
 {
-    int i = 0;
+	int	i;
 
-    while (cmd_sep[i])
-    {
-        if (cmd_sep[i] != ' ' && cmd_sep[i] != '\t' && cmd_sep[i] != '\n' &&
-            cmd_sep[i] != '<' && cmd_sep[i] != '>' && cmd_sep[i] != '|')
-        {
-            return (0); // No es solo una redirección
-        }
-        i++;
-    }
-    return (1); // Solo contiene redirecciones
+	i = 0;
+	while (cmd_sep[i])
+	{
+		if (cmd_sep[i] != ' ' && cmd_sep[i] != '\t' && cmd_sep[i] != '\n'
+			&& cmd_sep[i] != '<' && cmd_sep[i] != '>' && cmd_sep[i] != '|')
+		{
+			return (0);
+		}
+		i++;
+	}
+	return (1);
 }
 
 /// @brief Creates a new redirection node.
@@ -242,7 +245,6 @@ static t_command	*initialize_and_process_cell(char *cmd_sep)
 {
 	t_command	*cell;
 
-	// Inicializar la celda
 	cell = malloc(sizeof(t_command));
 	if (!cell)
 		return (NULL);
@@ -253,8 +255,6 @@ static t_command	*initialize_and_process_cell(char *cmd_sep)
 		free(cell);
 		return (NULL);
 	}
-
-	// Procesar argumentos de la celda
 	if (is_redirection_only(cmd_sep))
 	{
 		cell->args = malloc(sizeof(char *));
@@ -289,8 +289,6 @@ t_command	*create_cell(char *cmd_sep)
 	cell = initialize_and_process_cell(cmd_sep);
 	if (!cell)
 		return (NULL);
-
-	// Procesar redirecciones
 	cell->redir = create_redir_list(cmd_sep, &status);
 	if (status == -1)
 	{
@@ -308,6 +306,7 @@ t_command	*create_cell(char *cmd_sep)
 /// @param list The existing list of commands.
 /// @param cmd_sep The command string to store in the new cell.
 /// @return The updated command list with the new cell added.
+
 t_command	*add_cell(t_command *list, char *cmd_sep)
 {
 	t_command	*cur;

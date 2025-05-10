@@ -136,7 +136,7 @@ void			*ft_free_matrix(char **mtx);
 char			**split_minishell(char *s, char z);
 size_t			count_tokens(char *s, char z);
 char			*cross_string(char *s, size_t *i, char z);
-char			*get_end_str(char *s, char c, size_t *len, int count, char z);
+char			*get_end_str(char *s, size_t *len, char z);
 size_t			count_string(char *s, char z);
 
 // parse_utils

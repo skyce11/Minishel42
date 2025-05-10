@@ -90,7 +90,8 @@ size_t	count_tokens(char *s, char z)
 }
 
 /// @brief Moves the pointer past a specific character sequence.
-/// Handles quoted strings, tabs, and delimiters, advancing the pointer accordingly.
+/// Handles quoted strings, tabs, and delimiters,
+//  advancing the pointer accordingly.
 /// Also updates the length of the processed segment if needed.
 /// @param s The string to analyze.
 /// @param i Pointer to store the length of the skipped segment.
@@ -113,7 +114,7 @@ char	*cross_string(char *s, size_t *i, char z)
 	}
 	if (*s && (*s == c || *s == z || *s == '\t'))
 		s++;
-	s = get_end_str(s, c, &len, count, z);
+	s = get_end_str(s, &len, z);
 	if (i)
 		*i = len;
 	return (s);
@@ -128,11 +129,40 @@ char	*cross_string(char *s, size_t *i, char z)
 /// @param count Flag indicating whether inside a quoted section.
 /// @param z The delimiter to check.
 /// @return The updated pointer position in the string.
-char	*get_end_str(char *s, char c, size_t *len, int count, char z)
+// char	*get_end_str(char *s, char c, size_t *len, int count, char z)
+// {
+// 	while (*s && ((*s != z && *s != '\t') || ((*s == z && count == 1)
+// 				|| (*s == '\t' && count == 1))))
+// 	{
+// 		if (c != 0 && (*s == c))
+// 		{
+// 			count = !count;
+// 			c = 0;
+// 		}
+// 		else if (c == 0 && (*s == '\'' || *s == '\"'))
+// 		{
+// 			c = *s;
+// 			count = !count;
+// 		}
+// 		s++;
+// 		*len = *len +1;
+// 	}
+// 	return (s);
+// }
+
+char	*get_end_str(char *s, size_t *len, char z)
 {
-	while (*s && ((*s != z && *s != '\t') || ((*s == z && count == 1)
-				|| (*s == '\t' && count == 1))))
+	char	c;
+	int		count;
+
+	if (!s || !len)
+		return (NULL);
+	c = 0;
+	count = 0;
+	while (*s)
 	{
+		if ((*s == z || *s == '\t') && !(count == 1 && (*s == z || *s == '\t')))
+			break ;
 		if (c != 0 && (*s == c))
 		{
 			count = !count;
@@ -144,7 +174,7 @@ char	*get_end_str(char *s, char c, size_t *len, int count, char z)
 			count = !count;
 		}
 		s++;
-		*len = *len +1;
+		(*len)++;
 	}
 	return (s);
 }

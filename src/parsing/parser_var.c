@@ -15,23 +15,22 @@
 char	*get_right_str(char *str)
 {
 	char	*res;
-	int		i;
 	int		pos;
-	int		lon_str;
-	int		lon;
-	int		j;
+	size_t	lon;
+	size_t	i;
 
 	pos = get_char_pos(str, '=');
-	lon_str = ft_strlen(str);
-	lon = ft_strlen(str) - pos;
-	i = pos + 1;
-	j = 0;
-	res = ft_calloc(lon, sizeof(char));
-	while (i < lon_str)
+	if (pos == -1 || (size_t)pos == ft_strlen(str) - 1)
+		return (NULL);
+	lon = ft_strlen(str) - (size_t)pos - 1;
+	res = malloc((lon + 1) * sizeof(char));
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (i < lon)
 	{
-		res[j] = str[i];
+		res[i] = str[(size_t)pos + 1 + i];
 		i++;
-		j++;
 	}
 	res[i] = '\0';
 	return (res);

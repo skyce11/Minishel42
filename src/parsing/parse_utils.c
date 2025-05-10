@@ -39,7 +39,7 @@ int	count_words(const char *str, char c)
 			trigger = 0;
 		i++;
 	}
-	return count;
+	return (count);
 }
 
 char	*word_dup(char *str, int start, int finish)
@@ -158,8 +158,6 @@ char	**list_dup_after(char *s, char c)
 	return (pp);
 }
 
-
-
 static int	count_valid_args(char **args)
 {
 	int	count;
@@ -225,7 +223,6 @@ char	**parse_args(char *s)
 	return (res);
 }
 
-
 /// @brief free an tab
 /// @param arr
 void	ft_free_arr(char **arr)
@@ -252,7 +249,7 @@ char	**arrdup(char **arr)
 	i = 0;
 	while (arr[i] != NULL)
 		i++;
-	aux = ft_calloc(sizeof(char*), i + 1);
+	aux = ft_calloc(sizeof(char *), i + 1);
 	if (!aux)
 		return (NULL);
 	i = 0;
