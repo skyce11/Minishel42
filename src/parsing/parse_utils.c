@@ -14,38 +14,32 @@
 
 int	count_words(const char *str, char c)
 {
-	int	i;
+	int	count;
 	int	trigger;
-	int	j;
+	int	i;
 
-	i = 0;
-	j = 0;
+	count = 0;
 	trigger = 0;
-	while (str[j])
+	i = 0;
+	while (str[i])
 	{
-		if (str[j] == '"')
+		if (str[i] == '"')
 		{
-			if (str[j - 1] != ' ')
-			{
-				i++;
-			}
-			i++;
-			j++;
-			while (str[j] != '"')
-			{
-				j++;
-			}
+			if (i > 0 && str[i - 1] != ' ')
+				count++;
+			while (str[++i] && str[i] != '"')
+				;
 		}
-		if (str[j] != c && trigger == 0)
+		if (str[i] != c && !trigger)
 		{
 			trigger = 1;
-			i++;
+			count++;
 		}
-		else if (str[j] == c)
+		else if (str[i] == c)
 			trigger = 0;
-		j++;
+		i++;
 	}
-	return (i);
+	return count;
 }
 
 char	*word_dup(char *str, int start, int finish)
@@ -164,81 +158,73 @@ char	**list_dup_after(char *s, char c)
 	return (pp);
 }
 
-/// @brief Parses command arguments, filtering out redirection symbols. Splits
-/// the input string into individual arguments while excluding '<' and '>'.
-/// Also removes quotes from arguments for cleaner processing.
-/// @param s The command string to parse.
-/// @return A dynamically allocated array of command arguments.
-char	**parse_args(char *s)
+
+
+static int	count_valid_args(char **args)
 {
+	int	count;
+	int	i;
+
+	count = 0;
+	i = 0;
+	if (args[0] && args[0][0] != '<' && args[0][0] != '>')
+		count++;
+	i = 1;
+	while (args[i])
+	{
+		if (args[i][0] != '<' && args[i][0] != '>' &&
+			args[i - 1][0] != '<' && args[i - 1][0] != '>')
+		{
+			count++;
+		}
+		i++;
+	}
+	return (count);
+}
+
+// Copiar argumentos válidos a la nueva matriz
+static char	**copy_valid_args(char **args, int count)
+{
+	char	**res;
 	int		i;
 	int		j;
-	int		c;
+
+	res = ft_calloc(count + 1, sizeof(char *));
+	if (!res)
+		return (NULL);
+	j = 0;
+	i = 0;
+	if (args[0] && args[0][0] != '<' && args[0][0] != '>')
+		res[j++] = ft_strdup(args[0]);
+	i = 1;
+	while (args[i])
+	{
+		if (args[i][0] != '<' && args[i][0] != '>' &&
+			args[i - 1][0] != '<' && args[i - 1][0] != '>')
+		{
+			res[j++] = ft_strdup(args[i]);
+		}
+		i++;
+	}
+	return (res);
+}
+
+// Función principal refactorizada
+char	**parse_args(char *s)
+{
 	char	**aux;
 	char	**res;
+	int		count;
 
-	i = 0;
-	j = 0;
-	c = 0;
 	aux = split_minishell(s, ' ');
 	if (!aux)
 		return (NULL);
-	if (aux[0] && aux[0][0] != '<' && aux[0][0] != '>')
-		c++;
-	i = 1;
-	while (aux[i])
-	{
-		if (aux[i][0] != '<' && aux[i][0] != '>' &&
-			aux[i - 1][0] != '<' && aux[i - 1][0] != '>')
-		{
-			c++;
-		}
-		i++;
-	}
-	res = ft_calloc(c + 1, sizeof(char *));
-	if (!res)
-	{
-		ft_free_matrix(aux);
-		return (NULL);
-	}
-	j = 0;
-	if (aux[0] && aux[0][0] != '<' && aux[0][0] != '>')
-	{
-		res[j] = ft_strdup(aux[0]);
-		if (!res[j])
-		{
-			ft_free_matrix(aux);
-			free(res);
-			return (NULL);
-		}
-		j++;
-	}
-	i = 1;
-	while (aux[i])
-	{
-		if (aux[i][0] != '<' && aux[i][0] != '>' &&
-			aux[i - 1][0] != '<' && aux[i - 1][0] != '>')
-		{
-			res[j] = ft_strdup(aux[i]);
-			if (!res[j])
-			{
-				ft_free_matrix(aux);
-				ft_free_matrix(res);
-			}
-			j++;
-		}
-		i++;
-	}
-	i = 0;
-	while (res[i])
-	{
-		delete_quotes(res[i], '\"');
-		delete_quotes(res[i], '\'');
-		i++;
-	}
+	count = count_valid_args(aux);
+	res = copy_valid_args(aux, count);
 	ft_free_matrix(aux);
 	return (res);
 }
+
 
 /// @brief free an tab
 /// @param arr

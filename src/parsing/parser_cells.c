@@ -60,36 +60,20 @@ static int	locate_redir(char *redir, int *i)
 	return (type);
 }
 
-/// @brief Extracts the filename associated with a redirection. Skips leading
-/// spaces/tabs/newlines, then identifies and extracts the filename. Handles
-/// quoted filenames properly and ensures memory allocation is successful.
-/// If an error occurs, it updates the status and returns NULL.
-/// @param redir The string containing redirection.
-/// @param i Pointer to the current index in the string.
-/// @param status Pointer to track errors.
-/// @return A dynamically allocated string with the filename, or NULL on failure.
-static char	*locate_redir_file(char *redir, int *i, int *status)
+static size_t preprocess_redir_file(char *redir, int *i, int *status, char **word_start)
 {
-	char	quote;
-	char	*word_start;
-	char	*file;
-	size_t	length;
+	char	quote = 0;
+	size_t	length = 0;
 
-	quote = 0;
-	word_start = NULL;
-	length = 0;
-	file = NULL;
-	while (redir[*i] && (redir[*i] == ' '
-			|| redir[*i] == '\t' || redir[*i] == '\n'))
+	while (redir[*i] && (redir[*i] == ' ' || redir[*i] == '\t' || redir[*i] == '\n'))
 		*i = *i + 1;
-	if (redir[*i] && (redir[*i] == '\\'
-			|| redir[*i] == '<' || redir[*i] == '>'))
+	if (redir[*i] && (redir[*i] == '\\' || redir[*i] == '<' || redir[*i] == '>'))
 	{
 		*status = -1;
-		return (NULL);
+		return (0);
 	}
-	word_start = redir + *i;
-	while (redir[*i] && word_start)
+	*word_start = redir + *i;
+	while (redir[*i] && *word_start)
 	{
 		if (quote == '"' || quote == '\'')
 		{
@@ -97,40 +81,40 @@ static char	*locate_redir_file(char *redir, int *i, int *status)
 			{
 				*i = *i + 1;
 				length++;
-				break ;
+				break;
 			}
 		}
 		else
 		{
 			if (redir[*i] == '"' || redir[*i] == '\'')
-			{
-				if (word_start == NULL)
-					word_start = redir + *i;
 				quote = redir[*i];
-			}
-			else
-			{
-				if (redir[*i] == ' ' || redir[*i] == '\t'
-					|| redir[*i] == '\n' || redir[*i] == '<'
-					|| redir[*i] == '>')
-					break ;
-			}
+			else if (redir[*i] == ' ' || redir[*i] == '\t' || redir[*i] == '\n' || redir[*i] == '<' || redir[*i] == '>')
+				break;
 		}
 		length++;
 		*i = *i + 1;
 	}
 	if (length == 0)
-	{
 		*status = -1;
+	return (length);
+}
+
+// Función principal: Extrae y valida el nombre del archivo
+static char	*locate_redir_file(char *redir, int *i, int *status)
+{
+	char	*file;
+	char	*word_start;
+	size_t	length;
+
+	word_start = NULL;
+	// Preprocesar el archivo y calcular su longitud
+	length = preprocess_redir_file(redir, i, status, &word_start);
+	if (*status == -1 || length == 0)
 		return (NULL);
-	}
-	file = ft_calloc(1, sizeof(char) * length + 1);
-	if (!file)
-	{
-		*status = -1;
-		return (NULL);
-	}
-	if (ft_strlcpy(file, word_start, length + 1) < length)
+
+	// Reservar memoria y copiar el nombre del archivo
+	file = ft_calloc(1, sizeof(char) * (length + 1));
+	if (!file || ft_strlcpy(file, word_start, length + 1) < length)
 	{
 		free(file);
 		*status = -1;
@@ -202,28 +186,40 @@ void	cleanse_redir_list(t_redir *redir)
 	}
 }
 
-/// @brief Parses a redirection string and creates a linked list of redirection
-/// nodes. Iterates through the input string, identifying redirection types and
-/// associated filenames. If an error occurs, the allocated redirection list
-/// is cleaned up before returning NULL.
-/// @param redir The redirection string to process.
-/// @param status Pointer to a status flag that monitors errors.
-/// @return A pointer to the first redirection node, or NULL on failure.
+// Función auxiliar: Crea un nodo de redirección y lo agrega a la lista
+static int	add_redir_node(t_redir **list, char *file, int type, int *status)
+{
+	t_redir	*aux;
+	t_redir	*curr;
+
+	aux = create_redir_node(file, type, status);
+	if (!aux)
+	{
+		cleanse_redir_list(*list);
+		return (-1);
+	}
+	if (!*list)
+		*list = aux;
+	else
+	{
+		curr = *list;
+		while (curr->next)
+			curr = curr->next;
+		curr->next = aux;
+	}
+	return (0);
+}
+
+// Función principal refactorizada: Crea la lista de redirecciones
 t_redir	*create_redir_list(char *redir, int *status)
 {
 	int		type;
 	int		i;
 	char	*file;
-	t_redir	*curr;
 	t_redir	*first;
-	t_redir	*aux;
 
-	curr = NULL;
 	first = NULL;
-	aux = NULL;
-	file = NULL;
 	i = 0;
-	type = -1;
 	while (redir[i])
 	{
 		type = locate_redir(redir, &i);
@@ -235,37 +231,18 @@ t_redir	*create_redir_list(char *redir, int *status)
 			cleanse_redir_list(first);
 			return (NULL);
 		}
-		aux = create_redir_node(file, type, status);
-		if (!aux)
-		{
-			cleanse_redir_list(first);
+		if (add_redir_node(&first, file, type, status) == -1)
 			return (NULL);
-		}
-		if (!first)
-		{
-			first = aux;
-			curr = aux;
-		}
-		else
-		{
-			curr->next = aux;
-			curr = curr->next;
-		}
 	}
 	return (first);
 }
 
-/// @brief Creates a new command cell and initializes its properties.
-/// Allocates memory for a command structure, processes arguments and redirections,
-/// and sets the command separator.
-/// If an error occurs during redirection processing, it returns NULL.
-/// @param cmd_sep The command string to store in the new cell.
-t_command	*create_cell(char *cmd_sep)
+// Función auxiliar: Inicializa la celda y procesa sus argumentos
+static t_command	*initialize_and_process_cell(char *cmd_sep)
 {
 	t_command	*cell;
-	int			status;
 
-	status = 0;
+	// Inicializar la celda
 	cell = malloc(sizeof(t_command));
 	if (!cell)
 		return (NULL);
@@ -273,10 +250,11 @@ t_command	*create_cell(char *cmd_sep)
 	cell->cmd_sep = ft_strdup(cmd_sep);
 	if (!cell->cmd_sep)
 	{
-		if (cell->args)
-		ft_free_matrix(cell->args);
-		return(free(cell), NULL);
+		free(cell);
+		return (NULL);
 	}
+
+	// Procesar argumentos de la celda
 	if (is_redirection_only(cmd_sep))
 	{
 		cell->args = malloc(sizeof(char *));
@@ -290,7 +268,7 @@ t_command	*create_cell(char *cmd_sep)
 	}
 	else
 	{
-		cell -> args = parse_args(cmd_sep);
+		cell->args = parse_args(cmd_sep);
 		if (!cell->args)
 		{
 			free(cell->cmd_sep);
@@ -298,7 +276,22 @@ t_command	*create_cell(char *cmd_sep)
 			return (NULL);
 		}
 	}
-	cell -> redir = create_redir_list(cmd_sep, &status);
+	return (cell);
+}
+
+// Función principal: Crea la celda y procesa sus redirecciones
+t_command	*create_cell(char *cmd_sep)
+{
+	t_command	*cell;
+	int			status;
+
+	status = 0;
+	cell = initialize_and_process_cell(cmd_sep);
+	if (!cell)
+		return (NULL);
+
+	// Procesar redirecciones
+	cell->redir = create_redir_list(cmd_sep, &status);
 	if (status == -1)
 	{
 		free(cell->cmd_sep);
@@ -309,7 +302,6 @@ t_command	*create_cell(char *cmd_sep)
 	}
 	return (cell);
 }
-
 /// @brief Adds a new command cell to the end of a linked list.
 /// Creates a new command cell and attaches it to the last element in the list.
 /// If the list is empty, the new cell becomes the first element.
