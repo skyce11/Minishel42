@@ -6,20 +6,29 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 15:41:50 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 18:33:15 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// static void	free_tools(t_tools *tools)
-// {
-// 	ft_free_arr(tools->paths);
-// 	ft_free_arr(tools->envp);
-// 	free(tools->arg_str);
-// 	free(tools->pwd);
-// 	free(tools->old_pwd);
-// }
+static int	print_err_exit(t_tools *tools, int err)
+{
+	if (err == 1)
+	{
+		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
+		tools->exit_status = 1;
+		return (1);
+	}
+	if (err == 2)
+	{
+		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+		ft_putstr_fd(tools->command->args[1], STDERR_FILENO);
+		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+		return (2);
+	}
+	return (0);
+}
 
 /// @brief Validates the arguments provided to the 'exit' command. Checks if
 /// there are too many arguments, ensuring only one numeric value is allowed.
@@ -30,24 +39,27 @@
 static int	check_exit_args(t_tools *tools)
 {
 	int	i;
+	int	nbr;
 
-	if (tools->command->args[1] && tools->command->args[2])
-		return (1);
+	nbr = 0;
+	if (tools->command->args[2])
+		return (print_err_exit(tools, 1));
 	if (tools->command->args[1])
 	{
 		i = 0;
+		if (tools->command->args[1][i] == '+'
+			|| tools->command->args[1][i] == '-')
+			i++;
 		while (tools->command->args[1][i])
 		{
 			if (!ft_isdigit(tools->command->args[1][i]))
-			{
-				ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-				ft_putstr_fd(tools->command->args[1], STDERR_FILENO);
-				ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-				return (2);
-			}
+				return (print_err_exit(tools, 2));
 			i++;
 		}
-		return (ft_atoi(tools->command->args[1]));
+		nbr = ft_atoi(tools->command->args[1]);
+		if (nbr < 0)
+			nbr += 256;
+		return (nbr);
 	}
 	return (0);
 }
@@ -57,12 +69,16 @@ static int	check_exit_args(t_tools *tools)
 /// @param tools
 /// @return EXIT_FAILURE si el comando tiene demasiados argumentos,
 /// sino solo exit el shell.
-int	ft_exit(t_tools *tools)
+void	ft_exit(t_tools *tools)
 {
 	int	exit_code;
 
 	ft_putendl_fd("exit", STDERR_FILENO);
 	exit_code = check_exit_args(tools);
-	ft_clean_all(tools);
-	exit(exit_code);
+	if (exit_code != 1)
+	{
+		exit(exit_code);
+		ft_clean_all(tools);
+	}
+	return ;
 }
