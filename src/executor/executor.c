@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 13:25:07 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/10 15:39:34 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:42:08 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	run_command(t_command *command, t_tools *tools)
 		if (command->args == NULL || command->args[0] == NULL)
 			return ;
 		if (is_builtin(command))
-			ft_builtin(command, tools, fd1, fd2);
+			ft_builtin(command, tools);
 		else
 		{
 			execve(command->args[0], command->args, tools->envp);
