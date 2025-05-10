@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 16:00:43 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 16:27:04 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,15 @@ typedef enum e_exit_code
 
 typedef enum e_signal
 {
-	S_BASE, // señal base
-	S_HEREDOC, //entra en el heredox
-	S_HEREDOC_END, // finalización del heredox
-	S_HEREDOC_INTERRUPTED, //
-	S_SIGINT, // Ctrl + C
-	S_SIGINT_CMD, // Ctrl + C en medio de un comando
-	S_CMD, // Se ejecuta un comando
-	S_MINI, // Se ejecuta una mini
-	S_QUOTE, // se ejecuta cuando esta entre " " o ' '
-	S_CANCEL_EXEC, // Ctrl + D en heredoc
-	S_SIZE
+	S_BASE,
+	S_HEREDOC,
+	S_HEREDOC_END,
+	S_SIGINT,
+	S_SIGINT_CMD,
+	S_CMD,
+	S_MINI,
+	S_QUOTE,
+	S_CANCEL_EXEC,
 }	t_signal;
 
 typedef struct s_redir
