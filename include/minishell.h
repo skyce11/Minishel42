@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/08 19:33:25 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 14:02:48 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ int				check_valid_identifier(char c);
 
 //  Executor
 int				executor(t_tools *tools);
-int				run_command(t_command *command, t_tools *tools);
+void			run_command(t_command *command, t_tools *tools);
 
 // int				file_open(t_redir *redir);
 int		file_open(t_tools *tools, t_redir *redir);
