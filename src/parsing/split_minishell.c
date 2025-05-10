@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_minishell.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 12:13:15 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/30 14:01:26 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:17:09 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

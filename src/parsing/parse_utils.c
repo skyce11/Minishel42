@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 11:39:33 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 13:04:41 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:16:36 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,13 @@ static int	count_valid_args(char **args)
 		{
 			count++;
 		}
+		i++;
+	}
+	i = 0;
+	while (args[i])
+	{
+		delete_quotes(args[i], '\"');
+		delete_quotes(args[i], '\'');
 		i++;
 	}
 	return (count);

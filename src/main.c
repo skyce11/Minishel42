@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/08 16:34:15 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:17:19 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,7 @@ int	minishell_loop(t_tools *tools)
 		}
 		add_history(tools->arg_str);
 		expansor(tools);
-		if (tools->command)
-			free_command(tools->command);
-		tools->command = parser(tools->arg_str);
+		parser(tools);
 		if (!tools->command)
 			return (ft_clean_all(tools), 0);
 		tools->exit_status = executor(tools);
