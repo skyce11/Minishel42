@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/09 20:41:16 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 14:32:51 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,8 +232,13 @@ void			change_path(t_tools *tools);
 int				check_valid_identifier(char c);
 
 //  Executor
+<<<<<<< HEAD
 void			executor(t_tools *tools);
 void	run_command(t_command *command, t_tools *tools, int fd1, int fd2);
+=======
+int				executor(t_tools *tools);
+void			run_command(t_command *command, t_tools *tools);
+>>>>>>> main
 
 // int				file_open(t_redir *redir);
 int		file_open(t_tools *tools, t_redir *redir);
