@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_quotes.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:08:13 by ampocchi          #+#    #+#             */
+/*   Updated: 2025/05/08 18:08:28 by ampocchi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	update_quotes(const char *line, int *in_dquote, int *in_squote)
@@ -15,20 +27,20 @@ static void	update_quotes(const char *line, int *in_dquote, int *in_squote)
 	}
 }
 
-static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote, int *fd)
+void	heredoc_update_buffer(char **buffer, int *dquote, int *squote, int *fd)
 {
 	char	*next_line;
 	char	*temp;
 	char	*str_err;
 
 	str_err = "bash: unexpected EOF while looking for matching ";
-		next_line = readline("> ");
+	next_line = readline("> ");
 	if (!next_line)
 	{
 		ft_putstr_fd(str_err, STDOUT_FILENO);
-		if (*in_dquote)
+		if (*dquote)
 			ft_putendl_fd("`\"'", STDOUT_FILENO);
-		else if (*in_squote)
+		else if (*squote)
 			ft_putendl_fd("`\''", STDOUT_FILENO);
 		ft_putendl_fd("syntax error: unexpected end of file", STDOUT_FILENO);
 		free(*buffer);
@@ -41,9 +53,6 @@ static void	heredoc_update_buffer(char **buffer, int *in_dquote, int *in_squote,
 	*buffer = ft_strjoin(temp, next_line);
 	free(temp);
 	free(next_line);
-	*in_dquote = 0;
-	*in_squote = 0;
-	update_quotes(*buffer, in_dquote, in_squote);
 }
 
 void	child_heredoc(int fd[2], int in_dquote, int in_squote, t_tools *tools)
@@ -56,35 +65,17 @@ void	child_heredoc(int fd[2], int in_dquote, int in_squote, t_tools *tools)
 	if (!buffer)
 		exit(EXIT_FAILURE);
 	while (in_dquote || in_squote)
+	{
 		heredoc_update_buffer(&buffer, &in_dquote, &in_squote, fd);
+		in_dquote = 0;
+		in_squote = 0;
+		update_quotes(buffer, &in_dquote, &in_squote);
+	}
 	write(fd[1], buffer, ft_strlen(buffer));
 	free(buffer);
 	close(fd[1]);
 	signal(SIGINT, sigint_handler);
 	exit(EXIT_SUCCESS);
-}
-
-static int	check_child_status(int status, int fd, char *result, t_tools *tools)
-{
-	if (WIFSIGNALED(status))
-	{
-		int sig = WTERMSIG(status);
-		close(fd);
-		free(result);
-		if (sig == SIGINT)
-			tools->exit_status = 130;
-		else
-			tools->exit_status = 2;
-		return (EXIT_SUCCESS);
-	}
-	else if (WIFEXITED(status) && WEXITSTATUS(status) != EXIT_SUCCESS)
-	{
-		close(fd);
-		free(result);
-		tools->exit_status = WEXITSTATUS(status);
-		return (EXIT_SUCCESS);
-	}
-	return (EXIT_FAILURE);
 }
 
 static int	parent_heredoc(int fd[2], t_tools *tools, pid_t pid)

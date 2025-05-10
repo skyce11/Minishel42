@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:17:38 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 11:14:50 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 20:00:36 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ size_t	equal_after(char *str)
 }
 
 /// @brief Converts a single character into a dynamically allocated string.
-/// Allocates memory for a string with two characters: the given character and '\0'.
+/// Allocates memory for a string with two characters: the character and '\0'.
 /// @param c The character to convert.
 /// @return A pointer to the newly allocated string.
 char	*char_to_str(char c)

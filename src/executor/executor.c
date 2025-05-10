@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 13:25:07 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/07 10:55:17 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:30:25 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,13 @@
 /// @param command The command to be executed.
 /// @param tools
 /// @return Void
-
-
+// void	run_command(t_command *command, t_tools *tools, int fd1, int fd2)
 void	run_command(t_command *command, t_tools *tools)
 {
 	if (redir_setup(tools, command) == 0)
 	{
 		if (command->args == NULL || command->args[0] == NULL)
-		{
-			// Caso de redirección sin comando: no hacer nada más
-			// porque el archivo ya se ha creado/configurado en redir_setup
-			return;
-		}
+			return ;
 		if (is_builtin(command))
 			ft_builtin(command, tools);
 		else
@@ -43,31 +38,30 @@ void	run_command(t_command *command, t_tools *tools)
 /// @param tools Estructura que contiene los datos del shell,
 /// incluyendo la lista de comandos.
 /// @return 0 en caso de error, o el resultado de la ejecución del comando.
-
-
-int	executor(t_tools *tools)
+void	executor(t_tools *tools)
 {
-	unsigned int	size; // numero total de commando
+	unsigned int	size;
 
+	tools->exit_status = 0;
 	size = get_command_list_size(tools->command);
-	// verifica si la lista de commando esta vacia
+	printf("exec\n");
 	if (size < 1)
 	{
-		printf("ERROR: empty command list\n");
-		return (0);
+		ft_putendl_fd("ERROR: empty command list", 1);
+		tools->exit_status = 0;
+		return ;
 	}
-	// si solo hay un commando, se ejecuta directamente
 	if (size == 1)
 	{
-		// Validar si `args[0]` es NULL y solo considerar redirecciones
 		if (tools->command->args == NULL || tools->command->args[0] == NULL)
 		{
-			if (redir_setup(tools, tools->command) == 0)
-				return (1); // Redirección manejada correctamente
-			else
-				return (0); // Error al manejar la redirección
+			if (redir_setup(tools, tools->command))
+				return ;
 		}
-		return (exec_single_command(tools->command, tools));
+		exec_single_command(tools->command, tools);
+		return ;
 	}
-	return (exec_compound_command(tools, size));
+	printf("exec1\n");
+	exec_compound_command(tools, size);
+	return ;
 }

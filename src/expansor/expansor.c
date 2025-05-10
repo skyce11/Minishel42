@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:21:27 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/06 11:59:38 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 20:16:57 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	*ft_strstr(const char *haystack, const char *needle)
 	}
 	return (NULL);
 }
+
 /// @brief get el codigo de salida pedido con echo $?
 /// @param str
 /// @param exit_status
@@ -42,7 +43,7 @@ char	*expand_exit_status(char *str, int exit_status)
 	char	*result;
 	char	*exit_status_str;
 	char	*pos;
-	char 	*substr;
+	char	*substr;
 	char	*tmp;
 
 	pos = ft_strstr(str, "$?");
@@ -88,6 +89,31 @@ char	*expansor(t_tools *tools)
 	}
 	return (tools->arg_str);
 }
+
+static char	*process_dollar(t_tools *tools, char *aux, int *i)
+{
+	char	*aux2;
+	char	*aux3;
+
+	if (tools->arg_str[*i] == '$' && tools->arg_str[*i + 1] == '?')
+		return (free(aux), NULL);
+	else if (tools->arg_str[*i] == '$' && (tools->arg_str[*i + 1] != ' '
+			&& (tools->arg_str[*i + 1] != '"'
+				|| tools->arg_str[*i + 2] != '\0'))
+		&& tools->arg_str[*i + 1] != '\0')
+		*i += loop_dollar(tools, &aux, *i);
+	else
+	{
+		aux2 = char_to_str(tools->arg_str[(*i)++]);
+		aux3 = ft_strjoin(aux, aux2);
+		free(aux2);
+		free(aux);
+		aux = ft_strdup(aux3);
+		free(aux3);
+	}
+	return (aux);
+}
+
 /// @brief Transforma un comando del usuario que contiene variables en una
 /// versión interpretada antes de ser ejecutada.
 /// @param tools Estructura con las herramientas y datos necesarios para
@@ -98,76 +124,15 @@ char	*detect_dollar(t_tools *tools)
 {
 	int		i;
 	char	*aux;
-	char	*aux2;
-	char	*aux3;
 
 	i = 0;
 	aux = ft_strdup("\0");
 	while (tools->arg_str[i])
 	{
 		i += digit_after_dollar(i, tools->arg_str);
-		if (tools->arg_str[i] == '$' && tools->arg_str[i + 1] == '?')
-			return (free(aux), NULL);
-		else if (tools->arg_str[i] == '$' && (tools->arg_str[i + 1] != ' '
-				&& (tools->arg_str[i + 1] != '"' || tools->arg_str[i + 2]
-					!= '\0')) && tools->arg_str[i + 1] != '\0')
-			i += loop_dollar(tools, &aux, i);
-		else
-		{
-			aux2 = char_to_str(tools->arg_str[i++]);
-			aux3 = ft_strjoin(aux, aux2);
-			free(aux2);
-			free(aux);
-			aux = ft_strdup(aux3);
-			free(aux3);
-		}
+		aux = process_dollar(tools, aux, &i);
+		if (!aux)
+			return (NULL);
 	}
 	return (aux);
-}
-
-/// @brief La función loop_dollar procesa una ocurrencia de $VAR en una cadena
-// de comandos. Compara la variable con la lista de entorno (envp) y la
-/// sustituye por su valor si existe.
-/// @param tools
-/// @param aux Puntero a una cadena donde se construye el resultado.
-/// @param j Posición en la cadena donde comienza $.
-/// @return Longitud de la variable procesada (o su valor).
-int	loop_dollar(t_tools *tools, char **aux, int j)
-{
-	int		i;
-	int		res;
-	char	*aux2;
-	char	*aux3;
-	int		var_length;
-
-	i = 0;
-	res = 0;
-	var_length = 0;
-	while (tools-> envp[i])
-	{
-		if (ft_strncmp(tools->arg_str + j + 1, tools->envp[i],
-				equal_after(tools->envp[i]) - 1) == 0
-			&& after_dollar_lenght(tools->arg_str, j) - j
-			== (int) equal_after(tools->envp[i]))
-		{
-			aux2 = ft_strdup(tools->envp[i] + equal_after(tools->envp[i]));
-			aux3 = ft_strjoin(*aux, aux2);
-			free(*aux);
-			*aux = aux3;
-			free(aux2);
-			res = equal_after(tools->envp[i]);
-		}
-		i++;
-	}
-	if (res == 0)
-	{
-		var_length = after_dollar_lenght(tools->arg_str, j) - j;
-		aux2 = ft_strndup(tools->arg_str + j, var_length);
-		aux3 = ft_strjoin(*aux, aux2);
-		free(*aux);
-		*aux = aux3;
-		free(aux2);
-		res = var_length;
-	}
-	return (res);
 }

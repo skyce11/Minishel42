@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:30 by migonzal          #+#    #+#             */
-/*   Updated: 2025/04/22 12:07:47 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:51:42 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,10 @@ static void	unset_variable(t_tools *tools, char *name)
 {
 	int		i;
 	int		j;
-	int		len;
 	char	**new_envp;
 
 	i = 0;
 	j = 0;
-	len = ft_strlen(name);
 	while (tools->envp[i])
 		i++;
 	new_envp = malloc(sizeof(char *) * i);
@@ -35,16 +33,11 @@ static void	unset_variable(t_tools *tools, char *name)
 	i = 0;
 	while (tools->envp[i])
 	{
-		if (!(ft_strncmp(tools->envp[i], name, len)
-				== 0 && tools->envp[i][len] == '='))
-		{
-			new_envp[j] = tools->envp[i];
-			j++;
-		}
+		if (!(ft_strncmp(tools->envp[i], name, ft_strlen(name)) == 0
+				&& tools->envp[i][ft_strlen(name)] == '='))
+			new_envp[j++] = tools->envp[i];
 		else
-		{
 			free(tools->envp[i]);
-		}
 		i++;
 	}
 	new_envp[j] = NULL;

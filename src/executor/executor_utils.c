@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:27:37 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/08 14:07:02 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/09 19:25:56 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,21 @@ int	find_command_in_route(t_command *command, char *path)
 	return (found);
 }
 
+void	ft_print_err(int err, int fd, t_command *command, t_tools *tools)
+{
+	ft_putstr_fd(command->args[0], fd);
+	if (err == 1)
+	{
+		ft_putendl_fd(": No such file or directory", fd);
+		tools->exit_status = F_NOT_FILE;
+	}
+	else
+	{
+		ft_putendl_fd(": command not found", fd);
+		tools->exit_status = F_CMD_NOT_FOUND;
+	}
+}
+
 /// @brief Rellena la ruta de ejecución del comando buscando en rutas
 /// disponibles en el entorno (`PATH`). Comprueba si el comando es un comando
 /// incorporado o un comando externo.
@@ -51,11 +66,7 @@ int	fill_command_from_env(t_command *command, t_tools *tools)
 	found = 0;
 	i = 0;
 	if (!tools->paths)
-	{
-		printf("%s: No such file or directory\n", command->args[0]);
-		tools->exit_status = F_NOT_FILE;
-		return (-1);
-	}
+		return (ft_print_err(1, 1, command, tools), -1);
 	while (tools->paths[i] && !found)
 	{
 		if (access(command->args[0], R_OK | X_OK) != -1)
@@ -64,14 +75,11 @@ int	fill_command_from_env(t_command *command, t_tools *tools)
 			found = find_command_in_route(command, tools->paths[i++]);
 	}
 	if (!found)
-	{
-		printf("%s: command not found\n", command->args[0]);
-		tools->exit_status = F_CMD_NOT_FOUND;
-		return (-1);
-	}
+		return (ft_print_err(2, 1, command, tools), -1);
 	errno = 0;
 	return (0);
 }
+
 /// get list size
 int	get_command_list_size(t_command *list)
 {
@@ -112,32 +120,4 @@ t_pipe	*obtain_related_pipe_from_list(t_pipe *ps,
 	if (pos == 0 && is_prev)
 		return (NULL);
 	return (curr_pipe);
-}
-
-/// @brief Actualiza el estado de salida después de ejecutar un comando.
-/// Maneja códigos de retorno, errores de comando no encontrado e
-/// interrupciones SIGINT.
-/// @param status Código de retorno del comando ejecutado.
-/// @param tools
-void	handle_status(int status, t_tools *tools)
-{
-	if (WIFSIGNALED(status))
-	{
-		int sig = WTERMSIG(status);
-		if (sig == SIGINT)
-			tools->exit_status = 130;
-		else
-			tools->exit_status = 2;
-	}
-	if (WIFEXITED(status))
-	{
-		tools->exit_status = WEXITSTATUS(status);
-		if (status == 256)
-			tools->exit_status = 1;
-		else if (tools && tools->exit_status == F_CMD_NOT_FOUND)
-			printf("%s: command not found\n", tools->command->args[0]);
-	}
-	if (g_signal == S_SIGINT_CMD)
-			tools->exit_status = F_NOT_FILE;
-	// g_signal = S_BASE;
 }

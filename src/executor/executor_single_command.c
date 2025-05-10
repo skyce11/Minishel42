@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:34:38 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/06 11:59:19 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:29:31 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,26 @@ static void	run_builtin_in_parent_process(t_command *command, t_tools *tools)
 	run_command(command, tools);
 	dup2(stdin_fd, STDIN_FILENO);
 	dup2(stdout_fd, STDOUT_FILENO);
-	close(stdin_fd);
-	close(stdout_fd);
+	safe_close(&stdin_fd);
+	safe_close(&stdout_fd);
 }
 
 // si el commando no es integrada, lanza la  ejecucion con un fork
-// Gestiona las señales y actualiza el estado de ejecución una vez ejecutado el comando.
-static int	fork_single_command(t_command *command, t_tools *tools)
+// Gestiona las señales y actualiza el estado de ejecución una vez ejecutado
+// el comando.
+static void	fork_single_command(t_command *command, t_tools *tools)
 {
 	int	pid;
 	int	status;
 
 	if (fill_command_from_env(command, tools) != 0)
-		return (tools->exit_status);
+		return ;
 	g_signal = S_CMD;
 	if (ft_strcmp(command->args[0], "./minishell") == 0)
 		g_signal = S_MINI;
 	pid = fork();
 	if (pid < 0)
-		return (-1);
+		return ;
 	if (pid == 0)
 	{
 		run_command(command, tools);
@@ -55,7 +56,7 @@ static int	fork_single_command(t_command *command, t_tools *tools)
 		handle_status(status, tools);
 	}
 	g_signal = S_BASE;
-	return (tools->exit_status);
+	tools->exit_status = 0;
 }
 
 /// @brief La función `exec_single_command` es responsable de ejecutar
@@ -69,14 +70,11 @@ static int	fork_single_command(t_command *command, t_tools *tools)
 /// del resultado de la bifurcación para un comando externo).
 int	exec_single_command(t_command *command, t_tools *tools)
 {
-	int	status;
-
-	status = 0;
 	if (is_builtin(command))
 	{
 		run_builtin_in_parent_process(command, tools);
-		return (status);
+		return (tools->exit_status);
 	}
-	status = fork_single_command(command, tools);
-	return (status);
+	fork_single_command(command, tools);
+	return (tools->exit_status);
 }
