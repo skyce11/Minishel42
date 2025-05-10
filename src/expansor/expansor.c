@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:21:27 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/09 20:16:57 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 16:41:40 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ char	*expansor(t_tools *tools)
 	aux = NULL;
 	tools->arg_str = expand_exit_status(tools->arg_str, tools->exit_status);
 	idx = dollar_after(tools->arg_str);
-	if (idx != 0 && idx >= 2
-		&& tools->arg_str[idx - 2] != '\''
+	if (idx >= 0
+		&& (idx == 0 || tools->arg_str[idx - 2] != '\'')
 		&& tools->arg_str[idx] != '\0')
 	{
 		aux = detect_dollar(tools);

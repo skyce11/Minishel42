@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:55:19 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 15:16:42 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/10 16:42:37 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,15 @@ int	count_words(const char *str, char c)
 			if (i > 0 && str[i - 1] != ' ')
 				count++;
 			while (str[++i] && str[i] != '"')
-			;
+				;
 		}
 		if (str[i] != c && !trigger)
 		{
 			trigger = 1;
 			count++;
 		}
-		else if (str[i] == c)
+		else if (str[i++] == c)
 			trigger = 0;
-		i++;
 	}
 	return (count);
 }

@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 10:25:18 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 15:17:05 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/10 16:42:17 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ static t_command	*initialize_and_process_cell(char *cmd_sep)
 		if (!cell->args)
 			return (free(cell->cmd_sep), free(cell), NULL);
 	}
-
 	return (cell);
 }
 

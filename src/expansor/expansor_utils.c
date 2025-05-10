@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:17:38 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/09 20:00:36 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/10 16:41:51 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,7 @@ int	after_dollar_lenght(char *str, int j)
 		&& str[i] != '\"' && str[i] != '\'' && str[i] != '='
 		&& str[i] != '-' && str[i] != ':')
 		i++;
+	if (i == j + 1)
+		return (j);
 	return (i);
 }
