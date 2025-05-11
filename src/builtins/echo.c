@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:08:32 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/11 16:03:14 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:08:17 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 int	ft_echo(t_command *command)
 {
 	int	i;
-	int j;
-	int z;
+	int	j;
+	int	z;
 	int	skip_newline;
 
 	i = 1;
@@ -31,7 +31,7 @@ int	ft_echo(t_command *command)
 		if (command->args[i][0] == '-')
 		{
 			j = 1;
-			while (command->args[i][j]  == 'n')
+			while (command->args[i][j] == 'n')
 				j++;
 			if (!command->args[i][j] || command->args[i][j] == 'n')
 			{
@@ -41,7 +41,6 @@ int	ft_echo(t_command *command)
 		}
 		z++;
 	}
-
 	while (command->args[i])
 	{
 		ft_putstr_fd(command->args[i++], STDOUT_FILENO);

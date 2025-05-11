@@ -6,13 +6,11 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:09:43 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/11 14:09:28 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:07:26 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
 
 static int	is_valid_env_name(const char *name)
 {

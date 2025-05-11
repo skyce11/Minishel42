@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 12:13:15 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 15:17:09 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:06:48 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,27 +129,6 @@ char	*cross_string(char *s, size_t *i, char z)
 /// @param count Flag indicating whether inside a quoted section.
 /// @param z The delimiter to check.
 /// @return The updated pointer position in the string.
-// char	*get_end_str(char *s, char c, size_t *len, int count, char z)
-// {
-// 	while (*s && ((*s != z && *s != '\t') || ((*s == z && count == 1)
-// 				|| (*s == '\t' && count == 1))))
-// 	{
-// 		if (c != 0 && (*s == c))
-// 		{
-// 			count = !count;
-// 			c = 0;
-// 		}
-// 		else if (c == 0 && (*s == '\'' || *s == '\"'))
-// 		{
-// 			c = *s;
-// 			count = !count;
-// 		}
-// 		s++;
-// 		*len = *len +1;
-// 	}
-// 	return (s);
-// }
-
 char	*get_end_str(char *s, size_t *len, char z)
 {
 	char	c;

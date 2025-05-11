@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/11 15:41:38 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/11 16:57:56 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	minishell_loop(t_tools *tools)
 		tools->arg_str = readline("minishell ");
 		if (!tools->arg_str)
 			return (ft_putstr_fd("exit\n", 1), ft_clean_all(tools), 0);
-		aux = ft_strtrim(tools->arg_str, " ");
+		aux = ft_strtrim(tools->arg_str, " \t");
 		free(tools->arg_str);
 		tools->arg_str = aux;
 		if (tools->arg_str[0] == '\0' || !validate_pipes(tools->arg_str)

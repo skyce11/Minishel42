@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 18:18:39 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:08:41 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ void		ft_export(t_command *command, t_tools *tools);
 //unset
 void		ft_unset(t_command *command, t_tools *tools);
 //exit
-void			ft_exit(t_tools *tools);
+void		ft_exit(t_tools *tools);
 
 // env_utils
 char		*get_env_name(char *fullenv);

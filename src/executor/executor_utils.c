@@ -3,14 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:27:37 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/09 19:25:56 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:07:42 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	validate_file_access(const char *path)
+{
+	if (access(path, F_OK) == -1)
+	{
+		fprintf(stderr, "bash: %s: No such file or directory\n", path);
+		return (127);
+	}
+	if (access(path, X_OK) == -1)
+	{
+		fprintf(stderr, "bash: %s: Permission denied\n", path);
+		return (126);
+	}
+	return (0);
+}
 
 /// @brief Busca un comando en la ruta dada.  Si el comando es encontrado y es
 /// ejecutable, actualiza `command->args[0]`con la ruta completa.
@@ -60,7 +75,18 @@ int	fill_command_from_env(t_command *command, t_tools *tools)
 {
 	int	found;
 	int	i;
+	int	validation_status;
 
+	if (ft_strncmp(command->args[0], "./", 2) == 0)
+	{
+		validation_status = validate_file_access(command->args[0]);
+		if (validation_status != 0)
+		{
+			tools->exit_status = validation_status;
+			return (-1);
+		}
+		return (0);
+	}
 	if (is_builtin(command))
 		return (0);
 	found = 0;
