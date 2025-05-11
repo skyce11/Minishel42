@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:21:27 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 16:41:40 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:16:38 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,26 +92,31 @@ char	*expansor(t_tools *tools)
 
 static char	*process_dollar(t_tools *tools, char *aux, int *i)
 {
-	char	*aux2;
-	char	*aux3;
+	char	*replace_str;
+	char	*tmp;
 
+	replace_str = NULL;
+	tmp = NULL;
 	if (tools->arg_str[*i] == '$' && tools->arg_str[*i + 1] == '?')
-		return (free(aux), NULL);
+	{
+		replace_str = ft_itoa(tools->exit_status);
+		*i += 2;
+	}
 	else if (tools->arg_str[*i] == '$' && (tools->arg_str[*i + 1] != ' '
 			&& (tools->arg_str[*i + 1] != '"'
 				|| tools->arg_str[*i + 2] != '\0'))
 		&& tools->arg_str[*i + 1] != '\0')
-		*i += loop_dollar(tools, &aux, *i);
-	else
 	{
-		aux2 = char_to_str(tools->arg_str[(*i)++]);
-		aux3 = ft_strjoin(aux, aux2);
-		free(aux2);
-		free(aux);
-		aux = ft_strdup(aux3);
-		free(aux3);
+		*i += loop_dollar(tools, &aux, *i);
+		return (aux);
 	}
-	return (aux);
+	else
+		replace_str = char_to_str(tools->arg_str[(*i)++]);
+	tmp = ft_strjoin(aux, replace_str);
+	free(replace_str);
+	free(aux);
+	aux = ft_strdup(tmp);
+	return (free(tmp), aux);
 }
 
 /// @brief Transforma un comando del usuario que contiene variables en una
