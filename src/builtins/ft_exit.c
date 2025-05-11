@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 18:33:15 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/11 15:53:30 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	check_exit_args(t_tools *tools)
 	int	nbr;
 
 	nbr = 0;
-	if (tools->command->args[2])
+	if (tools->command->args[1] && tools->command->args[2])
 		return (print_err_exit(tools, 1));
 	if (tools->command->args[1])
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:08:32 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/03 21:00:50 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/11 16:03:14 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,29 @@
 int	ft_echo(t_command *command)
 {
 	int	i;
+	int j;
+	int z;
 	int	skip_newline;
 
 	i = 1;
+	z = 1;
 	skip_newline = 0;
-	while (command->args[i] && !ft_strncmp(command->args[i], "-n", 2))
+	while (command->args[z])
 	{
-		skip_newline = 1;
-		i++;
+		if (command->args[i][0] == '-')
+		{
+			j = 1;
+			while (command->args[i][j]  == 'n')
+				j++;
+			if (!command->args[i][j] || command->args[i][j] == 'n')
+			{
+				skip_newline = 1;
+				i++;
+			}
+		}
+		z++;
 	}
+
 	while (command->args[i])
 	{
 		ft_putstr_fd(command->args[i++], STDOUT_FILENO);
