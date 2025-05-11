@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/11 15:53:30 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:05:09 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static int	check_exit_args(t_tools *tools)
 		nbr = ft_atoi(tools->command->args[1]);
 		if (nbr < 0)
 			nbr += 256;
+		else if (nbr > 256)
+			nbr -= 256;
 		return (nbr);
 	}
 	return (0);
@@ -71,14 +73,8 @@ static int	check_exit_args(t_tools *tools)
 /// sino solo exit el shell.
 void	ft_exit(t_tools *tools)
 {
-	int	exit_code;
-
 	ft_putendl_fd("exit", STDERR_FILENO);
-	exit_code = check_exit_args(tools);
-	if (exit_code != 1)
-	{
-		exit(exit_code);
-		ft_clean_all(tools);
-	}
-	return ;
+	tools->exit_status = check_exit_args(tools);
+	ft_clean_all(tools);
+	exit(tools->exit_status);
 }

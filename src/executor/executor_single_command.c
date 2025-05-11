@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:34:38 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/10 15:41:59 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:30:17 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ static void	fork_single_command(t_command *command, t_tools *tools)
 		handle_status(status, tools);
 	}
 	g_signal = S_BASE;
-	tools->exit_status = 0;
 }
 
 /// @brief La función `exec_single_command` es responsable de ejecutar

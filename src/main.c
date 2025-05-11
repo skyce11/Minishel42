@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/11 16:57:56 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:24:37 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	minishell_loop(t_tools *tools)
 	{
 		tools->arg_str = readline("minishell ");
 		if (!tools->arg_str)
-			return (ft_putstr_fd("exit\n", 1), ft_clean_all(tools), 0);
+			return (ft_exit(tools), 0);
 		aux = ft_strtrim(tools->arg_str, " \t");
 		free(tools->arg_str);
 		tools->arg_str = aux;
@@ -77,7 +77,7 @@ int	minishell_loop(t_tools *tools)
 		executor(tools);
 		reset_tools(tools);
 	}
-	return (1);
+	return (0);
 }
 
 /// @brief update the nbr of SHLVL.
@@ -127,7 +127,8 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_clean_all(&tools), 0);
 	printf("AQUI EMPIEZA LA MINISHELL\n");
 	if (minishell_loop(&tools) == 0)
-		return (1);
+		return (0);
+	rl_clear_history();
 	ft_clean_all(&tools);
-	return (0);
+	return (tools.exit_status);
 }
