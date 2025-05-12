@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 11:39:33 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 15:16:36 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:24:59 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,148 @@ char	**list_dup_after(char *s, char c)
 	return (pp);
 }
 
+char *process_quotes(const char *input) {
+    size_t buf_size = strlen(input) + 1;
+    char *result = malloc(buf_size);
+    if (!result) {
+        perror("malloc");
+        return NULL;
+    }
+
+    size_t j = 0; // indice d'écriture dans le buffer résultat
+
+    enum { NORMAL, SIMPLE, DOUBLE } state = NORMAL;
+
+    for (size_t i = 0; input[i] != '\0'; i++) {
+        char c = input[i];
+
+        /* Dans les états NORMAL et DOUBLE, on traite l'expansion de variable */
+        if ((state == NORMAL || state == DOUBLE) && c == '$') {
+            size_t var_start = i + 1;
+            if (input[var_start] == '\0') {
+                /* '$' en fin de chaîne */
+                if (j + 1 >= buf_size) {
+                    buf_size *= 2;
+                    result = realloc(result, buf_size);
+                    if (!result) return NULL;
+                }
+                result[j++] = c;
+                continue;
+            }
+            /* Cas spécial : $? */
+            if (input[var_start] == '?') {
+                char numbuf[16];
+                snprintf(numbuf, sizeof(numbuf), "%d", 0);  // vous pouvez remplacer 0 par l'exit_status
+                size_t num_len = strlen(numbuf);
+                while (j + num_len >= buf_size) {
+                    buf_size *= 2;
+                    result = realloc(result, buf_size);
+                    if (!result) return NULL;
+                }
+                strcpy(result + j, numbuf);
+                j += num_len;
+                i++;  // on saute le '?' déjà traité
+                continue;
+            }
+            /* Extraction du nom : lettres, chiffres et '_' uniquement */
+            size_t var_end = var_start;
+            while (isalnum((unsigned char)input[var_end]) || input[var_end] == '_') {
+                var_end++;
+            }
+            size_t var_len = var_end - var_start;
+            char *varName = malloc(var_len + 1);
+            if (!varName) {
+                free(result);
+                return NULL;
+            }
+            strncpy(varName, input + var_start, var_len);
+            varName[var_len] = '\0';
+            char *varValue = getenv(varName);
+            free(varName);
+            if (!varValue)
+                varValue = "";  // si la variable n'existe pas
+            size_t value_len = strlen(varValue);
+            while (j + value_len >= buf_size) {
+                buf_size *= 2;
+                result = realloc(result, buf_size);
+                if (!result) return NULL;
+            }
+            strcpy(result + j, varValue);
+            j += value_len;
+            i = var_end - 1;
+            continue;
+        }
+
+        /* Gestion de la machine à états pour les quotes */
+        if (state == NORMAL) {
+            if (c == '\'') {
+                state = SIMPLE;  // démarre un segment en quotes simples (la quote n'est pas copiée)
+            } else if (c == '\"') {
+                state = DOUBLE;  // démarre un segment en double quotes
+            } else {
+                if (j + 1 >= buf_size) {
+                    buf_size *= 2;
+                    result = realloc(result, buf_size);
+                    if (!result) return NULL;
+                }
+                result[j++] = c;
+            }
+        }
+        else if (state == SIMPLE) {
+            if (c == '\'') {
+                state = NORMAL;  // fin du segment en quotes simples
+            } else {
+                if (j + 1 >= buf_size) {
+                    buf_size *= 2;
+                    result = realloc(result, buf_size);
+                    if (!result) return NULL;
+                }
+                result[j++] = c;
+            }
+        }
+        else if (state == DOUBLE) {
+            if (c == '\"') {
+                state = NORMAL;  // fin du segment en double quotes
+            } else {
+                if (j + 1 >= buf_size) {
+                    buf_size *= 2;
+                    result = realloc(result, buf_size);
+                    if (!result) return NULL;
+                }
+                result[j++] = c;
+            }
+        }
+    }
+    result[j] = '\0';
+    return result;
+}
+
+char **process_quotes_array(char **inputs) {
+    size_t count = 0;
+    while (inputs[count] != NULL) {
+        count++;
+    }
+
+    char **result_array = malloc((count + 1) * sizeof(char *));
+    if (!result_array) {
+        perror("malloc");
+        return NULL;
+    }
+
+    for (size_t i = 0; i < count; i++) {
+        result_array[i] = process_quotes(inputs[i]);
+        if (!result_array[i]) {
+            for (size_t j = 0; j < i; j++) {
+                free(result_array[j]);
+            }
+            free(result_array);
+            return NULL;
+        }
+    }
+    result_array[count] = NULL;
+    return result_array;
+}
+
 static int	count_valid_args(char **args)
 {
 	int	count;
@@ -59,13 +201,16 @@ static int	count_valid_args(char **args)
 		}
 		i++;
 	}
+
 	i = 0;
-	while (args[i])
-	{
-		delete_quotes(args[i], '\"');
-		delete_quotes(args[i], '\'');
-		i++;
-	}
+	// while (args[i])
+	// {
+		// process_quotes(args[i]);
+		// printf("test: %s\n", test);
+	// 	delete_quotes(args[i], '\"');
+	// 	delete_quotes(args[i], '\'');
+		// i++;
+	// }
 	return (count);
 }
 
@@ -107,6 +252,7 @@ char	**parse_args(char *s)
 	if (!aux)
 		return (NULL);
 	count = count_valid_args(aux);
+	res = process_quotes_array(aux);
 	res = copy_valid_args(aux, count);
 	ft_free_matrix(aux);
 	return (res);

@@ -6,23 +6,35 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:08:13 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/12 14:28:55 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:09:11 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	update_quotes(const char *line, int *in_dquote, int *in_squote)
+static void update_quotes(const char *line, int *in_dquote, int *in_squote)
 {
-	int	i;
+	int i = 0;
 
-	i = 0;
 	while (line[i])
 	{
-		if (line[i] == '"' && !(*in_squote))
-			*in_dquote = !(*in_dquote);
-		else if (line[i] == '\'' && !(*in_dquote))
-			*in_squote = !(*in_squote);
+		if (*in_dquote)
+		{
+			if (line[i] == '"')
+				*in_dquote = 0;
+		}
+		else if (*in_squote)
+		{
+			if (line[i] == '\'')
+				*in_squote = 0;
+		}
+		else
+		{
+			if (line[i] == '"')
+				*in_dquote = 1;
+			else if (line[i] == '\'')
+				*in_squote = 1;
+		}
 		i++;
 	}
 }
