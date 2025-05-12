@@ -77,20 +77,20 @@ int	fill_command_from_env(t_command *command, t_tools *tools)
 	int	i;
 	int	validation_status;
 
-	if (ft_strncmp(command->args[0], "./", 2) == 0)
-	{
-		validation_status = validate_file_access(command->args[0]);
-		if (validation_status != 0)
-		{
-			tools->exit_status = validation_status;
-			return (-1);
-		}
-		return (0);
-	}
 	if (is_builtin(command))
 		return (0);
 	found = 0;
 	i = 0;
+
+	// Comprobar si el comando es una ruta absoluta o relativa (empieza con '/' o './')
+	if (ft_strncmp(command->args[0], "/", 1) == 0 || ft_strncmp(command->args[0], "./", 2) == 0)
+	{
+		validation_status = validate_file_access(command->args[0]);
+		if (validation_status == 0) // Si la ruta es válida y ejecutable
+			return (0); // Ruta válida, continuar con la ejecución
+		tools->exit_status = validation_status;
+		return (-1); // Ruta inválida o no ejecutable
+	}
 	if (!tools->paths)
 		return (ft_print_err(1, 1, command, tools), -1);
 	while (tools->paths[i] && !found)
