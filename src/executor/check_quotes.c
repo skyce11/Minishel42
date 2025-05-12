@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:08:13 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/08 18:08:28 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:28:55 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ static int	parent_heredoc(int fd[2], t_tools *tools, pid_t pid)
 		result = ft_strjoin(result, line);
 		free(temp);
 		free(line);
+		if (!result)
+			return (close(fd[0]), EXIT_FAILURE);
 		line = get_next_line(fd[0]);
 	}
 	close(fd[0]);

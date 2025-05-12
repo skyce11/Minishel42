@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:09:43 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/11 17:07:26 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:55:40 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	print_env(t_tools *tools)
 	i = 0;
 	while (tools->envp[i])
 	{
-		printf("%s\n", tools->envp[i]);
+		ft_putendl_fd(tools->envp[i], 1);
 		i++;
 	}
 }
@@ -63,6 +63,16 @@ int	update_env_if_exists(t_tools *tools, char *name, char *value)
 	return (0);
 }
 
+void	printf_not_valid_env(t_tools *tools, char *name, char *value)
+{
+	ft_putstr_fd("export ", STDERR_FILENO);
+	ft_putstr_fd(name, STDERR_FILENO);
+	ft_putendl_fd(": not a valid identifier", STDERR_FILENO);
+	free(name);
+	free(value);
+	tools->exit_status = 1;
+}
+
 /// @brief Añade una nueva variable de entorno o actualiza una existente
 /// existente en `tools->envp`. Si la variable ya existe,
 /// es reemplazada por el nuevo valor. Si no existe, se añade.
@@ -79,10 +89,7 @@ void	add_or_update_env(t_tools *tools, char *var)
 	value = get_env_value(var);
 	if (!is_valid_env_name(name))
 	{
-		fprintf(stderr, "export: '%s': not a valid identifier\n", name);
-		free(name);
-		free(value);
-		tools->exit_status = 1;
+		printf_not_valid_env(tools, name, value);
 		return ;
 	}
 	if (update_env_if_exists(tools, name, value))

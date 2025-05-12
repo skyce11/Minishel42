@@ -8,6 +8,7 @@
         "fcntl.h": "c",
         "stdio.h": "c",
         "cstdlib": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "typeinfo": "c"
     }
 }
