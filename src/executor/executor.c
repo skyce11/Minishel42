@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 13:25:07 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/10 15:42:08 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/12 13:52:21 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	executor(t_tools *tools)
 	{
 		if (tools->command->args == NULL || tools->command->args[0] == NULL)
 		{
-			if (redir_setup(tools, tools->command))
+			if (redir_setup(tools, tools->command) == 0)
 				return ;
 		}
 		exec_single_command(tools->command, tools);

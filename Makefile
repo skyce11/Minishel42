@@ -6,7 +6,7 @@
 #    By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/13 09:43:48 by migonzal          #+#    #+#              #
-#    Updated: 2025/04/29 21:14:26 by ampocchi         ###   ########.fr        #
+#    Updated: 2025/05/12 12:48:03 by ampocchi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ all: $(NAME)
 $(LIBFTNAME):
 	@$(MAKE) -C $(LIBFT)
 
-$(NAME): $(OBJS) $(LIBFTNAME)
+$(NAME): $(LIBFTNAME) $(OBJS)
 	@$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) $(LDFLAGS) -L. -lreadline -o $(NAME)
 	@echo $(GREEN) "All ready to work"
 
