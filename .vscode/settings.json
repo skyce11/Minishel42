@@ -7,6 +7,7 @@
         "string.h": "c",
         "fcntl.h": "c",
         "stdio.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "type_traits": "c"
     }
 }

@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/11 19:24:37 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/12 12:35:58 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ int	minishell_loop(t_tools *tools)
 
 	while (1)
 	{
-		tools->arg_str = readline("minishell ");
+		tools->arg_str = readline("minishell$ ");
 		if (!tools->arg_str)
-			return (ft_exit(tools), 0);
+			return (ft_putstr_fd("exit\n", 1), ft_clean_all(tools), 0);
 		aux = ft_strtrim(tools->arg_str, " \t");
 		free(tools->arg_str);
 		tools->arg_str = aux;
@@ -77,7 +77,7 @@ int	minishell_loop(t_tools *tools)
 		executor(tools);
 		reset_tools(tools);
 	}
-	return (0);
+	return (1);
 }
 
 /// @brief update the nbr of SHLVL.
