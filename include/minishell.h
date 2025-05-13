@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/11 17:08:41 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:57:01 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,14 @@ typedef struct s_env
 	char			*value_var;
 	struct s_env	*next;
 }					t_env;
+
+void		locate_redir_aux(char *redir, int *i, int *type, char *quote);
+char		*locate_redir_file(char *redir, int *i, int *status);
+t_redir		*create_redir_list(char *redir, int *status);
+int			locate_redir(char *redir, int *i);
+size_t		preprocess_redir_file(char *redir, int *i, int *status,
+				char **word_start);
+void		update_quotes(const char *line, int *in_dquote, int *in_squote);
 
 void		update_shlvl(t_tools *tools);
 void		ft_clean_all(t_tools *tools);

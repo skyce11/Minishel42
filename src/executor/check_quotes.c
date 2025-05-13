@@ -6,26 +6,11 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:08:13 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/12 14:28:55 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:50:19 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// static void	update_quotes(const char *line, int *in_dquote, int *in_squote)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (line[i])
-// 	{
-// 		if (line[i] == '"' && !(*in_squote))
-// 			*in_dquote = !(*in_dquote);
-// 		else if (line[i] == '\'' && !(*in_dquote))
-// 			*in_squote = !(*in_squote);
-// 		i++;
-// 	}
-// }
 
 // void	heredoc_update_buffer(char **buffer, int *dquote, int *squote, int *fd)
 // {
@@ -78,20 +63,12 @@
 // 	exit(EXIT_SUCCESS);
 // }
 
-// static int	parent_heredoc(int fd[2], t_tools *tools, pid_t pid)
+// static int	read_heredoc_content(int fd, t_tools *tools, char *result)
 // {
-// 	int		status;
-// 	char	*result;
 // 	char	*line;
 // 	char	*temp;
 
-// 	result = ft_strdup("");
-// 	close(fd[1]);
-// 	waitpid(pid, &status, 0);
-// 	handle_status(status, tools);
-// 	if (check_child_status(status, fd[0], result, tools) == EXIT_SUCCESS)
-// 		return (EXIT_SUCCESS);
-// 	line = get_next_line(fd[0]);
+// 	line = get_next_line(fd);
 // 	while (line != NULL)
 // 	{
 // 		temp = result;
@@ -99,14 +76,28 @@
 // 		free(temp);
 // 		free(line);
 // 		if (!result)
-// 			return (close(fd[0]), EXIT_FAILURE);
-// 		line = get_next_line(fd[0]);
+// 			return (close(fd), EXIT_FAILURE);
+// 		line = get_next_line(fd);
 // 	}
-// 	close(fd[0]);
+// 	close(fd);
 // 	free(tools->arg_str);
 // 	tools->arg_str = result;
 // 	g_signal = S_BASE;
 // 	return (EXIT_FAILURE);
+// }
+
+// static int	parent_heredoc(int fd[2], t_tools *tools, pid_t pid)
+// {
+// 	int		status;
+// 	char	*result;
+
+// 	result = ft_strdup("");
+// 	close(fd[1]);
+// 	waitpid(pid, &status, 0);
+// 	handle_status(status, tools);
+// 	if (check_child_status(status, fd[0], result, tools) == EXIT_SUCCESS)
+// 		return (EXIT_SUCCESS);
+// 	return (read_heredoc_content(fd[0], tools, result));
 // }
 
 // int	check_quotes(int in_dquote, int in_squote, t_tools *tools)

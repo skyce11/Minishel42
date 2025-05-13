@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:08:09 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/11 19:05:03 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:56:38 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,21 @@ void	ft_clean_all(t_tools *tools)
 		ft_free_arr(tools->envp);
 	if (tools->paths)
 		ft_free_arr(tools->paths);
+}
+
+void	update_quotes(const char *line, int *in_dquote, int *in_squote)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '"' && !(*in_squote))
+			*in_dquote = !(*in_dquote);
+		else if (line[i] == '\'' && !(*in_dquote))
+			*in_squote = !(*in_squote);
+		i++;
+	}
 }
 
 int	check_child_status(int status, int fd, char *result, t_tools *tools)

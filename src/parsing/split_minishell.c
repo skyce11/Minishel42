@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_minishell.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 12:13:15 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/13 13:50:42 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:44:31 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,18 +156,4 @@ char	*get_end_str(char *s, size_t *len, char z)
 		(*len)++;
 	}
 	return (s);
-}
-
-/// @brief Calculates the length of a substring until a delimiter. Uses
-/// `cross_string` to find the endpoint of the substring and returns its length.
-/// @param s The string to analyze.
-/// @param z The delimiter character.
-/// @return The length of the substring before the delimiter.
-size_t	count_string(char *s, char z)
-{
-	size_t	i;
-
-	i = 0;
-	cross_string(s, &i, z);
-	return (i);
 }
