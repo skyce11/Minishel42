@@ -20,7 +20,14 @@ static int	handle_file_open_output(t_tools *tools, t_redir *redir)
 	mode = O_CREAT | O_RDWR;
 	if (redir->type == 3)
 		mode = mode | O_APPEND;
+	else if (redir->type == 1)
+		mode = mode | O_TRUNC;
 	redir->fd = open(redir->file, mode, S_IRGRP | S_IWUSR | S_IRUSR | S_IROTH);
+	if (redir->fd == -1)
+	{
+		perror("Error opening file");
+		return (-1);
+	}
 	return (redir->fd);
 }
 
@@ -42,6 +49,8 @@ static int	open_existing_file(t_tools *tools, t_redir *redir)
 	{
 		if (redir->type == 3)
 			mode = O_RDWR | O_APPEND;
+		else if (redir->type == 1)
+			mode = O_RDWR | O_TRUNC;
 		redir->fd = open(redir->file, mode);
 		if (redir->fd == -1)
 			return (-1);
