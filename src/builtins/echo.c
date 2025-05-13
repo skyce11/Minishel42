@@ -18,7 +18,7 @@ int	ft_echo_aux(t_command *command, int skip_newline, int i)
 	int	z;
 
 	z = 1;
-	skip_newline = 0;
+(void)	skip_newline;
 	while (command->args[z])
 	{
 		if (command->args[i][0] == '-')

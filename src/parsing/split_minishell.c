@@ -101,15 +101,15 @@ char	*cross_string(char *s, size_t *i, char z)
 {
 	char	c;
 	size_t	len;
-	int		count;
+	//int		count;
 
 	c = 0;
 	len = 0;
-	count = 0;
+//	count = 0;
 	if (*s == '\'' || *s == '\t')
 	{
 		c = *s;
-		count = 1;
+	//	count = 1;
 		len++;
 	}
 	if (*s && (*s == c || *s == z || *s == '\t'))

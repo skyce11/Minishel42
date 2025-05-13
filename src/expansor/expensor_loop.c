@@ -15,12 +15,12 @@
 static int	find_env_value(t_tools *tools, char **aux, int j)
 {
 	int		i;
-	int		res;
+//	int		res;
 	char	*aux2;
 	char	*aux3;
 
 	i = 0;
-	res = 0;
+//	res = 0;
 	while (tools->envp[i])
 	{
 		if (ft_strncmp(tools->arg_str + j + 1, tools->envp[i],

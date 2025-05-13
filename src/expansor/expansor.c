@@ -80,7 +80,7 @@ char	*expansor(t_tools *tools)
 	tools->arg_str = expand_exit_status(tools->arg_str, tools->exit_status);
 	idx = dollar_after(tools->arg_str);
 	if (idx >= 0
-		&& (idx == 0 || tools->arg_str[idx - 2] != '\'')
+		&& (idx == 0) //|| tools->arg_str[idx - 2] != '\'')
 		&& tools->arg_str[idx] != '\0')
 	{
 		aux = detect_dollar(tools);
