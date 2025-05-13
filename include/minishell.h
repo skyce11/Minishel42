@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/13 18:57:01 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/13 21:03:46 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void		update_shlvl(t_tools *tools);
 void		ft_clean_all(t_tools *tools);
 void		cleanse_redir_list(t_redir *redir);
 
-char *remove_external_quotes(const char *str);
+char		*remove_external_quotes(const char *str);
 
 //close_fd.c
 void		safe_close(int *fd);

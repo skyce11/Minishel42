@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 12:13:15 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/13 20:44:31 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/13 21:02:56 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,15 +101,12 @@ char	*cross_string(char *s, size_t *i, char z)
 {
 	char	c;
 	size_t	len;
-	//int		count;
 
 	c = 0;
 	len = 0;
-//	count = 0;
 	if (*s == '\'' || *s == '\t')
 	{
 		c = *s;
-	//	count = 1;
 		len++;
 	}
 	if (*s && (*s == c || *s == z || *s == '\t'))

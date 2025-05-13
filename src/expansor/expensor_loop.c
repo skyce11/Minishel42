@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 20:10:12 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/09 20:10:13 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:57:41 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,10 @@
 static int	find_env_value(t_tools *tools, char **aux, int j)
 {
 	int		i;
-//	int		res;
 	char	*aux2;
 	char	*aux3;
 
 	i = 0;
-//	res = 0;
 	while (tools->envp[i])
 	{
 		if (ft_strncmp(tools->arg_str + j + 1, tools->envp[i],
