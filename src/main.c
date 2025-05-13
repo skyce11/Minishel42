@@ -63,8 +63,7 @@ int	minishell_loop(t_tools *tools)
 		aux = ft_strtrim(tools->arg_str, " \t");
 		free(tools->arg_str);
 		tools->arg_str = aux;
-		if (tools->arg_str[0] == '\0' || !validate_pipes(tools->arg_str)
-			|| check_quotes(0, 0, tools) == 0)
+		if (tools->arg_str[0] == '\0' || !validate_pipes(tools->arg_str))
 		{
 			reset_tools(tools);
 			continue ;

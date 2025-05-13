@@ -44,6 +44,7 @@ static int	count_valid_args(char **args)
 {
 	int	count;
 	int	i;
+	char *cleaned_arg;
 
 	count = 0;
 	i = 0;
@@ -62,8 +63,9 @@ static int	count_valid_args(char **args)
 	i = 0;
 	while (args[i])
 	{
-		delete_quotes(args[i], '\"');
-		delete_quotes(args[i], '\'');
+		cleaned_arg = remove_external_quotes(args[i]);
+		free(args[i]);
+		args[i] = cleaned_arg;
 		i++;
 	}
 	return (count);

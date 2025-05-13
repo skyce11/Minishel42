@@ -101,6 +101,8 @@ void		update_shlvl(t_tools *tools);
 void		ft_clean_all(t_tools *tools);
 void		cleanse_redir_list(t_redir *redir);
 
+char *remove_external_quotes(const char *str);
+
 //close_fd.c
 void		safe_close(int *fd);
 void		close_safe(t_command *curr_command, t_pipes_command	pipes);
