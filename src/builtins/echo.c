@@ -12,27 +12,26 @@
 
 #include "minishell.h"
 
-int	ft_echo_aux(t_command *command, int skip_newline, int i)
+int	ft_echo_aux(t_command *command, int *skip_newline, int i)
 {
 	int	j;
-	int	z;
 
-	z = 1;
-(void)	skip_newline;
-	while (command->args[z])
+	*skip_newline = 0;
+	while (command->args[i])
 	{
 		if (command->args[i][0] == '-')
 		{
 			j = 1;
-			while (command->args[i][j] == 'n')
+			while (command->args[i][j] == 'n' && command->args[i][j] != '\0')
 				j++;
-			if (!command->args[i][j] || command->args[i][j] == 'n')
+			if (command->args[i][j] == '\0') // Todos los caracteres son 'n'
 			{
-				skip_newline = 1;
+				*skip_newline = 1;
 				i++;
+				continue;
 			}
 		}
-		z++;
+		break; // Si no es una bandera válida, salimos del bucle
 	}
 	return (i);
 }
@@ -46,16 +45,14 @@ int	ft_echo(t_command *command)
 	int	i;
 	int	skip_newline;
 
-	skip_newline = 0;
-	i = 1;
-	i = ft_echo_aux(command, skip_newline, i);
+	i = ft_echo_aux(command, &skip_newline, 1);
 	while (command->args[i])
 	{
 		ft_putstr_fd(command->args[i++], STDOUT_FILENO);
 		if (command->args[i])
-			ft_putchar_fd(32, STDOUT_FILENO);
+			ft_putchar_fd(32, STDOUT_FILENO); // Imprime espacio entre argumentos
 	}
 	if (!skip_newline)
-		ft_putchar_fd(10, STDOUT_FILENO);
+		ft_putchar_fd(10, STDOUT_FILENO); // Salto de línea si no está desactivado
 	return (EXIT_SUCCESS);
 }
