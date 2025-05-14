@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 13:25:07 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/13 18:35:06 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/14 13:24:54 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	run_command(t_command *command, t_tools *tools)
 void	executor(t_tools *tools)
 {
 	unsigned int	size;
+	int orig_stdin = dup(STDIN_FILENO);
 
 	tools->exit_status = 0;
 	size = get_command_list_size(tools->command);
@@ -54,11 +55,19 @@ void	executor(t_tools *tools)
 		if (tools->command->args == NULL || tools->command->args[0] == NULL)
 		{
 			if (redir_setup(tools, tools->command) == 0)
+			{
+				if (dup2(orig_stdin, STDIN_FILENO) == -1)
+					perror("dup2 failed on restore");
+				close(orig_stdin);
 				return ;
+			}
 		}
 		exec_single_command(tools->command, tools);
 		return ;
 	}
 	exec_compound_command(tools, size);
+	if (dup2(orig_stdin, STDIN_FILENO) == -1)
+		perror("dup2 failed on restore");
+	close(orig_stdin);
 	return ;
 }

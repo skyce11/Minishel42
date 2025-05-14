@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/13 21:03:46 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:27:36 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,7 +276,7 @@ int			check_child_status(int status, int fd, char *res, t_tools *tools);
 void		signal_init(void);
 void		sigint_handler(int sig);
 void		sigquit_handler(int sig);
-void		break_heredoc(char *line, int err, t_tools *tools);
+void		break_heredoc(char *line, int err, t_tools *tools, const char *del);
 int			preprocess_heredoc(t_tools *tools, const char *delimiter);
 
 #endif
