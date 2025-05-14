@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:08:32 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/12 14:37:07 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:53:43 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ int	ft_echo_aux(t_command *command, int *skip_newline, int i)
 			j = 1;
 			while (command->args[i][j] == 'n' && command->args[i][j] != '\0')
 				j++;
-			if (command->args[i][j] == '\0') // Todos los caracteres son 'n'
+			if (command->args[i][j] == '\0')
 			{
 				*skip_newline = 1;
 				i++;
-				continue;
+				continue ;
 			}
 		}
-		break; // Si no es una bandera válida, salimos del bucle
+		break ;
 	}
 	return (i);
 }
@@ -50,9 +50,9 @@ int	ft_echo(t_command *command)
 	{
 		ft_putstr_fd(command->args[i++], STDOUT_FILENO);
 		if (command->args[i])
-			ft_putchar_fd(32, STDOUT_FILENO); // Imprime espacio entre argumentos
+			ft_putchar_fd(32, STDOUT_FILENO);
 	}
 	if (!skip_newline)
-		ft_putchar_fd(10, STDOUT_FILENO); // Salto de línea si no está desactivado
+		ft_putchar_fd(10, STDOUT_FILENO);
 	return (EXIT_SUCCESS);
 }

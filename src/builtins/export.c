@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:09:43 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/12 14:55:40 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:28:35 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,6 @@ static int	is_valid_env_name(const char *name)
 		name++;
 	}
 	return (1);
-}
-
-static void	print_env(t_tools *tools)
-{
-	int	i;
-
-	i = 0;
-	while (tools->envp[i])
-	{
-		ft_putendl_fd(tools->envp[i], 1);
-		i++;
-	}
 }
 
 int	update_env_if_exists(t_tools *tools, char *name, char *value)
@@ -118,7 +106,12 @@ void	ft_export(t_command *command, t_tools *tools)
 	tools->exit_status = 0;
 	if (command->args[1] == NULL)
 	{
-		print_env(tools);
+		i = 0;
+		while (tools->envp[i])
+		{
+			ft_putendl_fd(tools->envp[i], 1);
+			i++;
+		}
 	}
 	else
 	{

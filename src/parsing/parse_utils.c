@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 11:39:33 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 15:16:36 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:17:54 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ char	**list_dup_after(char *s, char c)
 
 static int	count_valid_args(char **args)
 {
-	int	count;
-	int	i;
-	char *cleaned_arg;
+	int		count;
+	int		i;
+	char	*cleaned_arg;
 
 	count = 0;
 	i = 0;
@@ -55,9 +55,7 @@ static int	count_valid_args(char **args)
 	{
 		if (args[i][0] != '<' && args[i][0] != '>' &&
 			args[i - 1][0] != '<' && args[i - 1][0] != '>')
-		{
 			count++;
-		}
 		i++;
 	}
 	i = 0;

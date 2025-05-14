@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_minishell.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 12:13:15 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/13 13:50:42 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/13 21:02:56 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,15 +101,12 @@ char	*cross_string(char *s, size_t *i, char z)
 {
 	char	c;
 	size_t	len;
-	//int		count;
 
 	c = 0;
 	len = 0;
-//	count = 0;
 	if (*s == '\'' || *s == '\t')
 	{
 		c = *s;
-	//	count = 1;
 		len++;
 	}
 	if (*s && (*s == c || *s == z || *s == '\t'))
@@ -156,18 +153,4 @@ char	*get_end_str(char *s, size_t *len, char z)
 		(*len)++;
 	}
 	return (s);
-}
-
-/// @brief Calculates the length of a substring until a delimiter. Uses
-/// `cross_string` to find the endpoint of the substring and returns its length.
-/// @param s The string to analyze.
-/// @param z The delimiter character.
-/// @return The length of the substring before the delimiter.
-size_t	count_string(char *s, char z)
-{
-	size_t	i;
-
-	i = 0;
-	cross_string(s, &i, z);
-	return (i);
 }
