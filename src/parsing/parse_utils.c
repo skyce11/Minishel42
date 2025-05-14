@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 11:39:33 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/13 21:04:13 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/14 13:01:00 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,20 @@ static int	count_valid_args(char **args)
 	if (args[0] && args[0][0] != '<' && args[0][0] != '>')
 		count++;
 	i = 1;
-	while (args[i++])
+	while (args[i])
 	{
 		if (args[i][0] != '<' && args[i][0] != '>' &&
 			args[i - 1][0] != '<' && args[i - 1][0] != '>')
-		{
 			count++;
-		}
+		i++;
 	}
 	i = 0;
-	while (args[i++])
+	while (args[i])
 	{
 		cleaned_arg = remove_external_quotes(args[i]);
 		free(args[i]);
 		args[i] = cleaned_arg;
+		i++;
 	}
 	return (count);
 }
