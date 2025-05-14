@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:21:27 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/13 20:57:17 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:46:42 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ char	*expansor(t_tools *tools)
 	aux = NULL;
 	in_squote = 0;
 	in_dquote = 0;
-	i = 0;
-	while (tools->arg_str[i++])
+	i = -1;
+	while (tools->arg_str[++i])
 	{
 		if (tools->arg_str[i] == '\'' && !in_dquote)
 			in_squote = !in_squote;
