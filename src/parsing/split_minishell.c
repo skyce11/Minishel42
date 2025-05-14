@@ -3,14 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   split_minishell.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 12:13:15 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/13 21:02:56 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:21:53 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char	*extract_quoted_token(char *s, char z)
+{
+	char	quote;
+	size_t	len;
+	char	*token;
+
+	quote = 0;
+	len = 0;
+	while (s[len])
+	{
+		if ((s[len] == z || s[len] == '\t') && !quote)
+			break ;
+		if ((s[len] == '\'' || s[len] == '\"'))
+		{
+			if (quote == 0)
+				quote = s[len];
+			else if (quote == s[len])
+				quote = 0;
+		}
+		len++;
+	}
+	token = ft_substr(s, 0, len);
+	return (token);
+}
 
 /// @brief Frees a dynamically allocated matrix (array of strings).
 /// @param mtx The matrix (array of strings) to free.
@@ -49,7 +74,7 @@ char	**split_minishell(char *s, char z)
 	len = count_tokens(s, z);
 	if (len == 0)
 		return (NULL);
-	pp = ft_calloc(len +1, sizeof(s));
+	pp = ft_calloc(len + 1, sizeof(s));
 	if (!pp)
 		return (NULL);
 	i = 0;
@@ -57,13 +82,13 @@ char	**split_minishell(char *s, char z)
 	{
 		while (*s && (*s == z || *s == '\t'))
 			s++;
-		pp[i] = ft_substr(s, 0, count_string(s, z));
+		pp[i] = extract_quoted_token(s, z);
 		if (!pp[i])
 			return (ft_free_matrix(pp));
-		if (*s)
-			s = cross_string(s, NULL, z);
+		s += ft_strlen(pp[i]);
 		i++;
 	}
+	pp[i] = NULL;
 	return (pp);
 }
 

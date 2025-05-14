@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/12 14:31:46 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:29:42 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,11 @@ static int	check_exit_args(t_tools *tools)
 		if (tools->command->args[1][i] == '+'
 			|| tools->command->args[1][i] == '-')
 			i++;
-		while (tools->command->args[1][i++])
+		while (tools->command->args[1][i])
 		{
 			if (!ft_isdigit(tools->command->args[1][i]))
 				return (print_err_exit(tools, 2));
+			i++;
 		}
 		nbr = ft_atoi(tools->command->args[1]);
 		if (nbr < 0)

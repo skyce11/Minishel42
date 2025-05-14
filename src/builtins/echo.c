@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:08:32 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/13 20:53:43 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:19:53 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_echo_aux(t_command *command, int *skip_newline, int i)
 			j = 1;
 			while (command->args[i][j] == 'n' && command->args[i][j] != '\0')
 				j++;
-			if (command->args[i][j] == '\0')
+			if (command->args[i][j] == '\0' && j > 1)
 			{
 				*skip_newline = 1;
 				i++;
