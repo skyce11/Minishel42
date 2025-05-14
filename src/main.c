@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/12 13:53:00 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:39:07 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	minishell_loop(t_tools *tools)
 		parser(tools);
 		if (!tools->command)
 			return (ft_clean_all(tools), 0);
+		tools->exit_status = 0;
 		executor(tools);
 		reset_tools(tools);
 	}
