@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:09:43 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/13 18:28:35 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:16:22 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,12 @@ void	add_or_update_env(t_tools *tools, char *var)
 /// @return void.
 void	ft_export(t_command *command, t_tools *tools)
 {
-	int	i;
+	int		i;
+	char	*var;
 
 	tools->exit_status = 0;
+
+	// Si no hay argumentos, imprimir las variables de entorno
 	if (command->args[1] == NULL)
 	{
 		i = 0;
@@ -112,14 +115,26 @@ void	ft_export(t_command *command, t_tools *tools)
 			ft_putendl_fd(tools->envp[i], 1);
 			i++;
 		}
+		return ;
 	}
-	else
+
+	// Procesar argumentos
+	i = 1;
+	while (command->args[i])
 	{
-		i = 1;
-		while (command->args[i])
+		var = command->args[i];
+		// Verificar si el argumento contiene un '='
+		if (ft_strchr(var, '='))
 		{
-			add_or_update_env(tools, command->args[i]);
-			i++;
+			// Solo guardar si hay un '=' en el argumento
+			add_or_update_env(tools, var);
 		}
+		else
+		{
+			// Ignorar y opcionalmente mostrar un mensaje
+			ft_putstr_fd("export: ignoring invalid argument: ", STDERR_FILENO);
+			ft_putendl_fd(var, STDERR_FILENO);
+		}
+		i++;
 	}
 }
