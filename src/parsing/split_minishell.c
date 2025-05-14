@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_minishell.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 12:13:15 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/14 17:21:53 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:07:28 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,6 @@ static char	*extract_quoted_token(char *s, char z)
 	}
 	token = ft_substr(s, 0, len);
 	return (token);
-}
-
-/// @brief Frees a dynamically allocated matrix (array of strings).
-/// @param mtx The matrix (array of strings) to free.
-/// @return Always returns NULL after freeing memory.
-void	*ft_free_matrix(char **mtx)
-{
-	int	i;
-
-	if (!mtx)
-		return (NULL);
-	i = 0;
-	while (mtx[i])
-	{
-		free(mtx[i]);
-		i++;
-	}
-	free(mtx);
-	return (NULL);
 }
 
 /// @brief Splits a string into tokens based on a delimiter.

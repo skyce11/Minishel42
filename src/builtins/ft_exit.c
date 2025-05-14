@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:08 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/14 16:29:42 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:06:55 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,18 @@ static int	print_err_exit(t_tools *tools, int err)
 	return (0);
 }
 
+static int	nbr_exit(t_tools *tools)
+{
+	int	nbr;
+
+	nbr = ft_atoi(tools->command->args[1]);
+	if (nbr < 0)
+		nbr += 256;
+	else if (nbr > 256)
+		nbr -= 256;
+	return (nbr);
+}
+
 /// @brief Validates the arguments provided to the 'exit' command. Checks if
 /// there are too many arguments, ensuring only one numeric value is allowed.
 /// If a non-numeric argument is found, an error message is displayed.
@@ -39,9 +51,7 @@ static int	print_err_exit(t_tools *tools, int err)
 static int	check_exit_args(t_tools *tools)
 {
 	int	i;
-	int	nbr;
 
-	nbr = 0;
 	if (tools->command->args[1] && tools->command->args[2])
 		return (print_err_exit(tools, 1));
 	if (tools->command->args[1])
@@ -56,12 +66,7 @@ static int	check_exit_args(t_tools *tools)
 				return (print_err_exit(tools, 2));
 			i++;
 		}
-		nbr = ft_atoi(tools->command->args[1]);
-		if (nbr < 0)
-			nbr += 256;
-		else if (nbr > 256)
-			nbr -= 256;
-		return (nbr);
+		return (nbr_exit(tools));
 	}
 	return (0);
 }
