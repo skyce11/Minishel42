@@ -6,34 +6,11 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/16 17:31:44 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/16 20:08:30 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/// @brief Resets the structure containing execution tools.
-/// Frees allocated memory, clears stored data, and reinitializes the structure.
-/// @param tools Pointer to the tools structure being reset.
-/// @return Always returns 1 after successful reset.
-int	reset_tools(t_tools *tools)
-{
-	int	last_exit_status;
-
-	last_exit_status = tools->exit_status;
-	signal_init();
-	free_command(tools->command);
-	if (tools->arg_str)
-		free(tools->arg_str);
-	tools->arg_str = NULL;
-	if (tools->paths)
-		ft_free_arr(tools->paths);
-	tools->paths = NULL;
-	init_tools(tools);
-	tools->exit_status = last_exit_status;
-	tools->reset = 1;
-	return (1);
-}
 
 /// @brief Initializes the tools structure for command execution.
 /// Sets default values, initializes the command structure,
@@ -78,6 +55,15 @@ void	update_shlvl(t_tools *tools)
 	}
 }
 
+void	ft_strim_without_leaks(t_tools *tools)
+{
+	char	*temp;
+
+	temp = tools->arg_str;
+	tools->arg_str = ft_strtrim(tools->arg_str, " \t");
+	free(temp);
+}
+
 int	minishell_loop(t_tools *tools)
 {
 	g_signal = 0;
@@ -88,7 +74,7 @@ int	minishell_loop(t_tools *tools)
 			tools->exit_status = 130;
 		if (!tools->arg_str)
 			return (ft_putstr_fd("exit\n", 1), ft_clean_all(tools), 0);
-		tools->arg_str = ft_strtrim(tools->arg_str, " \t");
+		ft_strim_without_leaks(tools);
 		if (tools->arg_str[0] == '\0' || !validate_pipes(tools->arg_str))
 		{
 			reset_tools(tools);
@@ -125,7 +111,7 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_clean_all(&tools), 0);
 	printf("AQUI EMPIEZA LA MINISHELL\n");
 	if (minishell_loop(&tools) == 0)
-		return (0);
+		return (rl_clear_history(), 0);
 	rl_clear_history();
 	ft_clean_all(&tools);
 	return (0);

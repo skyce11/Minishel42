@@ -6,11 +6,33 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:08:09 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/16 17:28:08 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/16 20:08:11 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/// @brief Resets the structure containing execution tools.
+/// Frees allocated memory, clears stored data, and reinitializes the structure.
+/// @param tools Pointer to the tools structure being reset.
+/// @return Always returns 1 after successful reset.
+int	reset_tools(t_tools *tools)
+{
+	int	last_exit_status;
+
+	last_exit_status = tools->exit_status;
+	signal_init();
+	free_command(tools->command);
+	if (tools->arg_str)
+		free(tools->arg_str);
+	if (tools->paths)
+		ft_free_arr(tools->paths);
+	tools->paths = NULL;
+	init_tools(tools);
+	tools->exit_status = last_exit_status;
+	tools->reset = 1;
+	return (1);
+}
 
 void	ft_clean_all(t_tools *tools)
 {
