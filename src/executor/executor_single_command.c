@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:34:38 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/14 13:07:11 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:43:15 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,8 @@ static void	fork_single_command(t_command *command, t_tools *tools)
 
 	if (fill_command_from_env(command, tools) != 0)
 		return ;
-	g_signal = S_CMD;
 	if (ft_strcmp(command->args[0], "./minishell") == 0)
-		g_signal = S_MINI;
+		signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
 		return ;
@@ -55,7 +54,6 @@ static void	fork_single_command(t_command *command, t_tools *tools)
 		waitpid(pid, &status, 0);
 		handle_status(status, tools);
 	}
-	g_signal = S_BASE;
 }
 
 /// @brief La función `exec_single_command` es responsable de ejecutar

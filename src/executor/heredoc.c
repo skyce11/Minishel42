@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 19:49:12 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/14 15:28:07 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:42:03 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ void	break_heredoc(char *line, int err, t_tools *tools, const char *del)
 		tools->exit_status = 0;
 	}
 	else if (err == 2 || err == 4)
+	{
 		tools->exit_status = 130;
+	}
 	free(line);
 }
 
@@ -31,14 +33,15 @@ static void	heredoc_loop(t_tools *tools, const char *delimiter, int pipe_fd)
 {
 	char	*line;
 
-	signal(SIGINT, SIG_DFL);
+	g_signal = 0;
+	signal(SIGINT, sigint_handler_heredoc);
 	while (1)
 	{
 		line = readline("> ");
+		if (g_signal == 2)
+			return (break_heredoc(line, 2, tools, delimiter));
 		if (line == NULL)
 			return (break_heredoc(line, 1, tools, delimiter));
-		if (g_signal == S_CANCEL_EXEC)
-			return (break_heredoc(line, 2, tools, delimiter));
 		if (strcmp(line, delimiter) == 0)
 			return (break_heredoc(line, 3, tools, delimiter));
 		free(tools->arg_str);
@@ -47,7 +50,6 @@ static void	heredoc_loop(t_tools *tools, const char *delimiter, int pipe_fd)
 		ft_putendl_fd(tools->arg_str, pipe_fd);
 		free(line);
 	}
-	signal(SIGINT, sigint_handler);
 }
 
 int	preprocess_heredoc(t_tools *tools, const char *delimiter)
@@ -61,7 +63,6 @@ int	preprocess_heredoc(t_tools *tools, const char *delimiter)
 	pid = fork();
 	if (pid < 0)
 		return (perror("fork"), -1);
-	g_signal = S_QUOTE;
 	if (pid == 0)
 	{
 		close(pipe_fd[0]);
@@ -72,9 +73,10 @@ int	preprocess_heredoc(t_tools *tools, const char *delimiter)
 	else
 	{
 		close(pipe_fd[1]);
+		signal(SIGINT, SIG_IGN);
 		waitpid(pid, &status, 0);
+		signal(SIGINT, sigint_handler);
 		handle_status(status, tools);
-		g_signal = S_BASE;
 		return (pipe_fd[0]);
 	}
 }

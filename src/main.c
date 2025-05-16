@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/14 15:39:07 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:31:44 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,35 +51,6 @@ int	init_tools(t_tools *tools)
 	return (1);
 }
 
-int	minishell_loop(t_tools *tools)
-{
-	char	*aux;
-
-	while (1)
-	{
-		tools->arg_str = readline("minishell$ ");
-		if (!tools->arg_str)
-			return (ft_putstr_fd("exit\n", 1), ft_clean_all(tools), 0);
-		aux = ft_strtrim(tools->arg_str, " \t");
-		free(tools->arg_str);
-		tools->arg_str = aux;
-		if (tools->arg_str[0] == '\0' || !validate_pipes(tools->arg_str))
-		{
-			reset_tools(tools);
-			continue ;
-		}
-		add_history(tools->arg_str);
-		expansor(tools);
-		parser(tools);
-		if (!tools->command)
-			return (ft_clean_all(tools), 0);
-		tools->exit_status = 0;
-		executor(tools);
-		reset_tools(tools);
-	}
-	return (1);
-}
-
 /// @brief update the nbr of SHLVL.
 /// @param tools
 /// @param flag if flags = 1 -> increment ; if flags = 0 -> decrement;
@@ -107,6 +78,33 @@ void	update_shlvl(t_tools *tools)
 	}
 }
 
+int	minishell_loop(t_tools *tools)
+{
+	g_signal = 0;
+	while (1)
+	{
+		tools->arg_str = readline("minishell$ ");
+		if (g_signal == 2)
+			tools->exit_status = 130;
+		if (!tools->arg_str)
+			return (ft_putstr_fd("exit\n", 1), ft_clean_all(tools), 0);
+		tools->arg_str = ft_strtrim(tools->arg_str, " \t");
+		if (tools->arg_str[0] == '\0' || !validate_pipes(tools->arg_str))
+		{
+			reset_tools(tools);
+			continue ;
+		}
+		add_history(tools->arg_str);
+		expansor(tools);
+		parser(tools);
+		if (!tools->command)
+			return (ft_clean_all(tools), 0);
+		executor(tools);
+		reset_tools(tools);
+	}
+	return (1);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_tools	tools;
@@ -130,5 +128,5 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	rl_clear_history();
 	ft_clean_all(&tools);
-	return (tools.exit_status);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/14 15:27:36 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/16 13:02:22 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,7 @@ typedef enum e_exit_code
 {
 	F_CMD_NOT_FOUND = 127,
 	F_NOT_FILE = 130,
-	F_QUOTE = 2
 }	t_exit_code;
-
-typedef enum e_signal
-{
-	S_BASE,
-	S_HEREDOC,
-	S_HEREDOC_END,
-	S_SIGINT,
-	S_SIGINT_CMD,
-	S_CMD,
-	S_MINI,
-	S_QUOTE,
-	S_CANCEL_EXEC,
-}	t_signal;
 
 typedef struct s_redir
 {
@@ -103,7 +89,6 @@ t_redir		*create_redir_list(char *redir, int *status);
 int			locate_redir(char *redir, int *i);
 size_t		preprocess_redir_file(char *redir, int *i, int *status,
 				char **word_start);
-void		update_quotes(const char *line, int *in_dquote, int *in_squote);
 
 void		update_shlvl(t_tools *tools);
 void		ft_clean_all(t_tools *tools);
@@ -275,7 +260,7 @@ int			check_child_status(int status, int fd, char *res, t_tools *tools);
 // Signal
 void		signal_init(void);
 void		sigint_handler(int sig);
-void		sigquit_handler(int sig);
+void		sigint_handler_heredoc(int sig);
 void		break_heredoc(char *line, int err, t_tools *tools, const char *del);
 int			preprocess_heredoc(t_tools *tools, const char *delimiter);
 

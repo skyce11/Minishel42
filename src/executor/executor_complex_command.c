@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 19:30:00 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/10 15:40:32 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:27:31 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,11 @@ static int	exec_piped_command(t_pipe *ps, t_tools *tools,
 			close_safe(curr_command, pipes);
 			waitpid(pid, &child_status, 0);
 			handle_status(child_status, tools);
-			tools->exit_status = 0;
+			if (pipes.curr->next == NULL)
+				tools->exit_status = 0;
 		}
 	}
-	else
-		return (close_safe(curr_command, pipes), tools->exit_status);
-	return (0);
+	return (close_safe(curr_command, pipes), tools->exit_status);
 }
 
 /// @brief Maneja la ejecución de comandos compuestos, como los que utilizan
@@ -135,16 +134,13 @@ int	exec_compound_command(t_tools *tools, unsigned int size)
 		return (-1);
 	}
 	curr_command = tools->command;
-	while (i++ < size)
+	while (i < size)
 	{
-		g_signal = S_SIGINT;
-		if (exec_piped_command(ps, tools, curr_command, i) != 0)
-		{
-			cleanse_pipe_list(&ps);
-			return (1);
-		}
-		g_signal = S_BASE;
+		exec_piped_command(ps, tools, curr_command, i);
+		if (i == size -1)
+			break ;
 		curr_command = curr_command->next;
+		i++;
 	}
 	cleanse_pipe_list(&ps);
 	return (tools->exit_status);
