@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 10:40:31 by migonzal          #+#    #+#             */
-/*   Updated: 2021/10/02 10:08:06 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:36:27 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
 static int	is_in_set(char c, const char *set)
@@ -19,7 +20,7 @@ static int	is_in_set(char c, const char *set)
 	return (1);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char *s1, char const *set)
 {
 	size_t	start;
 	size_t	end;
@@ -44,5 +45,6 @@ char	*ft_strtrim(char const *s1, char const *set)
 	while (is_in_set(s1[end - 1], set) == 0)
 		end--;
 	rtn = ft_substr(s1, start, end - start);
+	free(s1);
 	return (rtn);
 }

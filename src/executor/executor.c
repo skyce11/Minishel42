@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 13:25:07 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/14 16:07:05 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:33:49 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,9 @@ void	executor(t_tools *tools)
 
 	size = get_command_list_size(tools->command);
 	orig_stdin = save_stdin();
+	tools->exit_status = 0;
 	if (size < 1)
-	{
 		ft_putendl_fd("ERROR: empty command list", 1);
-		tools->exit_status = 0;
-	}
 	else if (size == 1)
 	{
 		if ((tools->command->args == NULL || tools->command->args[0] == NULL)

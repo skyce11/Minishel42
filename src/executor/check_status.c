@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:08:09 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/13 18:56:38 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:28:08 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,47 +28,6 @@ void	ft_clean_all(t_tools *tools)
 		ft_free_arr(tools->paths);
 }
 
-void	update_quotes(const char *line, int *in_dquote, int *in_squote)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == '"' && !(*in_squote))
-			*in_dquote = !(*in_dquote);
-		else if (line[i] == '\'' && !(*in_dquote))
-			*in_squote = !(*in_squote);
-		i++;
-	}
-}
-
-int	check_child_status(int status, int fd, char *result, t_tools *tools)
-{
-	int	sig;
-
-	sig = -1;
-	if (WIFSIGNALED(status))
-	{
-		sig = WTERMSIG(status);
-		close(fd);
-		free(result);
-		if (sig == SIGINT)
-			tools->exit_status = 130;
-		else
-			tools->exit_status = 2;
-		return (EXIT_SUCCESS);
-	}
-	else if (WIFEXITED(status) && WEXITSTATUS(status) != EXIT_SUCCESS)
-	{
-		close(fd);
-		free(result);
-		tools->exit_status = WEXITSTATUS(status);
-		return (EXIT_SUCCESS);
-	}
-	return (EXIT_FAILURE);
-}
-
 /// @brief Actualiza el estado de salida después de ejecutar un comando.
 /// Maneja códigos de retorno, errores de comando no encontrado e
 /// interrupciones SIGINT.
@@ -83,17 +42,9 @@ void	handle_status(int status, t_tools *tools)
 		sig = WTERMSIG(status);
 		if (sig == SIGINT)
 			tools->exit_status = 130;
+		else if (sig == 127)
+			tools->exit_status = 127;
 		else
-			tools->exit_status = 2;
+			tools->exit_status = 0;
 	}
-	if (WIFEXITED(status))
-	{
-		tools->exit_status = WEXITSTATUS(status);
-		if (status == 256)
-			tools->exit_status = 1;
-		else if (tools && tools->exit_status == F_CMD_NOT_FOUND)
-			printf("%s: command not found\n", tools->command->args[0]);
-	}
-	if (g_signal == S_SIGINT_CMD)
-		tools->exit_status = F_NOT_FILE;
 }
