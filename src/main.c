@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/17 17:06:07 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 18:27:19 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ static char	*preprocess_redirs(const char *input)
 
 	len = 0;
 	out = NULL;
+	if (!input)
+		return (ft_strdup(""));
 	len = ft_strlen(input);
 	out = malloc(len * 3 + 1);
 	if (!out)
@@ -87,7 +89,6 @@ int	minishell_loop(t_tools *tools)
 		if (!tools->arg_str)
 			return (ft_putstr_fd("exit\n", 1), ft_clean_all(tools), 0);
 		ft_strim_without_leaks(tools);
-		add_history(tools->arg_str);
 		preprocessed = preprocess_redirs(tools->arg_str);
 		if (!preprocessed)
 			return (ft_clean_all(tools), 0);

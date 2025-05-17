@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:54:10 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/17 16:13:11 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/17 18:27:09 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	ft_strim_without_leaks(t_tools *tools)
 		reset_tools(tools);
 		return ;
 	}
+	if (tools->arg_str)
+			add_history(tools->arg_str);
 }
 /// @brief update the nbr of SHLVL.
 /// @param tools
