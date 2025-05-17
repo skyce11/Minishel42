@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:17:38 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 16:41:51 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:55:47 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,11 @@ int	after_dollar_lenght(char *str, int j)
 	int	i;
 
 	i = j + 1;
-	while (str[i] != '\0' && str[i] != '$' && str[i] != ' '
-		&& str[i] != '\"' && str[i] != '\'' && str[i] != '='
-		&& str[i] != '-' && str[i] != ':')
+	while (str[i])
+	{
+		if (!(ft_isalnum(str[i]) || str[i] == '_'))
+			break; // Detente si encuentras un carácter no válido
 		i++;
-	if (i == j + 1)
-		return (j);
+	}
 	return (i);
 }
