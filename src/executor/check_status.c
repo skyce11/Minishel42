@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_status.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:08:09 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/17 19:09:58 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/17 21:10:29 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ int	reset_tools(t_tools *tools)
 	if (tools->old_pwd)
 		free(tools->old_pwd);
 	tools->paths = NULL;
+	if (tools->pwd)
+		free(tools->pwd);
+	if (tools->old_pwd)
+		free(tools->old_pwd);
 	init_tools(tools);
 	tools->exit_status = last_exit_status;
 	tools->reset = 1;
@@ -61,16 +65,8 @@ void	ft_clean_all(t_tools *tools)
 /// @param tools
 void	handle_status(int status, t_tools *tools)
 {
-	int	sig;
-
-	if (WIFSIGNALED(status))
-	{
-		sig = WTERMSIG(status);
-		if (sig == SIGINT)
-			tools->exit_status = 130;
-		else if (sig == 127)
-			tools->exit_status = 127;
-		else
-			tools->exit_status = 0;
-	}
+	if (WIFEXITED(status))
+		tools->exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		tools->exit_status = 128 + WTERMSIG(status);
 }

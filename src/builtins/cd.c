@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:07:53 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/09 17:54:55 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 18:35:26 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	ft_change_pwd_env(t_tools *tools)
 
 void	ft_print_cd(int err, int fd, t_tools *tools, t_command *command)
 {
-	ft_putstr_fd("bash: cd: ", fd);
+	ft_putstr_fd("minishell: cd: ", fd);
 	if (err == 1)
 		ft_putendl_fd("too many arguments", fd);
 	if (err == 2)

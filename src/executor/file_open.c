@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 21:02:06 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/09 19:52:04 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:36:42 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,7 @@ int	file_open(t_tools *tools, t_redir *redir)
 	{
 		redir->fd = preprocess_heredoc(tools, redir->file);
 		if (redir->fd == -1)
-		{
-			ft_putstr_fd("Error al procesar heredoc\n", STDERR_FILENO);
 			return (-1);
-		}
 		return (redir->fd);
 	}
 	if (access(redir->file, F_OK) != -1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_minishell_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:54:10 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/17 18:27:09 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:48:55 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	ft_strim_without_leaks(t_tools *tools)
 		return ;
 	}
 	if (tools->arg_str)
-			add_history(tools->arg_str);
+		add_history(tools->arg_str);
 }
 /// @brief update the nbr of SHLVL.
 /// @param tools
