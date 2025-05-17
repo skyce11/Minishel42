@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:04:01 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/14 13:13:45 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 16:51:08 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 static void	handle_input_redirection(t_redir *redir)
 {
+	if (redir->fd == -1)
+	{
+		perror("Error opening file for input redirection");
+		return ;
+	}
 	if (dup2(redir->fd, STDIN_FILENO) == -1)
 	{
 		perror("dup2 failed for STDIN");
@@ -62,34 +67,56 @@ static void	fd_redir(t_tools *tools, t_redir *redir, int no_command)
 		handle_input_redirection(redir);
 	else
 		handle_output_redirection(redir, no_command);
-	if (close(redir->fd) == -1)
-		perror("close failed");
+	if (redir->fd != -1 && !no_command)
+	{
+		if (close(redir->fd) == -1)
+			perror("close failed");
+	}
 }
 
-/// Configura las redirecciones para un comando abriendo los archivos
-/// necesarios y ajustando los descriptores de archivo.
-/// @param tools Estructura global de herramientas.
-/// @param command El comando para el cual se configura la redirección.
-/// @return 0 si success, -1 en caso de error.
+static int	redir_handle(t_tools *tools, t_redir *curr_redir, int no_command)
+{
+	t_redir	*temp;
+	int		is_input;
+
+	temp = curr_redir;
+	while (temp)
+	{
+		is_input = (temp->type == 0 || temp->type == 2);
+		if (file_open(tools, temp) < 1)
+		{
+			if (is_input)
+				return (-1);
+			if (no_command)
+				return (-1);
+			temp->fd = -1;
+		}
+		temp = temp->next;
+	}
+	return (0);
+}
+
 int	redir_setup(t_tools *tools, t_command *command)
 {
-	t_redir	*curr_redir;
 	t_redir	*first_redir;
+	t_redir	*curr_redir;
 	int		no_command;
+	int		res;
 
-	curr_redir = command->redir;
 	first_redir = command->redir;
-	no_command = (command->args == NULL || command->args[0] == NULL);
-	while (curr_redir)
-	{
-		if (file_open(tools, curr_redir) < 1)
-			return (-1);
-		curr_redir = curr_redir->next;
-	}
+	curr_redir = command->redir;
+	no_command = 0;
+	res = 0;
+	if (command->args == NULL || command->args[0] == NULL)
+		no_command = 1;
+	res = redir_handle(tools, curr_redir, no_command);
+	if (res == -1)
+		return (-1);
 	curr_redir = first_redir;
 	while (curr_redir)
 	{
-		fd_redir(tools, curr_redir, no_command);
+		if (curr_redir->fd != -1)
+			fd_redir(tools, curr_redir, no_command);
 		curr_redir = curr_redir->next;
 	}
 	return (0);
