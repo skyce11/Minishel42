@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/16 20:08:30 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 16:54:20 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@ int	init_tools(t_tools *tools)
 {
 	tools->exit_status = 0;
 	tools->arg_str = NULL;
+	tools->paths = NULL;
+	tools->pwd = NULL;
+	tools->old_pwd = NULL;
 	tools->reset = 0;
 	tools->command = init_command();
-	if (parse_envp(tools) == 0)
-		return (0);
+	parse_envp(tools);
 	return (1);
 }
 
@@ -39,6 +41,8 @@ void	update_shlvl(t_tools *tools)
 	char	*entry;
 
 	i = 0;
+	if (!tools->envp)
+		return ;
 	while (tools->envp[i++])
 	{
 		if (!ft_strncmp(tools->envp[i], "SHLVL=", 6))
@@ -101,13 +105,10 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	}
 	tools.envp = arrdup(envp);
-	if (!tools.envp)
-		return (ft_free_arr(tools.envp), 0);
+	init_tools(&tools);
 	update_shlvl(&tools);
 	signal_init();
 	if (find_pwd(&tools) == 0)
-		return (ft_clean_all(&tools), 0);
-	if (init_tools(&tools) == 0)
 		return (ft_clean_all(&tools), 0);
 	printf("AQUI EMPIEZA LA MINISHELL\n");
 	if (minishell_loop(&tools) == 0)

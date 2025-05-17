@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:08:42 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/08 16:40:26 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 15:04:35 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,22 +75,22 @@ t_env	*ft_lstnew_env(char *name, char *value, int alloc)
 	return (new_node);
 }
 
-void	ft_lst_env_init(t_env **env, char **envp)
-{
-	t_env	*new;
-	int		i;
-	char	*var_name;
-	char	*var_value;
+// void	ft_lst_env_init(t_env **env, char **envp)
+// {
+// 	t_env	*new;
+// 	int		i;
+// 	char	*var_name;
+// 	char	*var_value;
 
-	new = NULL;
-	i = -1;
-	while (++i < ft_arraylen(envp))
-	{
-		var_name = get_env_name(envp[i]);
-		var_value = get_env_value(envp[i]);
-		new = ft_lstnew_env(var_name, var_value, 1);
-		ft_lstadd_back_env(env, new);
-		ft_memfree(var_name);
-		ft_memfree(var_value);
-	}
-}
+// 	new = NULL;
+// 	i = -1;
+// 	while (++i < ft_arraylen(envp))
+// 	{
+// 		var_name = get_env_name(envp[i]);
+// 		var_value = get_env_value(envp[i]);
+// 		new = ft_lstnew_env(var_name, var_value, 1);
+// 		ft_lstadd_back_env(env, new);
+// 		ft_memfree(var_name);
+// 		ft_memfree(var_value);
+// 	}
+// }

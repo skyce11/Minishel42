@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:37:56 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/13 18:38:13 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 16:56:29 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,12 @@ int	fill_command_from_env(t_command *command, t_tools *tools)
 		if (access(command->args[0], R_OK | X_OK) != -1)
 			found = 1;
 		else
-			found = find_command_in_route(command, tools->paths[i++]);
+		{
+			found = find_command_in_route(command, tools->paths[i]);
+			i++;
+		}
 	}
 	if (!found)
 		return (ft_print_err(2, 1, command, tools), -1);
-	errno = 0;
 	return (0);
 }

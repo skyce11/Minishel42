@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:59:56 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/14 12:21:00 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 16:34:12 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,28 @@
 char	**arrdup(char **arr)
 {
 	char	**aux;
-	size_t	i;
+	ssize_t	i;
 
 	i = 0;
+	if (!arr)
+	{
+		aux = malloc(sizeof(char *) * 2);
+		if (!aux)
+			return (NULL);
+		aux[0] = ft_strdup("");
+		return (aux);
+	}
 	while (arr[i] != NULL)
 		i++;
 	aux = ft_calloc(sizeof(char *), i + 1);
 	if (!aux)
 		return (NULL);
-	i = 0;
-	while (arr[i] != NULL)
+	i = -1;
+	while (arr[++i] != NULL)
 	{
 		aux[i] = ft_strdup(arr[i]);
 		if (aux[i] == NULL)
-		{
-			ft_free_arr(aux);
-			return (aux);
-		}
-		i++;
+			return (ft_free_arr(aux), aux);
 	}
 	return (aux);
 }

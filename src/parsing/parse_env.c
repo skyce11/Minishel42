@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:45:04 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/10 15:16:57 by migonzal         ###   ########.fr       */
+/*   Updated: 2025/05/17 16:51:36 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	find_pwd(t_tools *tools)
 {
 	int	i;
 
+	if (!tools || !tools->envp)
+		return (1);
 	i = 0;
 	while (tools->envp[i])
 	{
@@ -45,7 +47,7 @@ int	find_pwd(t_tools *tools)
 /// @brief Extracts the PATH variable from the environment.
 /// Searches the environment variable list for "PATH=" and returns its value.
 /// @param envp Array of environment variables.
-/// @return A string containing the extracted PATH, 
+/// @return A string containing the extracted PATH,
 //	or an empty string if not found.
 char	*find_path(char **envp)
 {
@@ -79,7 +81,7 @@ static int	process_paths(t_tools *tools, char *path_from_envp)
 	tools->paths = ft_split(path_from_envp, ':');
 	if (!path_from_envp || path_from_envp[0] == '\0' || !tools->paths)
 	{
-		printf("Error: PATH no encontrado.\n");
+		ft_putendl_fd("Error: PATH no encontrado.", STDIN_FILENO);
 		return (0);
 	}
 	i = 0;
@@ -106,11 +108,14 @@ int	parse_envp(t_tools *tools)
 	path_from_envp = find_path(tools->envp);
 	if (!path_from_envp)
 		return (0);
-	if (!process_paths(tools, path_from_envp))
+	else
 	{
+		if (!process_paths(tools, path_from_envp))
+		{
+			free(path_from_envp);
+			return (0);
+		}
 		free(path_from_envp);
-		return (0);
 	}
-	free(path_from_envp);
 	return (1);
 }

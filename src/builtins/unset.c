@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:30 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/08 17:51:42 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 17:01:52 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,43 @@
 /// variable y liberar memoria.
 /// @param tools
 /// @param name Nombre de la variable a eliminar.
-static void	unset_variable(t_tools *tools, char *name)
+
+void	copy_env(t_tools *tools, char *name, char	**new_envp)
 {
-	int		i;
-	int		j;
-	char	**new_envp;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
 	while (tools->envp[i])
-		i++;
-	new_envp = malloc(sizeof(char *) * i);
-	if (!new_envp)
-		return ;
-	i = 0;
-	while (tools->envp[i])
 	{
 		if (!(ft_strncmp(tools->envp[i], name, ft_strlen(name)) == 0
 				&& tools->envp[i][ft_strlen(name)] == '='))
-			new_envp[j++] = tools->envp[i];
+			new_envp[j++] = strdup(tools->envp[i]);
 		else
 			free(tools->envp[i]);
 		i++;
 	}
 	new_envp[j] = NULL;
+}
+
+static void	unset_variable(t_tools *tools, char *name)
+{
+	int		i;
+	char	**new_envp;
+
+	i = 0;
+	if (!tools->envp)
+		return ;
+	while (tools->envp[i])
+		i++;
+	new_envp = malloc(sizeof(char *) * (i + 1));
+	if (!new_envp)
+	{
+		ft_free_arr(new_envp);
+		return ;
+	}
+	copy_env(tools, name, new_envp);
 	free(tools->envp);
 	tools->envp = new_envp;
 }
