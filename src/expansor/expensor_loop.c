@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expensor_loop.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 20:10:12 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/13 20:57:41 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:07:00 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,23 @@ static int	find_env_value(t_tools *tools, char **aux, int j)
 int	loop_dollar(t_tools *tools, char **aux, int j)
 {
 	int		res;
-	char	*aux2;
-	char	*aux3;
+	//char	*aux2;
+	//char	*aux3;
 	int		var_length;
 
 	res = find_env_value(tools, aux, j);
 	if (res == 0)
 	{
+		// var_length = after_dollar_lenght(tools->arg_str, j) - j;
+		// aux2 = ft_strndup(tools->arg_str + j, var_length);
+		// aux3 = ft_strjoin(*aux, aux2);
+		// free(*aux);
+		// *aux = aux3;
+		// free(aux2);
+		// res = var_length;
+		// No añadir nada, solo avanzar la posición
 		var_length = after_dollar_lenght(tools->arg_str, j) - j;
-		aux2 = ft_strndup(tools->arg_str + j, var_length);
-		aux3 = ft_strjoin(*aux, aux2);
-		free(*aux);
-		*aux = aux3;
-		free(aux2);
+		// aux se queda igual, no concatenes el nombre de la variable
 		res = var_length;
 	}
 	return (res);

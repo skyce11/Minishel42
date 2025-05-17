@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:09:43 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/14 16:10:29 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:17:37 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,11 @@ void	ft_export(t_command *command, t_tools *tools)
 		var = command->args[i];
 		if (ft_strchr(var, '='))
 			add_or_update_env(tools, var);
-		else
-		{
-			ft_putstr_fd("export: ignoring invalid argument: ", STDERR_FILENO);
-			ft_putendl_fd(var, STDERR_FILENO);
-		}
+		// else
+		// {
+		// 	ft_putstr_fd("export: ignoring invalid argument: ", STDERR_FILENO);
+		// 	ft_putendl_fd(var, STDERR_FILENO);
+		// }
 		i++;
 	}
 }
