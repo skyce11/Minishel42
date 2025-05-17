@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_minishell_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:54:10 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/14 18:07:33 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 16:13:11 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,45 @@ void	*ft_free_matrix(char **mtx)
 	}
 	free(mtx);
 	return (NULL);
+}
+
+void	ft_strim_without_leaks(t_tools *tools)
+{
+	char	*temp;
+
+	temp = tools->arg_str;
+	tools->arg_str = ft_strtrim(tools->arg_str, " \t");
+	free(temp);
+	if (tools->arg_str[0] == '\0' || !validate_pipes(tools->arg_str))
+	{
+		reset_tools(tools);
+		return ;
+	}
+}
+/// @brief update the nbr of SHLVL.
+/// @param tools
+/// @param flag if flags = 1 -> increment ; if flags = 0 -> decrement;
+
+void	update_shlvl(t_tools *tools)
+{
+	int		i;
+	int		shlvl;
+	char	*new_val;
+	char	*entry;
+
+	i = 0;
+	while (tools->envp[i++])
+	{
+		if (!ft_strncmp(tools->envp[i], "SHLVL=", 6))
+		{
+			shlvl = ft_atoi(tools->envp[i] + 6);
+			shlvl++;
+			new_val = ft_itoa(shlvl);
+			entry = ft_strjoin("SHLVL=", new_val);
+			free(new_val);
+			free(tools->envp[i]);
+			tools->envp[i] = entry;
+			return ;
+		}
+	}
 }

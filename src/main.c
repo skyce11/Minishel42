@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 10:42:59 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/16 20:08:30 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 16:13:31 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,44 +28,54 @@ int	init_tools(t_tools *tools)
 	return (1);
 }
 
-/// @brief update the nbr of SHLVL.
-/// @param tools
-/// @param flag if flags = 1 -> increment ; if flags = 0 -> decrement;
-void	update_shlvl(t_tools *tools)
+static void	preprocess_redirs_fill(const char *input, char *out, size_t len)
 {
-	int		i;
-	int		shlvl;
-	char	*new_val;
-	char	*entry;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
-	while (tools->envp[i++])
+	j = 0;
+	while (i < len)
 	{
-		if (!ft_strncmp(tools->envp[i], "SHLVL=", 6))
+		if (input[i] == '<' || input[i] == '>')
 		{
-			shlvl = ft_atoi(tools->envp[i] + 6);
-			shlvl++;
-			new_val = ft_itoa(shlvl);
-			entry = ft_strjoin("SHLVL=", new_val);
-			free(new_val);
-			free(tools->envp[i]);
-			tools->envp[i] = entry;
-			return ;
+			if (j > 0 && out[j - 1] != ' ')
+				out[j++] = ' ';
+			out[j++] = input[i];
+			if (input[i + 1] == input[i])
+			{
+				out[j++] = input[i + 1];
+				i++;
+			}
+			if (input[i + 1] && input[i + 1] != ' ')
+				out[j++] = ' ';
 		}
+		else
+			out[j++] = input[i];
+		i++;
 	}
+	out[j] = '\0';
 }
 
-void	ft_strim_without_leaks(t_tools *tools)
+static char	*preprocess_redirs(const char *input)
 {
-	char	*temp;
+	size_t	len;
+	char	*out;
 
-	temp = tools->arg_str;
-	tools->arg_str = ft_strtrim(tools->arg_str, " \t");
-	free(temp);
+	len = 0;
+	out = NULL;
+	len = ft_strlen(input);
+	out = malloc(len * 3 + 1);
+	if (!out)
+		return (NULL);
+	preprocess_redirs_fill(input, out, len);
+	return (out);
 }
 
 int	minishell_loop(t_tools *tools)
 {
+	char	*preprocessed;
+
 	g_signal = 0;
 	while (1)
 	{
@@ -75,12 +85,12 @@ int	minishell_loop(t_tools *tools)
 		if (!tools->arg_str)
 			return (ft_putstr_fd("exit\n", 1), ft_clean_all(tools), 0);
 		ft_strim_without_leaks(tools);
-		if (tools->arg_str[0] == '\0' || !validate_pipes(tools->arg_str))
-		{
-			reset_tools(tools);
-			continue ;
-		}
 		add_history(tools->arg_str);
+		preprocessed = preprocess_redirs(tools->arg_str);
+		if (!preprocessed)
+			return (ft_clean_all(tools), 0);
+		free(tools->arg_str);
+		tools->arg_str = preprocessed;
 		expansor(tools);
 		parser(tools);
 		if (!tools->command)

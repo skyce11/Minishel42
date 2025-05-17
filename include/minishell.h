@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 09:45:35 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/16 13:02:22 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 16:11:56 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,9 @@ t_command	*init_command(void);
 void		free_command(t_command *command);
 
 // split minishell
+
+void		update_shlvl(t_tools *tools);
+void		ft_strim_without_leaks(t_tools *tools);
 void		*ft_free_matrix(char **mtx);
 char		**split_minishell(char *s, char z);
 size_t		count_tokens(char *s, char z);
