@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_status.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:08:09 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/17 21:10:29 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 21:29:42 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,6 @@ int	reset_tools(t_tools *tools)
 	if (tools->old_pwd)
 		free(tools->old_pwd);
 	tools->paths = NULL;
-	if (tools->pwd)
-		free(tools->pwd);
-	if (tools->old_pwd)
-		free(tools->old_pwd);
 	init_tools(tools);
 	tools->exit_status = last_exit_status;
 	tools->reset = 1;

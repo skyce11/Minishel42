@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 13:25:07 by sperez-s          #+#    #+#             */
-/*   Updated: 2025/05/17 20:48:33 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/17 21:29:09 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,11 @@ void	executor(t_tools *tools)
 		ft_putendl_fd("ERROR: empty command list", 1);
 	else if (size == 1)
 	{
-		if ((tools->command->args == NULL || tools->command->args[0] == NULL)
-			&& redir_setup(tools, tools->command) == 0)
+		if (tools->command->args == NULL || tools->command->args[0] == NULL)
+	//	if ((tools->command->args == NULL || tools->command->args[0] == NULL)
+	//		&& redir_setup(tools, tools->command) == 0)
 		{
+			redir_setup(tools, tools->command);
 			restore_stdin(orig_stdin);
 			return ;
 		}
