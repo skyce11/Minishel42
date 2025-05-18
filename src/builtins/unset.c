@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:11:30 by migonzal          #+#    #+#             */
-/*   Updated: 2025/05/17 17:01:52 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/18 11:39:19 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	copy_env(t_tools *tools, char *name, char	**new_envp)
 		if (!(ft_strncmp(tools->envp[i], name, ft_strlen(name)) == 0
 				&& tools->envp[i][ft_strlen(name)] == '='))
 			new_envp[j++] = strdup(tools->envp[i]);
-		else
-			free(tools->envp[i]);
 		i++;
 	}
 	new_envp[j] = NULL;
@@ -41,6 +39,7 @@ static void	unset_variable(t_tools *tools, char *name)
 {
 	int		i;
 	char	**new_envp;
+	char	**old_envp;
 
 	i = 0;
 	if (!tools->envp)
@@ -49,12 +48,10 @@ static void	unset_variable(t_tools *tools, char *name)
 		i++;
 	new_envp = malloc(sizeof(char *) * (i + 1));
 	if (!new_envp)
-	{
-		ft_free_arr(new_envp);
 		return ;
-	}
+	old_envp = tools->envp;
 	copy_env(tools, name, new_envp);
-	free(tools->envp);
+	ft_free_matrix(old_envp);
 	tools->envp = new_envp;
 }
 
