@@ -6,7 +6,7 @@
 /*   By: ampocchi <ampocchi@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:37:56 by ampocchi          #+#    #+#             */
-/*   Updated: 2025/05/17 16:56:29 by ampocchi         ###   ########.fr       */
+/*   Updated: 2025/05/18 11:33:37 by ampocchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_print_err(int err, int fd, t_command *command, t_tools *tools)
 	if (err == 1)
 	{
 		ft_putendl_fd(": No such file or directory", fd);
-		tools->exit_status = F_NOT_FILE;
+		tools->exit_status = 127;
 	}
 	else
 	{
